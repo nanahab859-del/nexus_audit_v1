@@ -353,25 +353,10 @@ def _ai_complete(prompt: str, system: str,
             )
             resp = urllib.request.urlopen(req, timeout=timeout)
             data = json.loads(resp.read())
-
             candidates = data.get("candidates", [])
             if candidates:
-                content = candidates[0].get("content", {})
-                parts = content.get("parts", [])
-                finish_reason = candidates[0].get("finishReason", "UNKNOWN")
-                if finish_reason != "STOP":
-                    print(f"   ⚠ Gemini finish reason: {finish_reason} (response may be incomplete)")
-
-                # Extract text from all parts that actually have text.
-                # Some models may embed extra metadata (like thoughtSignature) but
-                # the .text field still contains the final answer.
-                text_parts = [p.get("text", "") for p in parts if p.get("text")]
-                result = "".join(text_parts).strip()
-
-                if not result:
-                    print(f"   ⚠ Gemini returned empty text (finish reason: {finish_reason})")
-                return result if result else None
-
+                parts = candidates[0].get("content", {}).get("parts", [])
+                return "".join(p.get("text", "") for p in parts).strip()
             return None
 
         elif backend == "claude":
