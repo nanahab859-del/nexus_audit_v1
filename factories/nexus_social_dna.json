@@ -1,0 +1,724 @@
+{
+    "__main__": {
+        "bacon": 0,
+        "imports": [
+            "nexus_social",
+            "nexus_social.admin",
+            "nexus_social.api_events",
+            "nexus_social.apps",
+            "nexus_social.models",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.infrastructure",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences",
+            "nexus_social.models.projections",
+            "nexus_social.models.sequence",
+            "nexus_social.tasks",
+            "nexus_social.tests",
+            "nexus_social.tests.test_notification_preferences",
+            "nexus_social.urls",
+            "nexus_social.views",
+            "nexus_social.views_announcements"
+        ],
+        "name": "__main__",
+        "path": null
+    },
+    "django": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.conf",
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "django.core.management",
+            "django.db",
+            "django.db.models",
+            "django.db.transaction",
+            "django.http",
+            "django.test",
+            "django.utils.timezone",
+            "django.views",
+            "django.views.decorators.csrf",
+            "django.views.decorators.http",
+            "nexus_core.models",
+            "nexus_social.admin",
+            "nexus_social.api_events",
+            "nexus_social.apps",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.infrastructure",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences",
+            "nexus_social.models.projections",
+            "nexus_social.models.sequence",
+            "nexus_social.tasks",
+            "nexus_social.tests.test_notification_preferences",
+            "nexus_social.urls",
+            "nexus_social.views",
+            "nexus_social.views_announcements"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.conf",
+            "django.urls",
+            "django.utils"
+        ],
+        "name": "django",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/__init__.py"
+    },
+    "django.apps": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.contrib.auth",
+            "django.core.management",
+            "nexus_social.apps",
+            "nexus_social.views"
+        ],
+        "name": "django.apps",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/apps/__init__.py"
+    },
+    "django.conf": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.conf",
+            "django.contrib.auth",
+            "django.core.management",
+            "django.utils.timezone",
+            "nexus_core.models",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.core",
+            "django.urls",
+            "django.utils"
+        ],
+        "name": "django.conf",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/conf/__init__.py"
+    },
+    "django.contrib": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "nexus_core.models",
+            "nexus_social.admin",
+            "nexus_social.tests.test_notification_preferences"
+        ],
+        "name": "django.contrib",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/__init__.py"
+    },
+    "django.contrib.admin": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.admin",
+            "nexus_social.admin"
+        ],
+        "imports": [
+            "django",
+            "django.contrib",
+            "django.contrib.admin",
+            "django.utils"
+        ],
+        "name": "django.contrib.admin",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/admin/__init__.py"
+    },
+    "django.contrib.auth": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.auth",
+            "nexus_core.models",
+            "nexus_social.tests.test_notification_preferences"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.conf",
+            "django.contrib",
+            "django.contrib.auth",
+            "django.core",
+            "django.utils",
+            "django.views",
+            "django.views.decorators"
+        ],
+        "name": "django.contrib.auth",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/auth/__init__.py"
+    },
+    "django.core": {
+        "bacon": 2,
+        "imported_by": [
+            "django.conf",
+            "django.contrib.auth",
+            "django.core.management",
+            "django.db",
+            "django.db.models",
+            "nexus_social.tasks"
+        ],
+        "name": "django.core",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/core/__init__.py"
+    },
+    "django.core.management": {
+        "bacon": 2,
+        "imported_by": [
+            "django.core.management",
+            "nexus_social.tasks"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.conf",
+            "django.core",
+            "django.core.management",
+            "django.utils"
+        ],
+        "name": "django.core.management",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/core/management/__init__.py"
+    },
+    "django.db": {
+        "bacon": 2,
+        "imported_by": [
+            "django.db",
+            "django.db.models",
+            "django.db.transaction",
+            "nexus_core.models",
+            "nexus_social.api_events",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.infrastructure",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences",
+            "nexus_social.models.projections",
+            "nexus_social.models.sequence",
+            "nexus_social.views_announcements"
+        ],
+        "imports": [
+            "django",
+            "django.core",
+            "django.db",
+            "django.utils"
+        ],
+        "name": "django.db",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/db/__init__.py"
+    },
+    "django.db.models": {
+        "bacon": 2,
+        "imported_by": [
+            "django.db.models",
+            "nexus_core.models",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.infrastructure",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences",
+            "nexus_social.models.projections",
+            "nexus_social.models.sequence",
+            "nexus_social.views_announcements"
+        ],
+        "imports": [
+            "django",
+            "django.core",
+            "django.db",
+            "django.db.models"
+        ],
+        "name": "django.db.models",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/db/models/__init__.py"
+    },
+    "django.db.transaction": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events"
+        ],
+        "imports": [
+            "django",
+            "django.db"
+        ],
+        "name": "django.db.transaction",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/db/transaction.py"
+    },
+    "django.http": {
+        "bacon": 2,
+        "imported_by": [
+            "django.http",
+            "django.views.decorators.http",
+            "nexus_social.api_events"
+        ],
+        "imports": [
+            "django",
+            "django.http"
+        ],
+        "name": "django.http",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/http/__init__.py"
+    },
+    "django.test": {
+        "bacon": 2,
+        "imported_by": [
+            "django.test",
+            "nexus_social.tests.test_notification_preferences"
+        ],
+        "imports": [
+            "django",
+            "django.test"
+        ],
+        "name": "django.test",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/test/__init__.py"
+    },
+    "django.urls": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.conf",
+            "nexus_social.urls"
+        ],
+        "name": "django.urls",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/urls/__init__.py"
+    },
+    "django.utils": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.conf",
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "django.core.management",
+            "django.db",
+            "django.views.decorators.csrf",
+            "django.views.decorators.http",
+            "nexus_social.api_events",
+            "nexus_social.views_announcements"
+        ],
+        "name": "django.utils",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/utils/__init__.py"
+    },
+    "django.utils.timezone": {
+        "bacon": 2,
+        "imported_by": [
+            "django.views.decorators.http",
+            "nexus_social.api_events",
+            "nexus_social.views_announcements"
+        ],
+        "imports": [
+            "django",
+            "django.conf"
+        ],
+        "name": "django.utils.timezone",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/utils/timezone.py"
+    },
+    "django.views": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.auth",
+            "django.views",
+            "nexus_social.api_events"
+        ],
+        "imports": [
+            "django",
+            "django.views"
+        ],
+        "name": "django.views",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/views/__init__.py"
+    },
+    "django.views.decorators": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.auth",
+            "nexus_social.api_events"
+        ],
+        "name": "django.views.decorators",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/views/decorators/__init__.py"
+    },
+    "django.views.decorators.csrf": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events"
+        ],
+        "imports": [
+            "django",
+            "django.utils"
+        ],
+        "name": "django.views.decorators.csrf",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/views/decorators/csrf.py"
+    },
+    "django.views.decorators.http": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events"
+        ],
+        "imports": [
+            "django",
+            "django.http",
+            "django.utils",
+            "django.utils.timezone"
+        ],
+        "name": "django.views.decorators.http",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/views/decorators/http.py"
+    },
+    "json": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_gaming.events",
+            "nexus_social.api_events"
+        ],
+        "name": "json",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/json/__init__.py"
+    },
+    "logging": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events",
+            "nexus_social.tasks",
+            "nexus_social.views"
+        ],
+        "name": "logging",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/logging/__init__.py"
+    },
+    "nexus_core": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.models.sequence"
+        ],
+        "name": "nexus_core",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/__init__.py"
+    },
+    "nexus_core.models": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.models.sequence"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.contrib",
+            "django.contrib.auth",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_core.models",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/models.py"
+    },
+    "nexus_gaming": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events",
+            "nexus_social.apps"
+        ],
+        "name": "nexus_gaming",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_gaming/__init__.py"
+    },
+    "nexus_gaming.events": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_social.api_events",
+            "nexus_social.apps"
+        ],
+        "imports": [
+            "json",
+            "uuid"
+        ],
+        "name": "nexus_gaming.events",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_gaming/events.py"
+    },
+    "nexus_social": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.api_events",
+            "nexus_social.models",
+            "nexus_social.tests.test_notification_preferences",
+            "nexus_social.urls",
+            "nexus_social.views_announcements"
+        ],
+        "name": "nexus_social",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/__init__.py"
+    },
+    "nexus_social.admin": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.contrib",
+            "django.contrib.admin"
+        ],
+        "name": "nexus_social.admin",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/admin.py"
+    },
+    "nexus_social.api_events": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.urls"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.transaction",
+            "django.http",
+            "django.utils",
+            "django.utils.timezone",
+            "django.views",
+            "django.views.decorators",
+            "django.views.decorators.csrf",
+            "django.views.decorators.http",
+            "json",
+            "logging",
+            "nexus_gaming",
+            "nexus_gaming.events",
+            "nexus_social",
+            "nexus_social.models"
+        ],
+        "name": "nexus_social.api_events",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/api_events.py"
+    },
+    "nexus_social.apps": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "nexus_gaming",
+            "nexus_gaming.events"
+        ],
+        "name": "nexus_social.apps",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/apps.py"
+    },
+    "nexus_social.models": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.api_events",
+            "nexus_social.models",
+            "nexus_social.tests.test_notification_preferences",
+            "nexus_social.views_announcements"
+        ],
+        "imports": [
+            "nexus_social",
+            "nexus_social.models",
+            "nexus_social.models.chat",
+            "nexus_social.models.cursors",
+            "nexus_social.models.infrastructure",
+            "nexus_social.models.moderation",
+            "nexus_social.models.preferences",
+            "nexus_social.models.projections",
+            "nexus_social.models.sequence"
+        ],
+        "name": "nexus_social.models",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/__init__.py"
+    },
+    "nexus_social.models.chat": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models",
+            "nexus_social.models.moderation"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_social.models.chat",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/chat.py"
+    },
+    "nexus_social.models.cursors": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models"
+        ],
+        "name": "nexus_social.models.cursors",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/cursors.py"
+    },
+    "nexus_social.models.infrastructure": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_social.models.infrastructure",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/infrastructure.py"
+    },
+    "nexus_social.models.moderation": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models",
+            "nexus_social.models.chat"
+        ],
+        "name": "nexus_social.models.moderation",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/moderation.py"
+    },
+    "nexus_social.models.preferences": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models"
+        ],
+        "name": "nexus_social.models.preferences",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/preferences.py"
+    },
+    "nexus_social.models.projections": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models"
+        ],
+        "name": "nexus_social.models.projections",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/projections.py"
+    },
+    "nexus_social.models.sequence": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.models"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models",
+            "nexus_core",
+            "nexus_core.models"
+        ],
+        "name": "nexus_social.models.sequence",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/models/sequence.py"
+    },
+    "nexus_social.tasks": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.core",
+            "django.core.management",
+            "logging"
+        ],
+        "name": "nexus_social.tasks",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/tasks.py"
+    },
+    "nexus_social.tests": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "name": "nexus_social.tests",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/tests/__init__.py"
+    },
+    "nexus_social.tests.test_notification_preferences": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.contrib",
+            "django.contrib.auth",
+            "django.test",
+            "nexus_social",
+            "nexus_social.models"
+        ],
+        "name": "nexus_social.tests.test_notification_preferences",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/tests/test_notification_preferences.py"
+    },
+    "nexus_social.urls": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.urls",
+            "nexus_social",
+            "nexus_social.api_events",
+            "nexus_social.views",
+            "nexus_social.views_announcements"
+        ],
+        "name": "nexus_social.urls",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/urls.py"
+    },
+    "nexus_social.views": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.urls"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "logging"
+        ],
+        "name": "nexus_social.views",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views.py"
+    },
+    "nexus_social.views_announcements": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_social.urls"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models",
+            "django.utils",
+            "django.utils.timezone",
+            "nexus_social",
+            "nexus_social.models"
+        ],
+        "name": "nexus_social.views_announcements",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views_announcements.py"
+    },
+    "uuid": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_core.models",
+            "nexus_gaming.events",
+            "nexus_social.models.chat",
+            "nexus_social.models.infrastructure"
+        ],
+        "name": "uuid",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/uuid.py"
+    }
+}

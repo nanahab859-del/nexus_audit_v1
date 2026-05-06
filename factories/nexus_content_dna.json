@@ -1,0 +1,200 @@
+{
+    "__main__": {
+        "bacon": 0,
+        "imports": [
+            "nexus_content",
+            "nexus_content.admin",
+            "nexus_content.apps",
+            "nexus_content.models",
+            "nexus_content.tests",
+            "nexus_content.views"
+        ],
+        "name": "__main__",
+        "path": null
+    },
+    "django": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.contrib.admin",
+            "django.db",
+            "django.db.models",
+            "django.shortcuts",
+            "django.test",
+            "nexus_content.admin",
+            "nexus_content.apps",
+            "nexus_content.models",
+            "nexus_content.tests",
+            "nexus_content.views"
+        ],
+        "imports": [
+            "django",
+            "django.apps"
+        ],
+        "name": "django",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/__init__.py"
+    },
+    "django.apps": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "nexus_content.apps"
+        ],
+        "name": "django.apps",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/apps/__init__.py"
+    },
+    "django.contrib": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.admin",
+            "nexus_content.admin"
+        ],
+        "name": "django.contrib",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/__init__.py"
+    },
+    "django.contrib.admin": {
+        "bacon": 2,
+        "imported_by": [
+            "django.contrib.admin",
+            "nexus_content.admin"
+        ],
+        "imports": [
+            "django",
+            "django.contrib",
+            "django.contrib.admin"
+        ],
+        "name": "django.contrib.admin",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/admin/__init__.py"
+    },
+    "django.db": {
+        "bacon": 2,
+        "imported_by": [
+            "django.db",
+            "django.db.models",
+            "nexus_content.models"
+        ],
+        "imports": [
+            "django",
+            "django.db"
+        ],
+        "name": "django.db",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/db/__init__.py"
+    },
+    "django.db.models": {
+        "bacon": 2,
+        "imported_by": [
+            "django.db.models",
+            "nexus_content.models"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models"
+        ],
+        "name": "django.db.models",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/db/models/__init__.py"
+    },
+    "django.shortcuts": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_content.views"
+        ],
+        "imports": [
+            "django"
+        ],
+        "name": "django.shortcuts",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/shortcuts.py"
+    },
+    "django.test": {
+        "bacon": 2,
+        "imported_by": [
+            "django.test",
+            "nexus_content.tests"
+        ],
+        "imports": [
+            "django",
+            "django.test"
+        ],
+        "name": "django.test",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/test/__init__.py"
+    },
+    "nexus_content": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "name": "nexus_content",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/__init__.py"
+    },
+    "nexus_content.admin": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.contrib",
+            "django.contrib.admin"
+        ],
+        "name": "nexus_content.admin",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/admin.py"
+    },
+    "nexus_content.apps": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.apps"
+        ],
+        "name": "nexus_content.apps",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/apps.py"
+    },
+    "nexus_content.models": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_content.models",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/models.py"
+    },
+    "nexus_content.tests": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.test"
+        ],
+        "name": "nexus_content.tests",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tests.py"
+    },
+    "nexus_content.views": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.shortcuts"
+        ],
+        "name": "nexus_content.views",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/views.py"
+    },
+    "uuid": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_content.models"
+        ],
+        "name": "uuid",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/uuid.py"
+    }
+}
