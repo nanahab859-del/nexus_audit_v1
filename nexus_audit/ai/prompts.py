@@ -87,6 +87,8 @@ valid JSON object — no markdown fences, no prose before or after, just the raw
   "before_code": "# CURRENT (violation)\\nfrom {tgt} import Something  # in {src_apps_str}",
   "after_code":  "# FIXED\\nfrom correct.location import Something  # update this path",
 
+  "fix_effort": "< 1 hour",
+  "fix_effort_rationale": "Single import redirection needed, no downstream changes",
   "effort": "S or M or L or XL",
   "priority": "HIGH",
   "confidence": 1

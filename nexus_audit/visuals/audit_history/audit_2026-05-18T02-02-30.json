@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "timestamp": "2026-05-18T07:35:58.879089",
+    "timestamp": "2026-05-18T02:02:30.404547",
     "project_path": "/home/yusupha/my_tools/nexus_project_copy",
     "total_modules": 238,
     "total_physical_files": 211,
     "total_violations": 13,
     "total_raw_imports": 123,
-    "total_cycles": 16,
+    "total_cycles": 15,
     "ghost_files": [
       "nexus_tournaments.management.commands.dispatch_outbox_events",
       "nexus_core.serializers.token",
@@ -51,7 +51,7 @@
         "direction": "\u2192"
       },
       "_meta": {
-        "previous_timestamp": "2026-05-18T06:45:23",
+        "previous_timestamp": "2026-05-18T01:59:10",
         "cross_violations_prev": 13,
         "cross_violations_curr": 13,
         "cross_violations_delta": 0
@@ -72,16 +72,17 @@
       "dependency_freshness": true,
       "cve_enrichment": true
     },
-    "ai_backend": "Google Gemini",
+    "ai_backend": "Google Gemini + templates",
+    "ai_fallback_reason": "no_ai_output",
     "fix_queue": {
-      "tracked_recommendations": 30,
-      "tracked_entries": 97,
+      "tracked_recommendations": 54,
+      "tracked_entries": 65,
       "reappeared_done": [],
       "reappeared_done_count": 0,
       "status_counts": {
         "done": 0,
         "in_progress": 0,
-        "open": 30,
+        "open": 54,
         "snoozed": 0
       }
     }
@@ -7806,34 +7807,8 @@
     },
     {
       "nodes": [
-        "nexus_tournaments.views.leagues",
+        "nexus_tournaments.views.announcements",
         "nexus_tournaments.views"
-      ],
-      "length": 2,
-      "severity": "high",
-      "cross_app": false,
-      "apps": [
-        "nexus_tournaments"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.moderation"
-      ],
-      "length": 2,
-      "severity": "high",
-      "cross_app": false,
-      "apps": [
-        "nexus_tournaments"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.matches"
       ],
       "length": 2,
       "severity": "high",
@@ -7859,7 +7834,7 @@
     {
       "nodes": [
         "nexus_tournaments.views",
-        "nexus_tournaments.views.announcements"
+        "nexus_tournaments.views.leagues"
       ],
       "length": 2,
       "severity": "high",
@@ -7871,8 +7846,34 @@
     },
     {
       "nodes": [
-        "nexus_economy.tasks",
-        "nexus_economy.tasks.payout"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.matches"
+      ],
+      "length": 2,
+      "severity": "high",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.moderation"
+      ],
+      "length": 2,
+      "severity": "high",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_economy.tasks.refund",
+        "nexus_economy.tasks"
       ],
       "length": 2,
       "severity": "high",
@@ -7898,7 +7899,7 @@
     {
       "nodes": [
         "nexus_economy.tasks",
-        "nexus_economy.tasks.refund"
+        "nexus_economy.tasks.payout"
       ],
       "length": 2,
       "severity": "high",
@@ -7940,20 +7941,6 @@
       "nodes": [
         "nexus_economy.tasks",
         "nexus_economy.tasks.payout",
-        "nexus_economy.services.payout_service"
-      ],
-      "length": 3,
-      "severity": "medium",
-      "cross_app": false,
-      "apps": [
-        "nexus_economy"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
-        "nexus_economy.tasks",
-        "nexus_economy.tasks.payout",
         "nexus_economy.services.forfeiture_service"
       ],
       "length": 3,
@@ -7967,8 +7954,8 @@
     {
       "nodes": [
         "nexus_economy.tasks",
-        "nexus_economy.tasks.refund",
-        "nexus_economy.services.refund_service"
+        "nexus_economy.tasks.payout",
+        "nexus_economy.services.payout_service"
       ],
       "length": 3,
       "severity": "medium",
@@ -8278,576 +8265,904 @@
   "dead_code": [],
   "recommendations": [
     {
-      "title": "Refactor: move events to correct app",
-      "priority": "HIGH",
-      "description": "```json\n{\n  \"title\": \"Relocate nexus_core.utils.events to nexus_social.utils.events\",\n  \"why_harmful\": \"This creates direct compile-time coupling between `nexus_social` and `nexus_core`. If `nexus",
-      "action": "Move nexus_core.utils.events to nexus_core or appropriate shared module.",
+      "title": "Refactor nexus_content boundary",
+      "priority": "CRITICAL",
+      "description": "1 cross-app violation(s) point at nexus_content. Apps involved: nexus_core.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
       "affected_modules": [
-        "nexus_social.services.event_consumers",
-        "nexus_social.views.events"
+        "nexus_core.views.games",
+        "nexus_content"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
       "effort": "M",
-      "rec_id": "rec-94ef62e02eb0",
+      "rec_id": "rec-0e7d7923f699",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Refactor: move match_service to correct app",
-      "priority": "HIGH",
-      "description": "```json\n{\n  \"title\": \"Decouple Gateway Consumers from Tournament Match Service\",\n  \"why_harmful\": \"This direct import creates a tight compile-time coupling between `nexus_gateway` and the internal implementation details of `nexus_tour",
-      "action": "Move nexus_tournaments.services.match_service to nexus_core or appropriate shared module.",
-      "affected_modules": [
-        "nexus_gateway.consumers"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "effort": "M",
-      "rec_id": "rec-8968e86e99c9",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor: move nexus_core to correct app",
-      "priority": "HIGH",
-      "description": "```json\n{\n  \"title\": \"Refactor User Model Access via Core Service Layer\",\n  \"why_harmful\": \"This direct import creates compile-time coupling between `nexus_social`, `nexus_tournaments`, and `nexus_core`. If",
-      "action": "Move nexus_core to nexus_core or appropriate shared module.",
+      "title": "Refactor nexus_core boundary",
+      "priority": "CRITICAL",
+      "description": "3 cross-app violation(s) point at nexus_core. Apps involved: nexus_social, nexus_tournaments.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
       "affected_modules": [
         "nexus_social.services.event_consumers",
         "nexus_social.views.events",
-        "nexus_tournaments.services.verification_service"
+        "nexus_tournaments.services.verification_service",
+        "nexus_core"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
       "effort": "M",
-      "rec_id": "rec-3ae8f24fe890",
+      "rec_id": "rec-18ce06b925da",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Refactor: move nexus_tournaments to correct app",
-      "priority": "HIGH",
-      "description": "```json\n{\n  \"title\": \"Decouple Gateway Consumers from Tournament Internals\",\n  \"why_harmful\": \"This direct import creates tight coupling between `nexus_gateway` and the internal implementation details of `nexus_tournaments`. If",
-      "action": "Move nexus_tournaments to nexus_core or appropriate shared module.",
-      "affected_modules": [
-        "nexus_gateway.consumers"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "effort": "M",
-      "rec_id": "rec-1fabbb30dcd0",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor: move utils to correct app",
-      "priority": "HIGH",
-      "description": "```json\n{\n  \"title\": \"Relocate cross-domain utilities from nexus_core.utils\",\n  \"why_harmful\": \"This direct import creates tight coupling between `nexus_core` and both `nexus_social` and `nexus_",
-      "action": "Move nexus_core.utils to nexus_core or appropriate shared module.",
+      "title": "Refactor utils boundary",
+      "priority": "CRITICAL",
+      "description": "3 cross-app violation(s) point at nexus_core.utils. Apps involved: nexus_social, nexus_tournaments.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
       "affected_modules": [
         "nexus_social.services.event_consumers",
         "nexus_social.views.events",
-        "nexus_tournaments.services.verification_service"
+        "nexus_tournaments.services.verification_service",
+        "nexus_core.utils"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
       "effort": "M",
-      "rec_id": "rec-7615cbc144b5",
+      "rec_id": "rec-3de183b40438",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "NEXUS_CORE \u2014 Health Analysis",
-      "priority": "HIGH",
-      "description": "## Nexus Core Architectural Guidance\n\n**Health Narrative:**",
-      "action": "Fix 1 boundary violation(s) first (+3 pts), then 58 security finding(s) (+174 pts). Projected score: 100%.",
+      "title": "Refactor events boundary",
+      "priority": "CRITICAL",
+      "description": "2 cross-app violation(s) point at nexus_core.utils.events. Apps involved: nexus_social.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
       "affected_modules": [
-        "nexus_core",
-        "nexus_core.utils",
-        "nexus_core.utils.events",
-        "nexus_core.signals",
+        "nexus_social.services.event_consumers",
+        "nexus_social.views.events",
+        "nexus_core.utils.events"
+      ],
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "M",
+      "rec_id": "rec-af45b45cc28e",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor feature_flags boundary",
+      "priority": "CRITICAL",
+      "description": "1 cross-app violation(s) point at nexus_core.utils.feature_flags. Apps involved: nexus_tournaments.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
+      "affected_modules": [
+        "nexus_tournaments.services.verification_service",
         "nexus_core.utils.feature_flags"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
       "effort": "M",
-      "rec_id": "rec-15fd945fe68c",
+      "rec_id": "rec-ad22d769f151",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "NEXUS_SOCIAL \u2014 Health Analysis",
-      "priority": "MEDIUM",
-      "description": "The 86.0% score for nexus",
-      "action": "Fix 6 boundary violation(s) first (+30 pts), then 12 security finding(s) (+36 pts). Projected score: 100%.",
+      "title": "Refactor nexus_tournaments boundary",
+      "priority": "CRITICAL",
+      "description": "1 cross-app violation(s) point at nexus_tournaments. Apps involved: nexus_gateway.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
       "affected_modules": [
-        "nexus_social",
-        "nexus_social.admin",
-        "nexus_social.apps",
-        "nexus_social.consumers",
-        "nexus_social.logging"
+        "nexus_gateway.consumers",
+        "nexus_tournaments"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "effort": "L",
-      "rec_id": "rec-7bffad7a39bc",
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "M",
+      "rec_id": "rec-9b0141a799cd",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Extract Shared Utility: nexus_core.utils",
+      "title": "Refactor services boundary",
+      "priority": "CRITICAL",
+      "description": "1 cross-app violation(s) point at nexus_tournaments.services. Apps involved: nexus_gateway.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
+      "affected_modules": [
+        "nexus_gateway.consumers",
+        "nexus_tournaments.services"
+      ],
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "M",
+      "rec_id": "rec-532e80a58c21",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor match_service boundary",
+      "priority": "CRITICAL",
+      "description": "1 cross-app violation(s) point at nexus_tournaments.services.match_service. Apps involved: nexus_gateway.",
+      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
+      "affected_modules": [
+        "nexus_gateway.consumers",
+        "nexus_tournaments.services.match_service"
+      ],
+      "rec_type": "violation",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "M",
+      "rec_id": "rec-6b1cce4e4c1d",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Fix Bare Except",
+      "priority": "MEDIUM",
+      "description": "11 bare except finding(s) were detected by Bandit.",
+      "action": "Replace broad exception handling with specific exception types. Narrow each catch block to the real failure mode and preserve the stack trace where needed.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/middleware.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/admin_panel.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_gateway/consumers.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/apps.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/auto_flag.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/push_notifications.py"
+      ],
+      "rec_type": "security",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "S",
+      "rec_id": "rec-81d2d7d49a6a",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Fix Hardcoded Password",
+      "priority": "MEDIUM",
+      "description": "99 hardcoded password finding(s) were detected by Bandit.",
+      "action": "Move the password into an environment variable or secret manager. Replace hardcoded credentials with settings-backed secrets and rotate the exposed value.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tests/test_views.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_admin_panel.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_auth.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_new_endpoints.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_sessions_mfa_deletion.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_signals.py",
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_users.py"
+      ],
+      "rec_type": "security",
+      "ai_generated": false,
+      "confidence": 8,
+      "effort": "S",
+      "rec_id": "rec-ed7d0e7525f6",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor LoginView",
+      "priority": "MEDIUM",
+      "description": "LoginView in auth.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-6d1908e66e17",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor post",
+      "priority": "MEDIUM",
+      "description": "post in auth.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-ed0927c954fa",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor generate_single_elimination",
+      "priority": "MEDIUM",
+      "description": "generate_single_elimination in bracket_service.py has cyclomatic complexity 13.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/bracket_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-57bc8a597fb4",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor EscrowService",
+      "priority": "MEDIUM",
+      "description": "EscrowService in escrow_service.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-75130f0805ae",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor lock",
+      "priority": "MEDIUM",
+      "description": "lock in escrow_service.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-15dfc2445298",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor ingest_event",
+      "priority": "MEDIUM",
+      "description": "ingest_event in events.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/events.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-1ccd906adfca",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor HandshakeRecheckService",
       "priority": "HIGH",
-      "description": "`nexus_core.utils` is imported by 2 app(s) (nexus_social, nexus_tournaments) as a cross-app violation. One refactor eliminates all 2 violations.",
-      "action": "Here is a precise, actionable plan for extracting `nexus_core.utils`",
+      "description": "HandshakeRecheckService in handshake_recheck_service.py has cyclomatic complexity 22.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "L",
+      "rec_id": "rec-bc5338fe104d",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor recheck",
+      "priority": "HIGH",
+      "description": "recheck in handshake_recheck_service.py has cyclomatic complexity 21.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "L",
+      "rec_id": "rec-d8ab30d8a749",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor create_tournament",
+      "priority": "MEDIUM",
+      "description": "create_tournament in league_service.py has cyclomatic complexity 20.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/league_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-f1b6124396d6",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _try_activate",
+      "priority": "MEDIUM",
+      "description": "_try_activate in match_service.py has cyclomatic complexity 14.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-b4ea6fffcf4d",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor handle_timeout",
+      "priority": "HIGH",
+      "description": "handle_timeout in match_service.py has cyclomatic complexity 21.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "L",
+      "rec_id": "rec-572bf085876a",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor join_tournament",
+      "priority": "MEDIUM",
+      "description": "join_tournament in participation_service.py has cyclomatic complexity 19.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/participation_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-7da7f006f6a9",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor PayoutService",
+      "priority": "MEDIUM",
+      "description": "PayoutService in payout_service.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/payout_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-569330323798",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor patch",
+      "priority": "MEDIUM",
+      "description": "patch in preferences.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/preferences.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-3779c331bb91",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor MarkReadView",
+      "priority": "MEDIUM",
+      "description": "MarkReadView in receipts.py has cyclomatic complexity 13.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-6c71f76c1f21",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor post",
+      "priority": "MEDIUM",
+      "description": "post in receipts.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-3bb88d74a46e",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor auto_snatcher_backfill",
+      "priority": "MEDIUM",
+      "description": "auto_snatcher_backfill in tasks.py has cyclomatic complexity 13.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-b92d5511e737",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor fourteen_day_sweep",
+      "priority": "MEDIUM",
+      "description": "fourteen_day_sweep in tasks.py has cyclomatic complexity 15.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-cba5960aa100",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_01_env",
+      "priority": "HIGH",
+      "description": "_check_01_env in verify_backend.py has cyclomatic complexity 23.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "L",
+      "rec_id": "rec-e1778c7a6743",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_02_models",
+      "priority": "MEDIUM",
+      "description": "_check_02_models in verify_backend.py has cyclomatic complexity 19.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-fb488e9896e0",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_06_imports",
+      "priority": "MEDIUM",
+      "description": "_check_06_imports in verify_backend.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-9b0fa696b38a",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_08_websockets",
+      "priority": "MEDIUM",
+      "description": "_check_08_websockets in verify_backend.py has cyclomatic complexity 13.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-d889fde825e1",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_10_security",
+      "priority": "MEDIUM",
+      "description": "_check_10_security in verify_backend.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-a109f234a66f",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_11_financial",
+      "priority": "HIGH",
+      "description": "_check_11_financial in verify_backend.py has cyclomatic complexity 26.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "L",
+      "rec_id": "rec-3ff51a03ecbb",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _check_12_invariants",
+      "priority": "MEDIUM",
+      "description": "_check_12_invariants in verify_backend.py has cyclomatic complexity 19.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-56101d3e463f",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _render_json",
+      "priority": "MEDIUM",
+      "description": "_render_json in verify_backend.py has cyclomatic complexity 14.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-72200907e02e",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _render_text",
+      "priority": "MEDIUM",
+      "description": "_render_text in verify_backend.py has cyclomatic complexity 16.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-ef5dc6faee38",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor handle",
+      "priority": "MEDIUM",
+      "description": "handle in verify_backend.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-4134cdd72305",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor WalletDepositView",
+      "priority": "MEDIUM",
+      "description": "WalletDepositView in wallet.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-130e5950c0bf",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor WalletWithdrawView",
+      "priority": "MEDIUM",
+      "description": "WalletWithdrawView in wallet.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-1fdb02c3f466",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor post",
+      "priority": "MEDIUM",
+      "description": "post in wallet.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-6db98ba51d82",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor modempay_webhook_handler",
+      "priority": "MEDIUM",
+      "description": "modempay_webhook_handler in webhooks.py has cyclomatic complexity 15.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/webhooks.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-da11b4479a3c",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor WithdrawalService",
+      "priority": "MEDIUM",
+      "description": "WithdrawalService in withdrawal_service.py has cyclomatic complexity 12.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-413c523fe966",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor process",
+      "priority": "MEDIUM",
+      "description": "process in withdrawal_service.py has cyclomatic complexity 11.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-5ef5f5a3769f",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Review ghost files in nexus_core",
+      "priority": "LOW",
+      "description": "4 ghost file(s) were discovered for nexus_core.",
+      "action": "Remove dead files that are no longer imported, or register the missing modules properly if they are still required.",
+      "affected_modules": [
+        "nexus_core.serializers.token",
+        "nexus_core.serializers.users",
+        "nexus_core.serializers.auth",
+        "nexus_core.management.commands.dispatch_outbox_events"
+      ],
+      "rec_type": "health",
+      "ai_generated": false,
+      "confidence": 6,
+      "effort": "S",
+      "rec_id": "rec-30c25d881bbd",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Review ghost files in nexus_tournaments",
+      "priority": "LOW",
+      "description": "1 ghost file(s) were discovered for nexus_tournaments.",
+      "action": "Remove dead files that are no longer imported, or register the missing modules properly if they are still required.",
+      "affected_modules": [
+        "nexus_tournaments.management.commands.dispatch_outbox_events"
+      ],
+      "rec_type": "health",
+      "ai_generated": false,
+      "confidence": 6,
+      "effort": "S",
+      "rec_id": "rec-247c53012aac",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Resolve intra-app cycle",
+      "priority": "HIGH",
+      "description": "nexus_core.utils -> nexus_core.utils.decorators",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
         "nexus_core.utils",
-        "nexus_social",
-        "nexus_tournaments"
+        "nexus_core.utils.decorators"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
       "effort": "M",
-      "rec_id": "rec-40361c343063",
+      "rec_id": "rec-ca75899f4f32",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Extract Shared Utility: nexus_core",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
-      "description": "`nexus_core` is imported by 2 app(s) (nexus_social, nexus_tournaments) as a cross-app violation. One refactor eliminates all 2 violations.",
-      "action": "**Shared Utility Extraction Plan: `nexus_core` to `",
+      "description": "nexus_tournaments.services.match_service -> nexus_tournaments.tasks",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "nexus_core",
-        "nexus_social",
-        "nexus_tournaments"
+        "nexus_tournaments.services.match_service",
+        "nexus_tournaments.tasks"
       ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
       "effort": "M",
-      "rec_id": "rec-efa49c006432",
+      "rec_id": "rec-4a78be67a2fd",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install autobahn==25.12.2",
-      "why_upgrade": "The installed version of autobahn (24.4.2) has known CVEs, posing a significant security risk. Upgrading to 25.12.2 addresses these vulnerabilities and ensures the project is protected against potential exploits.",
-      "breaking_changes": "None known. Autobahn's core WebSocket functionality and its integration with Django/Celery are generally stable across minor versions. Thorough testing is still recommended.",
-      "test_after": "python manage.py test nexus_gateway",
-      "risk_if_skipped": "Exposure to known security vulnerabilities (CVEs) in autobahn, potentially leading to data breaches, denial-of-service attacks, or unauthorized access to the nexus platform.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade autobahn: 24.4.2 \u2192 25.12.2",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_tournaments.views.announcements -> nexus_tournaments.views",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "autobahn"
+        "nexus_tournaments.views.announcements",
+        "nexus_tournaments.views"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install autobahn==25.12.2\n\nBreaking changes: None known. Autobahn's core WebSocket functionality and its integration with Django/Celery are generally stable across minor versions. Thorough testing is still recommended.\n\nVerify: python manage.py test nexus_gateway",
-      "rec_id": "rec-f6c9eb53e2d2",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-c31a7752cef8",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install certifi==2026.4.22",
-      "why_upgrade": "The installed version of certifi has known CVEs, posing a security risk. Upgrading to the latest version patches these vulnerabilities, ensuring the platform's security and compliance.",
-      "breaking_changes": "None known. certifi is a foundational library for SSL certificate verification and typically has backward-compatible updates for minor versions.",
-      "test_after": "python manage.py check",
-      "risk_if_skipped": "Exposure to known security vulnerabilities, potentially leading to data breaches or system compromise. This could impact user trust and regulatory compliance.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade certifi: 2026.2.25 \u2192 2026.4.22",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.results",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "certifi"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.results"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install certifi==2026.4.22\n\nBreaking changes: None known. certifi is a foundational library for SSL certificate verification and typically has backward-compatible updates for minor versions.\n\nVerify: python manage.py check",
-      "rec_id": "rec-8ce249e70f5e",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-28122bd19840",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install black==26.5.0",
-      "why_upgrade": "Upgrading Black addresses critical CVEs in the installed version, mitigating security vulnerabilities. The latest version also includes performance improvements and bug fixes, ensuring a more robust and secure development environment.",
-      "breaking_changes": "None known. Black is a code formatter and does not typically introduce breaking changes to application logic or Django/Celery integrations.",
-      "test_after": "black --check .",
-      "risk_if_skipped": "Continued exposure to known security vulnerabilities (CVEs) in the Nexus project, potentially leading to data breaches or system compromise. Outdated tooling can also hinder developer productivity and introduce subtle formatting inconsistencies.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade black: 26.3.1 \u2192 26.5.0",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.leagues",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "black"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.leagues"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install black==26.5.0\n\nBreaking changes: None known. Black is a code formatter and does not typically introduce breaking changes to application logic or Django/Celery integrations.\n\nVerify: black --check .",
-      "rec_id": "rec-8cad61aae0cf",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-73c2aa342b16",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install click==8.4.0",
-      "why_upgrade": "While no CVEs are present on the installed version, upgrading to the latest ensures access to the newest features and potential performance optimizations. It also keeps the project aligned with current best practices and reduces the risk of encountering future compatibility issues.",
-      "breaking_changes": "None known. The click library is primarily used for command-line interface creation and has a stable API. No direct impact on Django/Celery usage is anticipated.",
-      "test_after": "python manage.py test nexus_economy nexus_gaming nexus_tournaments",
-      "risk_if_skipped": "The primary risk is falling behind on minor feature enhancements and potential future compatibility issues. Without CVEs, immediate security risks are low, but it contributes to technical debt.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade click: 8.3.1 \u2192 8.4.0",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "click"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install click==8.4.0\n\nBreaking changes: None known. The click library is primarily used for command-line interface creation and has a stable API. No direct impact on Django/Celery usage is anticipated.\n\nVerify: python manage.py test nexus_economy nexus_gaming nexus_tournaments",
-      "rec_id": "rec-3eced05fd428",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install --upgrade Authlib==1.7.2",
-      "why_upgrade": "Upgrading Authlib addresses critical CVEs in version 1.6.9, mitigating security vulnerabilities. Version 1.7.2 also includes minor bug fixes and potential performance enhancements.",
-      "breaking_changes": "None known. Authlib 1.7.2 is a minor version update with backward-compatible changes. No direct impact on Django or Celery usage is anticipated based on release notes.",
-      "test_after": "python manage.py test nexus_core nexus_gateway",
-      "risk_if_skipped": "Continued exposure to known security vulnerabilities (CVEs) in Authlib 1.6.9, potentially leading to unauthorized access or data breaches within the nexus platform.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade Authlib: 1.6.9 \u2192 1.7.2",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.matches",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "Authlib"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.matches"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install --upgrade Authlib==1.7.2\n\nBreaking changes: None known. Authlib 1.7.2 is a minor version update with backward-compatible changes. No direct impact on Django or Celery usage is anticipated based on release notes.\n\nVerify: python manage.py test nexus_core nexus_gateway",
-      "rec_id": "rec-71955968be5a",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-7e4903faf4eb",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install \"cron-descriptor>=2.0.8,<2.1.0\"",
-      "why_upgrade": "Upgrading to cron-descriptor 2.0.8 addresses potential security vulnerabilities and introduces performance improvements. It also ensures compatibility with newer Python versions and dependencies, maintaining a secure and efficient development environment.",
-      "breaking_changes": "None known. The changelog for cron-descriptor 2.0.x indicates minor bug fixes and improvements without introducing breaking API changes relevant to typical Django/Celery usage.",
-      "test_after": "python manage.py shell -c \"from cron_descriptor import get_description; print(get_description('* * * * *'))\"",
-      "risk_if_skipped": "While no CVEs are currently reported for 1.4.5, skipping the upgrade leaves the project vulnerable to undiscovered security flaws. It also prevents leveraging performance optimizations and future compatibility, potentially leading to technical debt and future upgrade complexities.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade cron-descriptor: 1.4.5 \u2192 2.0.8",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "cron-descriptor"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install \"cron-descriptor>=2.0.8,<2.1.0\"\n\nBreaking changes: None known. The changelog for cron-descriptor 2.0.x indicates minor bug fixes and improvements without introducing breaking API changes relevant to typical Django/Celery usage.\n\nVerify: python manage.py shell -c \"from cron_descriptor import get_description; print(get_description('* * * * *'))\"",
-      "rec_id": "rec-701609dca034",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install \"filelock>=3.25.2,<3.29.0\" && pip install filelock==3.29.0",
-      "why_upgrade": "The installed version of filelock (3.25.2) has known CVEs, posing a security risk. Upgrading to the latest version (3.29.0) resolves these vulnerabilities and ensures the project is protected against potential exploits.",
-      "breaking_changes": "None known. The filelock library is a low-level utility for file-based locking and is unlikely to introduce breaking changes that impact higher-level Django or Celery operations between these minor versions.",
-      "test_after": "python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "risk_if_skipped": "Continued exposure to security vulnerabilities (CVEs) in the filelock library, potentially allowing unauthorized access or denial-of-service attacks on the nexus platform, especially in areas relying on file locking for concurrency control (e.g., Celery task coordination).",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade filelock: 3.25.2 \u2192 3.29.0",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.moderation",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "filelock"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.moderation"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install \"filelock>=3.25.2,<3.29.0\" && pip install filelock==3.29.0\n\nBreaking changes: None known. The filelock library is a low-level utility for file-based locking and is unlikely to introduce breaking changes that impact higher-level Django or Celery operations between these minor versions.\n\nVerify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "rec_id": "rec-2a50afaba192",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-f6b61d264109",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "upgrade_command": "pip install identify==2.6.19",
-      "why_upgrade": "While no CVEs are listed for version 2.6.18, upgrading to the latest patch release ensures the project benefits from any minor bug fixes or internal improvements. This proactive maintenance reduces the risk of encountering unforeseen issues as the project evolves.",
-      "breaking_changes": "None known. Patch releases typically contain only backward-compatible bug fixes and minor enhancements.",
-      "test_after": "python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "risk_if_skipped": "The risk is minimal in the short term due to the absence of reported CVEs. However, skipping minor updates can lead to a larger, more complex upgrade process later, potentially introducing more risk and effort if a critical bug or security vulnerability is discovered in the older version.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade identify: 2.6.18 \u2192 2.6.19",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "identify"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install identify==2.6.19\n\nBreaking changes: None known. Patch releases typically contain only backward-compatible bug fixes and minor enhancements.\n\nVerify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "rec_id": "rec-f8905dc49a34",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install cryptography==48.0.0",
-      "why_upgrade": "The installed version (46.0.6) has 28 known CVEs, posing a significant security risk. Upgrading to 48.0.0 addresses these vulnerabilities, ensuring the security and integrity of cryptographic operations within the Nexus project.",
-      "breaking_changes": "None known. The cryptography library upgrade is generally backward-compatible for common use cases. Specific breaking changes are rare and typically involve very low-level API usage not commonly exposed to Django/Celery application logic.",
-      "test_after": "python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "risk_if_skipped": "Continued exposure to 28 known security vulnerabilities, potentially leading to data breaches, unauthorized access, or compromise of sensitive user information and financial transactions. This directly impacts user trust and platform security.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade cryptography: 46.0.6 \u2192 48.0.0",
+      "title": "Resolve intra-app cycle",
       "priority": "HIGH",
+      "description": "nexus_economy.tasks.refund -> nexus_economy.tasks",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "cryptography"
+        "nexus_economy.tasks.refund",
+        "nexus_economy.tasks"
       ],
-      "rec_type": "upgrade",
-      "action": "pip install cryptography==48.0.0\n\nBreaking changes: None known. The cryptography library upgrade is generally backward-compatible for common use cases. Specific breaking changes are rare and typically involve very low-level API usage not commonly exposed to Django/Celery application logic.\n\nVerify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "rec_id": "rec-49931e2f502c",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install \"idna>=3.15,<4.0\"",
-      "why_upgrade": "The installed version of idna (3.11) has known CVEs, posing a security risk. Upgrading to 3.15 or later patches these vulnerabilities, ensuring the security and integrity of network communications within the Nexus project.",
-      "breaking_changes": "None known. The idna library primarily handles Internationalized Domain Names in Applications. Its core functionality is unlikely to have breaking changes that impact typical Django or Celery operations unless custom domain validation logic is heavily reliant on specific internal idna behaviors, which is rare.",
-      "test_after": "python manage.py shell -c \"import idna; print(idna.__version__)\"",
-      "risk_if_skipped": "Continued exposure to security vulnerabilities (CVEs) in the idna library, potentially leading to exploitation of network-related features, data breaches, or denial-of-service attacks. This could compromise user data and system stability.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade idna: 3.11 \u2192 3.15",
-      "priority": "HIGH",
-      "affected_modules": [
-        "idna"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install \"idna>=3.15,<4.0\"\n\nBreaking changes: None known. The idna library primarily handles Internationalized Domain Names in Applications. Its core functionality is unlikely to have breaking changes that impact typical Django or Celery operations unless custom domain validation logic is heavily reliant on specific internal idna behaviors, which is rare.\n\nVerify: python manage.py shell -c \"import idna; print(idna.__version__)\"",
-      "rec_id": "rec-b3ba7869a873",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install \"Django>=6.0.5,<6.1\"",
-      "why_upgrade": "Upgrading to Django 6.0.5 addresses potential future security vulnerabilities and provides access to new features and performance optimizations. It ensures the project remains on a supported and secure version of the framework.",
-      "breaking_changes": "None known for typical usage patterns. Django 6.0 is a minor release and generally backward compatible. Review of `django.contrib.auth` and `django.db.models` usage is recommended, but direct breaking changes are unlikely for this version jump.",
-      "test_after": "python manage.py test",
-      "risk_if_skipped": "Exposure to unpatched security vulnerabilities, even if none are currently known for 5.2.12. Missed performance improvements and new features that could be leveraged in future development. Potential for increased difficulty in upgrading to future major Django versions.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade Django: 5.2.12 \u2192 6.0.5",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "Django"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install \"Django>=6.0.5,<6.1\"\n\nBreaking changes: None known for typical usage patterns. Django 6.0 is a minor release and generally backward compatible. Review of `django.contrib.auth` and `django.db.models` usage is recommended, but direct breaking changes are unlikely for this version jump.\n\nVerify: python manage.py test",
-      "rec_id": "rec-91e3d1cd25be",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install jsonschema==4.26.0",
-      "why_upgrade": "Upgrading jsonschema to the latest version ensures the project benefits from the latest bug fixes and potential performance improvements. While the installed version has no known CVEs, staying current is a best practice for long-term security and maintainability.",
-      "breaking_changes": "None known. The jsonschema library's core functionality and API are generally stable. No direct impact on Django or Celery usage is anticipated.",
-      "test_after": "python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "risk_if_skipped": "Missed opportunity to incorporate minor bug fixes and performance enhancements. In the long term, falling behind on dependency versions can increase the effort required for future upgrades and introduce latent security vulnerabilities.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade jsonschema: 4.19.0 \u2192 4.26.0",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "jsonschema"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install jsonschema==4.26.0\n\nBreaking changes: None known. The jsonschema library's core functionality and API are generally stable. No direct impact on Django or Celery usage is anticipated.\n\nVerify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "rec_id": "rec-fd5e8ea66109",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install packaging==26.2",
-      "why_upgrade": "While no CVEs are present on the installed version, upgrading to 26.2 ensures the project benefits from the latest bug fixes and potential performance optimizations within the packaging library. This proactive maintenance reduces the risk of encountering unforeseen issues with dependency resolution or build processes in the future.",
-      "breaking_changes": "None known. The packaging library primarily deals with metadata and distribution formats, and minor version updates are generally backward-compatible for typical Python/Django usage.",
-      "test_after": "python manage.py check",
-      "risk_if_skipped": "The primary risk is the missed opportunity to benefit from minor bug fixes and performance improvements. In the long term, not keeping dependencies updated can lead to compatibility issues when other packages require newer versions of 'packaging', potentially causing build failures or unexpected runtime errors.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade packaging: 26.0 \u2192 26.2",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "packaging"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install packaging==26.2\n\nBreaking changes: None known. The packaging library primarily deals with metadata and distribution formats, and minor version updates are generally backward-compatible for typical Python/Django usage.\n\nVerify: python manage.py check",
-      "rec_id": "rec-21a0943a8000",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install pathspec==1.1.1",
-      "why_upgrade": "While no CVEs are reported on the installed version, upgrading to the latest pathspec ensures the project benefits from any minor bug fixes, performance enhancements, or potential future compatibility improvements. It's good practice to stay current with dependencies to mitigate unforeseen risks.",
-      "breaking_changes": "None known. The pathspec library is primarily used for file path matching and is unlikely to have breaking changes that impact core Django or Celery functionality in this minor version update.",
-      "test_after": "python manage.py test",
-      "risk_if_skipped": "Minimal immediate risk due to no reported CVEs. However, skipping the upgrade leaves the project vulnerable to potential future security issues or compatibility problems with other updated dependencies.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade pathspec: 1.0.4 \u2192 1.1.1",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "pathspec"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install pathspec==1.1.1\n\nBreaking changes: None known. The pathspec library is primarily used for file path matching and is unlikely to have breaking changes that impact core Django or Celery functionality in this minor version update.\n\nVerify: python manage.py test",
-      "rec_id": "rec-e1733dc82750",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install markdown-it-py==4.2.0",
-      "why_upgrade": "Upgrading addresses critical CVEs in the installed version, mitigating security vulnerabilities. The latest version also includes bug fixes and potential performance enhancements.",
-      "breaking_changes": "None known. The changelog for markdown-it-py between 4.0.0 and 4.2.0 does not indicate any API-breaking changes that would impact typical Python usage, including within Django or Celery contexts.",
-      "test_after": "python manage.py test nexus_content",
-      "risk_if_skipped": "Continued exposure to known security vulnerabilities (CVEs) in the markdown-it-py library, potentially leading to data breaches or system compromise.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade markdown-it-py: 4.0.0 \u2192 4.2.0",
-      "priority": "HIGH",
-      "affected_modules": [
-        "markdown-it-py"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install markdown-it-py==4.2.0\n\nBreaking changes: None known. The changelog for markdown-it-py between 4.0.0 and 4.2.0 does not indicate any API-breaking changes that would impact typical Python usage, including within Django or Celery contexts.\n\nVerify: python manage.py test nexus_content",
-      "rec_id": "rec-2fe77fdd1537",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Upgrade platformdirs: 4.9.4 \u2192 4.9.6",
-      "priority": "MEDIUM",
-      "action": "pip install platformdirs==4.9.6\n\n```json\n{\n  \"upgrade_command\": \"pip install platform",
-      "affected_modules": [
-        "platformdirs"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "rec_type": "upgrade",
-      "rec_id": "rec-fbbde4c546f4",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Upgrade pre_commit: 4.5.1 \u2192 4.6.0",
-      "priority": "MEDIUM",
-      "action": "pip install pre_commit==4.6.0\n\n```json\n{\n  \"upgrade_command\": \"pip",
-      "affected_modules": [
-        "pre_commit"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "rec_type": "upgrade",
-      "rec_id": "rec-8a61f50a5065",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "upgrade_command": "pip install --upgrade psycopg2-binary==2.9.12",
-      "why_upgrade": "While no CVEs are reported for 2.9.11, upgrading to the latest patch version ensures you benefit from any minor bug fixes or performance enhancements. It's standard practice to stay on the latest patch release for stability and potential improvements.",
-      "breaking_changes": "None known. Patch releases typically contain only bug fixes and minor improvements, with no breaking API changes.",
-      "test_after": "python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "risk_if_skipped": "Missing out on potential minor stability improvements or bug fixes, which could indirectly lead to subtle issues in database operations within any of the nexus applications.",
-      "confidence": 1,
-      "fix_effort": "unknown",
-      "fix_effort_rationale": "",
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "title": "Upgrade psycopg2-binary: 2.9.11 \u2192 2.9.12",
-      "priority": "MEDIUM",
-      "affected_modules": [
-        "psycopg2-binary"
-      ],
-      "rec_type": "upgrade",
-      "action": "pip install --upgrade psycopg2-binary==2.9.12\n\nBreaking changes: None known. Patch releases typically contain only bug fixes and minor improvements, with no breaking API changes.\n\nVerify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content",
-      "rec_id": "rec-270d6cbe9584",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Upgrade pydantic: 2.12.5 \u2192 2.13.4",
-      "priority": "HIGH",
-      "action": "pip install pydantic==2.13.4\n\n```json\n{\n  \"upgrade_command\": \"pip install pyd",
-      "affected_modules": [
-        "pydantic"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "rec_type": "upgrade",
-      "rec_id": "rec-11aca4420a55",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Upgrade python-discovery: 1.2.2 \u2192 1.3.1",
-      "priority": "MEDIUM",
-      "action": "pip install python-discovery==1.3.1\n\n```json\n{\n  \"upgrade_command\": \"pip install python-",
-      "affected_modules": [
-        "python-discovery"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "rec_type": "upgrade",
-      "rec_id": "rec-ae1290292536",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Upgrade pydantic_core: 2.41.5 \u2192 2.46.4",
-      "priority": "MEDIUM",
-      "action": "pip install pydantic_core==2.46.4\n\n```json\n{\n  \"upgrade_command\": \"pip install pyd",
-      "affected_modules": [
-        "pydantic_core"
-      ],
-      "ai_generated": true,
-      "ai_backend": "Google Gemini",
-      "rec_type": "upgrade",
-      "rec_id": "rec-5eebe28243c2",
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-286f9b739882",
       "fix_status": "open",
       "fix_notes": ""
     }
@@ -8855,9 +9170,9 @@
   "dependency_scan": {
     "packages": [
       {
-        "name": "annotated-types",
-        "installed": "0.7.0",
-        "latest": "0.7.0",
+        "name": "Automat",
+        "installed": "25.4.16",
+        "latest": "25.4.16",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -8871,6 +9186,14 @@
         "cves": []
       },
       {
+        "name": "async-timeout",
+        "installed": "5.0.1",
+        "latest": "5.0.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "attrs",
         "installed": "26.1.0",
         "latest": "26.1.0",
@@ -8879,25 +9202,9 @@
         "cves": []
       },
       {
-        "name": "anyio",
-        "installed": "4.13.0",
-        "latest": "4.13.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "Automat",
-        "installed": "25.4.16",
-        "latest": "25.4.16",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "asgiref",
-        "installed": "3.11.1",
-        "latest": "3.11.1",
+        "name": "annotated-types",
+        "installed": "0.7.0",
+        "latest": "0.7.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -8911,9 +9218,17 @@
         "cves": []
       },
       {
-        "name": "async-timeout",
-        "installed": "5.0.1",
-        "latest": "5.0.1",
+        "name": "anyio",
+        "installed": "4.13.0",
+        "latest": "4.13.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "asgiref",
+        "installed": "3.11.1",
+        "latest": "3.11.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9021,100 +9336,6 @@
         ]
       },
       {
-        "name": "billiard",
-        "installed": "4.2.4",
-        "latest": "4.2.4",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "cfgv",
-        "installed": "3.5.0",
-        "latest": "3.5.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "celery",
-        "installed": "5.6.3",
-        "latest": "5.6.3",
-        "outdated": false,
-        "cve_count": 4,
-        "cves": [
-          {
-            "id": "GHSA-q4xr-rc97-m4xx",
-            "summary": "OS Command Injection in celery",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
-          },
-          {
-            "id": "GHSA-rpc6-h455-3rx5",
-            "summary": "Celery local privilege escalation vulnerability",
-            "severity": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
-          },
-          {
-            "id": "PYSEC-2011-17",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
-          },
-          {
-            "id": "PYSEC-2021-858",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
-          }
-        ]
-      },
-      {
-        "name": "certifi",
-        "installed": "2026.2.25",
-        "latest": "2026.4.22",
-        "outdated": true,
-        "cve_count": 6,
-        "cves": [
-          {
-            "id": "GHSA-248v-346w-9cwc",
-            "summary": "Certifi removes GLOBALTRUST root certificate",
-            "severity": "",
-            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-248v-346w-9cwc"
-          },
-          {
-            "id": "GHSA-43fp-rhv2-5gv8",
-            "summary": "Certifi removing TrustCor root certificate",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:N/I:H/A:N",
-            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-43fp-rhv2-5gv8"
-          },
-          {
-            "id": "GHSA-xqr8-7jwr-rhp7",
-            "summary": "Removal of e-Tugra root certificate",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-xqr8-7jwr-rhp7"
-          },
-          {
-            "id": "PYSEC-2022-42986",
-            "summary": "",
-            "severity": "",
-            "url": "https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ"
-          },
-          {
-            "id": "PYSEC-2023-135",
-            "summary": "",
-            "severity": "",
-            "url": "https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/C-HrP1SEq1A"
-          },
-          {
-            "id": "PYSEC-2024-230",
-            "summary": "",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-248v-346w-9cwc"
-          }
-        ]
-      },
-      {
         "name": "backports-datetime-fromisoformat",
         "installed": "2.0.3",
         "latest": "2.0.3",
@@ -9126,6 +9347,14 @@
         "name": "bcrypt",
         "installed": "5.0.0",
         "latest": "5.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "billiard",
+        "installed": "4.2.4",
+        "latest": "4.2.4",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9200,12 +9429,90 @@
         ]
       },
       {
-        "name": "cffi",
-        "installed": "2.0.0",
-        "latest": "2.0.0",
+        "name": "certifi",
+        "installed": "2026.2.25",
+        "latest": "2026.4.22",
+        "outdated": true,
+        "cve_count": 6,
+        "cves": [
+          {
+            "id": "GHSA-248v-346w-9cwc",
+            "summary": "Certifi removes GLOBALTRUST root certificate",
+            "severity": "",
+            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-248v-346w-9cwc"
+          },
+          {
+            "id": "GHSA-43fp-rhv2-5gv8",
+            "summary": "Certifi removing TrustCor root certificate",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:N/I:H/A:N",
+            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-43fp-rhv2-5gv8"
+          },
+          {
+            "id": "GHSA-xqr8-7jwr-rhp7",
+            "summary": "Removal of e-Tugra root certificate",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-xqr8-7jwr-rhp7"
+          },
+          {
+            "id": "PYSEC-2022-42986",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ"
+          },
+          {
+            "id": "PYSEC-2023-135",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/C-HrP1SEq1A"
+          },
+          {
+            "id": "PYSEC-2024-230",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://github.com/certifi/python-certifi/security/advisories/GHSA-248v-346w-9cwc"
+          }
+        ]
+      },
+      {
+        "name": "cfgv",
+        "installed": "3.5.0",
+        "latest": "3.5.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "celery",
+        "installed": "5.6.3",
+        "latest": "5.6.3",
+        "outdated": false,
+        "cve_count": 4,
+        "cves": [
+          {
+            "id": "GHSA-q4xr-rc97-m4xx",
+            "summary": "OS Command Injection in celery",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
+          },
+          {
+            "id": "GHSA-rpc6-h455-3rx5",
+            "summary": "Celery local privilege escalation vulnerability",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
+          },
+          {
+            "id": "PYSEC-2011-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
+          },
+          {
+            "id": "PYSEC-2021-858",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
+          }
+        ]
       },
       {
         "name": "channels",
@@ -9264,18 +9571,18 @@
         "cves": []
       },
       {
-        "name": "click-didyoumean",
-        "installed": "0.3.1",
-        "latest": "0.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "click",
         "installed": "8.3.1",
         "latest": "8.4.0",
         "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "click-didyoumean",
+        "installed": "0.3.1",
+        "latest": "0.3.1",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -9304,10 +9611,26 @@
         "cves": []
       },
       {
+        "name": "cffi",
+        "installed": "2.0.0",
+        "latest": "2.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "cron-descriptor",
         "installed": "1.4.5",
         "latest": "2.0.8",
         "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "distlib",
+        "installed": "0.4.0",
+        "latest": "0.4.0",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -9328,9 +9651,9 @@
         "cves": []
       },
       {
-        "name": "distlib",
-        "installed": "0.4.0",
-        "latest": "0.4.0",
+        "name": "django-ratelimit",
+        "installed": "4.1.0",
+        "latest": "4.1.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9339,14 +9662,6 @@
         "name": "django-celery-beat",
         "installed": "2.9.0",
         "latest": "2.9.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "django-ratelimit",
-        "installed": "4.1.0",
-        "latest": "4.1.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9431,27 +9746,6 @@
         "cves": []
       },
       {
-        "name": "filelock",
-        "installed": "3.25.2",
-        "latest": "3.29.0",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-qmgc-5h2g-mvrw",
-            "summary": "filelock Time-of-Check-Time-of-Use (TOCTOU) Symlink Vulnerability in SoftFileLock",
-            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:H",
-            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-qmgc-5h2g-mvrw"
-          },
-          {
-            "id": "GHSA-w853-jp5j-5j7f",
-            "summary": "filelock has a TOCTOU race condition which allows symlink attacks during lock file creation",
-            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:H",
-            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-w853-jp5j-5j7f"
-          }
-        ]
-      },
-      {
         "name": "h11",
         "installed": "0.16.0",
         "latest": "0.16.0",
@@ -9473,6 +9767,64 @@
         "outdated": false,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "filelock",
+        "installed": "3.25.2",
+        "latest": "3.29.0",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-qmgc-5h2g-mvrw",
+            "summary": "filelock Time-of-Check-Time-of-Use (TOCTOU) Symlink Vulnerability in SoftFileLock",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:H",
+            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-qmgc-5h2g-mvrw"
+          },
+          {
+            "id": "GHSA-w853-jp5j-5j7f",
+            "summary": "filelock has a TOCTOU race condition which allows symlink attacks during lock file creation",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:H",
+            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-w853-jp5j-5j7f"
+          }
+        ]
+      },
+      {
+        "name": "Incremental",
+        "installed": "24.11.0",
+        "latest": "24.11.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "identify",
+        "installed": "2.6.18",
+        "latest": "2.6.19",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "idna",
+        "installed": "3.11",
+        "latest": "3.15",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-jjg7-2v4v-x38h",
+            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
+          },
+          {
+            "id": "PYSEC-2024-60",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
+          }
+        ]
       },
       {
         "name": "cryptography",
@@ -9652,14 +10004,6 @@
         ]
       },
       {
-        "name": "Incremental",
-        "installed": "24.11.0",
-        "latest": "24.11.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "iniconfig",
         "installed": "2.3.0",
         "latest": "2.3.0",
@@ -9668,38 +10012,38 @@
         "cves": []
       },
       {
-        "name": "idna",
-        "installed": "3.11",
-        "latest": "3.15",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-jjg7-2v4v-x38h",
-            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
-          },
-          {
-            "id": "PYSEC-2024-60",
-            "summary": "",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
-          }
-        ]
-      },
-      {
-        "name": "identify",
-        "installed": "2.6.18",
-        "latest": "2.6.19",
-        "outdated": true,
+        "name": "jsonschema-specifications",
+        "installed": "2025.9.1",
+        "latest": "2025.9.1",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "Django",
-        "installed": "5.2.12",
-        "latest": "6.0.5",
+        "name": "joblib",
+        "installed": "1.5.3",
+        "latest": "1.5.3",
+        "outdated": false,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-6hrg-qmvc-2xh8",
+            "summary": "joblib vulnerable to arbitrary code execution",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-21797"
+          },
+          {
+            "id": "PYSEC-2022-288",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/joblib/joblib/commit/b90f10efeb670a2cc877fb88ebb3f2019189e059"
+          }
+        ]
+      },
+      {
+        "name": "jsonschema",
+        "installed": "4.19.0",
+        "latest": "4.26.0",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -9804,18 +10148,10 @@
         ]
       },
       {
-        "name": "jsonschema-specifications",
-        "installed": "2025.9.1",
-        "latest": "2025.9.1",
+        "name": "mdurl",
+        "installed": "0.1.2",
+        "latest": "0.1.2",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "jsonschema",
-        "installed": "4.19.0",
-        "latest": "4.26.0",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -9828,33 +10164,1663 @@
         "cves": []
       },
       {
-        "name": "joblib",
-        "installed": "1.5.3",
-        "latest": "1.5.3",
-        "outdated": false,
-        "cve_count": 2,
+        "name": "Django",
+        "installed": "5.2.12",
+        "latest": "6.0.5",
+        "outdated": true,
+        "cve_count": 275,
         "cves": [
           {
-            "id": "GHSA-6hrg-qmvc-2xh8",
-            "summary": "joblib vulnerable to arbitrary code execution",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-21797"
+            "id": "GHSA-2655-q453-22f9",
+            "summary": "Django Allows Arbitrary URL Generation",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2012-4520"
           },
           {
-            "id": "PYSEC-2022-288",
+            "id": "GHSA-296w-6qhq-gf92",
+            "summary": "Django denial of service via file upload naming",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0481"
+          },
+          {
+            "id": "GHSA-2f9x-5v75-3qv4",
+            "summary": "Django Denial-of-service possibility in truncatechars_html and truncatewords_html template filters",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-7537"
+          },
+          {
+            "id": "GHSA-2gwj-7jmv-h26r",
+            "summary": "SQL Injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-28346"
+          },
+          {
+            "id": "GHSA-2hrw-hx67-34x6",
+            "summary": "Resource exhaustion in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-24580"
+          },
+          {
+            "id": "GHSA-2m34-jcjv-45xf",
+            "summary": "XSS in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-13596"
+          },
+          {
+            "id": "GHSA-2mcm-79hx-8fxw",
+            "summary": "Django has Observable Timing Discrepancy",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N/E:U",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-13473"
+          },
+          {
+            "id": "GHSA-337x-4q8g-prc5",
+            "summary": "Improper Input Validation in Django",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-3498"
+          },
+          {
+            "id": "GHSA-33mw-q7rj-mjwj",
+            "summary": "Django has Inefficient Algorithmic Complexity",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-14550"
+          },
+          {
+            "id": "GHSA-37hp-765x-j95x",
+            "summary": "Django open redirect and possible XSS attack via user-supplied numeric redirect URLs",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-7233"
+          },
+          {
+            "id": "GHSA-3f2c-jm6v-cr35",
+            "summary": "Django DNS Rebinding Vulnerability",
+            "severity": "CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-9014"
+          },
+          {
+            "id": "GHSA-3gh2-xw74-jmcw",
+            "summary": "SQL injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-9402"
+          },
+          {
+            "id": "GHSA-3jqw-crqj-w8qw",
+            "summary": "Denial of service in django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4137"
+          },
+          {
+            "id": "GHSA-46x4-9jmv-jc8p",
+            "summary": "Django Access Restrictions Bypass ",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2048"
+          },
+          {
+            "id": "GHSA-4894-5vqc-6r2r",
+            "summary": "Django cross-site scripting (XSS) vulnerability in the AdminURLFieldWidget widget",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-4249"
+          },
+          {
+            "id": "GHSA-4c42-4rxm-x6qf",
+            "summary": "Django Denial of Service Vulnerability in the authentication framework ",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-1443"
+          },
+          {
+            "id": "GHSA-4rrr-2h4v-f3j9",
+            "summary": "Django has Inefficient Algorithmic Complexity",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N/E:U",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1285"
+          },
+          {
+            "id": "GHSA-53qw-q765-4fww",
+            "summary": "Denial-of-service in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45115"
+          },
+          {
+            "id": "GHSA-54qj-48vx-cr9f",
+            "summary": "Django Cross-site scripting (XSS) vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2008-2302"
+          },
+          {
+            "id": "GHSA-59w8-4wm2-4xw8",
+            "summary": "Django Image Field Vulnerable to Image Decompression Bombs",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2012-3443"
+          },
+          {
+            "id": "GHSA-5h2q-4hrp-v9rr",
+            "summary": "Django vulnerable to Improper Restriction of Operations within the Bounds of a Memory Buffer",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2012-3444"
+          },
+          {
+            "id": "GHSA-5hg3-6c2f-f3wr",
+            "summary": "Django open redirect",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-14574"
+          },
+          {
+            "id": "GHSA-5hgc-2vfp-mqvc",
+            "summary": "Django vulnerable to denial-of-service attack via the urlize() and urlizetrunc() template filters",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-45230"
+          },
+          {
+            "id": "GHSA-5hrc-gvxj-w55p",
+            "summary": "Django Uses Cache Containing Sensitive Information",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-6907"
+          },
+          {
+            "id": "GHSA-5j2h-h5hg-3wf8",
+            "summary": "Cross-site request forgery in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-0696"
+          },
+          {
+            "id": "GHSA-5mf9-h53q-7mhq",
+            "summary": "Django has potential DoS via MultiPartParser through crafted multipart uploads",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33033"
+          },
+          {
+            "id": "GHSA-625g-gx8c-xcmg",
+            "summary": "Django Middleware Enables Session Hijacking",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0482"
+          },
+          {
+            "id": "GHSA-6426-9fv3-65x8",
+            "summary": "Django has an SQL Injection issue",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1312"
+          },
+          {
+            "id": "GHSA-6565-fg86-6jcx",
+            "summary": "Django Cross-site Scripting Vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-2241"
+          },
+          {
+            "id": "GHSA-68w8-qjq3-2gfm",
+            "summary": "Path Traversal in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33203"
+          },
+          {
+            "id": "GHSA-6c3j-c64m-qhgq",
+            "summary": "XSS in jQuery as used in Drupal, Backdrop CMS, and other products",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-11358"
+          },
+          {
+            "id": "GHSA-6c7v-2f49-8h26",
+            "summary": "Django Incorrect HTTP detection with reverse-proxy connecting via HTTPS",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-12781"
+          },
+          {
+            "id": "GHSA-6cw3-g6wv-c2xv",
+            "summary": "Infinite Loop in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23833"
+          },
+          {
+            "id": "GHSA-6g95-x6cj-mg4v",
+            "summary": "Django database denial-of-service with ModelMultipleChoiceField",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-0222"
+          },
+          {
+            "id": "GHSA-6mx3-3vqg-hpp2",
+            "summary": "Django allows unprivileged users to read the password hashes of arbitrary accounts",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-16984"
+          },
+          {
+            "id": "GHSA-6r97-cj55-9hrq",
+            "summary": "SQL Injection in Django",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14234"
+          },
+          {
+            "id": "GHSA-6w2r-r2m5-xq5w",
+            "summary": "Django is subject to SQL injection through its column aliases",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-57833"
+          },
+          {
+            "id": "GHSA-6wcr-wcqm-3mfh",
+            "summary": "Django settings leak in date template filter",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-8213"
+          },
+          {
+            "id": "GHSA-6wgp-fwfm-mxp3",
+            "summary": "Django allows user sessions hijacking via an empty string in the session key",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-3982"
+          },
+          {
+            "id": "GHSA-78vx-ggch-wghm",
+            "summary": "Django Allows Redirect via Data URL",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2012-3442"
+          },
+          {
+            "id": "GHSA-795c-9xpc-xw6g",
+            "summary": "Django vulnerable to a denial-of-service attack",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-41990"
+          },
+          {
+            "id": "GHSA-7fq8-4pv5-5w5c",
+            "summary": "Django cross-site scripting (XSS) attack via user-supplied redirect URLs",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-2317"
+          },
+          {
+            "id": "GHSA-7g9h-c88w-r7h2",
+            "summary": "Directory traversal in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-0698"
+          },
+          {
+            "id": "GHSA-7h2m-m8vj-598h",
+            "summary": "Django Uses Persistent Cookies Containing Sensitive Information ",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-35192"
+          },
+          {
+            "id": "GHSA-7h4p-27mh-hmrw",
+            "summary": "Django Denial of service vulnerability in django.utils.encoding.uri_to_iri",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-41164"
+          },
+          {
+            "id": "GHSA-7qfw-j7hp-v45g",
+            "summary": "Django WSGI Header Spoofing Vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-0219"
+          },
+          {
+            "id": "GHSA-7rp2-fm2h-wchj",
+            "summary": "Django Cross-site Scripting in AdminURLFieldWidget",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-12308"
+          },
+          {
+            "id": "GHSA-7wph-fc4w-wqp2",
+            "summary": "Improper date handling in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-4535"
+          },
+          {
+            "id": "GHSA-7xr5-9hcq-chf9",
+            "summary": "Django Improper Output Neutralization for Logs vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-48432"
+          },
+          {
+            "id": "GHSA-8498-2h75-472j",
+            "summary": "Django denial-of-service in django.utils.html.strip_tags()",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-53907"
+          },
+          {
+            "id": "GHSA-89hj-xfx5-7q66",
+            "summary": "Django Reuses Cached CSRF Token",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0473"
+          },
+          {
+            "id": "GHSA-8c5j-9r9f-c6w8",
+            "summary": "Information disclosure in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45116"
+          },
+          {
+            "id": "GHSA-8j24-cjrq-gr2m",
+            "summary": "Django has a denial-of-service possibility in strip_tags()",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-32873"
+          },
+          {
+            "id": "GHSA-8m3r-rv5g-fcpq",
+            "summary": "Cross-site scripting in django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-0697"
+          },
+          {
+            "id": "GHSA-8p8v-wh79-9r56",
+            "summary": "Django vulnerable to Uncontrolled Resource Consumption",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25673"
+          },
+          {
+            "id": "GHSA-8x94-hmjh-97hq",
+            "summary": "Django vulnerable to Reflected File Download attack",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-36359"
+          },
+          {
+            "id": "GHSA-933h-hp56-hf7m",
+            "summary": "Django: SGI requests with a missing or understated `Content-Length` header could bypass the `DATA_UPLOAD_MAX_MEMORY_SIZE` limit",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-33034"
+          },
+          {
+            "id": "GHSA-95rw-fx8r-36v6",
+            "summary": "Cross-site Scripting in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22818"
+          },
+          {
+            "id": "GHSA-9cwg-mhxf-hh59",
+            "summary": "Django cross-site scripting (XSS) vulnerability via is_safe_url function ",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-6044"
+          },
+          {
+            "id": "GHSA-9jmf-237g-qf46",
+            "summary": "Django Path Traversal vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-39330"
+          },
+          {
+            "id": "GHSA-9r8w-6x8c-6jr9",
+            "summary": "Django vulnerable to XSS on 500 pages",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12794"
+          },
+          {
+            "id": "GHSA-9v8h-57gv-qch6",
+            "summary": "Django vulnerable to Denial of Service via i18n middleware component",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-5712"
+          },
+          {
+            "id": "GHSA-9xg7-gg9m-rmq9",
+            "summary": "Django Admin Media Handler Vulnerable to Directory Traversal",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2009-2659"
+          },
+          {
+            "id": "GHSA-c4qh-4vgv-qc6g",
+            "summary": "Django Denial-of-service in django.utils.text.Truncator",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14232"
+          },
+          {
+            "id": "GHSA-c8c8-9472-w52h",
+            "summary": "Django Cross-site scripting Vulnerability",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-6186"
+          },
+          {
+            "id": "GHSA-cqf7-ff9h-7967",
+            "summary": "Django ReDoS in validators.URLValidator",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5145"
+          },
+          {
+            "id": "GHSA-crhm-qpjc-cm64",
+            "summary": "Django CSRF Protection Bypass",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-7401"
+          },
+          {
+            "id": "GHSA-f6f8-9mx6-9mx2",
+            "summary": "Django vulnerable to Denial of Service",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-39614"
+          },
+          {
+            "id": "GHSA-f7cm-ccfp-3q4r",
+            "summary": "Django Incorrectly Validates URLs",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0480"
+          },
+          {
+            "id": "GHSA-fp6p-5xvw-m74f",
+            "summary": "Django User Enumeration Vulnerability",
+            "severity": "CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2513"
+          },
+          {
+            "id": "GHSA-fr28-569j-53c4",
+            "summary": "Django Incorrect Default Permissions",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-24584"
+          },
+          {
+            "id": "GHSA-frmv-pr5f-9mcr",
+            "summary": "Django vulnerable to SQL injection via _connector keyword argument in QuerySet and Q objects.",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64459"
+          },
+          {
+            "id": "GHSA-fvgf-6h6h-3322",
+            "summary": "Django Directory Traversal via archive.extract",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-3281"
+          },
+          {
+            "id": "GHSA-fwr5-q9rx-294f",
+            "summary": "Improper query string handling in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-4534"
+          },
+          {
+            "id": "GHSA-fxpg-gg9g-76gj",
+            "summary": "Cross-site scripting in django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2010-3082"
+          },
+          {
+            "id": "GHSA-g8xg-jgj6-49r3",
+            "summary": "Django is vulnerable to Denial of Service attack in formset ",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-0306"
+          },
+          {
+            "id": "GHSA-gv98-g628-m9x5",
+            "summary": "Django Cross-site Scripting Vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-0220"
+          },
+          {
+            "id": "GHSA-gvg8-93h5-g6qq",
+            "summary": "Django has an SQL Injection issue",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:U",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1287"
+          },
+          {
+            "id": "GHSA-h4hv-m4h4-mhwg",
+            "summary": "Django open redirect",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-7234"
+          },
+          {
+            "id": "GHSA-h582-2pch-3xv3",
+            "summary": "Django Denial-of-service by filling session store",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5143"
+          },
+          {
+            "id": "GHSA-h5jv-4p7w-64jg",
+            "summary": "Django Denial-of-service in strip_tags()",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14233"
+          },
+          {
+            "id": "GHSA-h8gc-pgj2-vjm3",
+            "summary": "Django Denial-of-service in django.utils.text.Truncator",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-43665"
+          },
+          {
+            "id": "GHSA-h95j-h2rv-qrg4",
+            "summary": "Django Cross-Site Request Forgery vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4140"
+          },
+          {
+            "id": "GHSA-hmr4-m2h5-33qx",
+            "summary": "SQL injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7471"
+          },
+          {
+            "id": "GHSA-hpr9-3m2g-3j9p",
+            "summary": "Django vulnerable to SQL injection in column aliases",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59681"
+          },
+          {
+            "id": "GHSA-hvmf-r92r-27hr",
+            "summary": "Django allows unintended model editing",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-19118"
+          },
+          {
+            "id": "GHSA-j3j3-jrfh-cm2w",
+            "summary": "Django Denial-of-service possibility with strip_tags",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-2316"
+          },
+          {
+            "id": "GHSA-jh3w-4vvf-mjgr",
+            "summary": "Django has regular expression denial of service vulnerability in EmailValidator/URLValidator",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-36053"
+          },
+          {
+            "id": "GHSA-jh75-99hh-qvx9",
+            "summary": "Django memory consumption vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-41989"
+          },
+          {
+            "id": "GHSA-jhjg-w2cp-5j44",
+            "summary": "Django DoS in django.views.static.serve",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-0221"
+          },
+          {
+            "id": "GHSA-jrh2-hc4r-7jwx",
+            "summary": "Directory-traversal in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-45452"
+          },
+          {
+            "id": "GHSA-m6gj-h9gm-gw44",
+            "summary": "Django Incorrect Default Permissions",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-24583"
+          },
+          {
+            "id": "GHSA-m9g8-fxxm-xg86",
+            "summary": "Django SQL injection in HasKey(lhs, rhs) on Oracle",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-53908"
+          },
+          {
+            "id": "GHSA-mjgh-79qc-68w3",
+            "summary": "Django has a Race Condition vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-25674"
+          },
+          {
+            "id": "GHSA-mmwr-2jhp-mc7j",
+            "summary": "Django vulnerable to privilege abuse in ModelAdmin.list_editable",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4292"
+          },
+          {
+            "id": "GHSA-mv8g-fhh6-6267",
+            "summary": "Django user with hardcoded password created when running tests on Oracle",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-9013"
+          },
+          {
+            "id": "GHSA-mvfq-ggxm-9mc5",
+            "summary": "Django vulnerable to ASGI header spoofing via underscore/hyphen conflation",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3902"
+          },
+          {
+            "id": "GHSA-mwm9-4648-f68q",
+            "summary": "Django has an SQL Injection issue",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:U",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-1207"
+          },
+          {
+            "id": "GHSA-mwv2-398h-v489",
+            "summary": "Django Improper Access Control",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-0405"
+          },
+          {
+            "id": "GHSA-p3fp-8748-vqfq",
+            "summary": "Django vulnerable to Allocation of Resources Without Limits or Throttling",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-26699"
+          },
+          {
+            "id": "GHSA-p64x-8rxx-wf6q",
+            "summary": "Django `Trunc()` and `Extract()` database functions vulnerable to SQL Injection",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-34265"
+          },
+          {
+            "id": "GHSA-p6m5-h7pp-v2x5",
+            "summary": "Django Regex Algorithmic Complexity Causes Denial of Service",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2009-3695"
+          },
+          {
+            "id": "GHSA-p99v-5w3c-jqq9",
+            "summary": "Django Access Control Bypass possibly leading to SSRF, RFI, and LFI attacks ",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33571"
+          },
+          {
+            "id": "GHSA-pgxh-wfw4-jx2v",
+            "summary": "Django denial of service via empty session record creation",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5963"
+          },
+          {
+            "id": "GHSA-pv4p-cwwg-4rph",
+            "summary": "Django SQL injection vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-42005"
+          },
+          {
+            "id": "GHSA-pw27-w7w4-9qc7",
+            "summary": "Django XSS Vulnerability",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2512"
+          },
+          {
+            "id": "GHSA-pwjp-ccjc-ghwg",
+            "summary": "Django vulnerable to privilege abuse in GenericInlineModelAdmin",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4277"
+          },
+          {
+            "id": "GHSA-q2jf-h9jm-m7p4",
+            "summary": "Django contains Uncontrolled Resource Consumption via cached header",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-23969"
+          },
+          {
+            "id": "GHSA-q5qw-4364-5hhm",
+            "summary": "Django Vulnerable to HTTP Response Splitting Attack",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5144"
+          },
+          {
+            "id": "GHSA-q7q2-qf2q-rw3w",
+            "summary": "Django Vulnerable to Cache Poisoning",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-1418"
+          },
+          {
+            "id": "GHSA-q95w-c7qg-hrff",
+            "summary": "Django vulnerable to partial directory traversal via archives",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-59682"
+          },
+          {
+            "id": "GHSA-qc99-g3wm-hgxr",
+            "summary": "Django Arbitrary Code Execution",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2007-0404"
+          },
+          {
+            "id": "GHSA-qcgg-j2x8-h9g8",
+            "summary": "Django has a potential denial-of-service vulnerability in IPv6 validation",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-56374"
+          },
+          {
+            "id": "GHSA-qg2p-9jwr-mmqf",
+            "summary": "Django vulnerable to Denial of Service",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-38875"
+          },
+          {
+            "id": "GHSA-qm57-vhq3-3fwf",
+            "summary": "Header injection possible in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32052"
+          },
+          {
+            "id": "GHSA-qmf9-6jqf-j8fq",
+            "summary": "Django potential denial of service vulnerability in UsernameField on Windows",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46695"
+          },
+          {
+            "id": "GHSA-qrh7-x6fp-c2mp",
+            "summary": "XML Entity Expansion (XEE) in Django",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-1664"
+          },
+          {
+            "id": "GHSA-qrw5-5h28-6cmg",
+            "summary": "Django denial-of-service vulnerability in internationalized URLs",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-41323"
+          },
+          {
+            "id": "GHSA-qw25-v68c-qjf3",
+            "summary": "Django has a denial-of-service vulnerability in HttpResponseRedirect and HttpResponsePermanentRedirect on Windows",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64458"
+          },
+          {
+            "id": "GHSA-r28v-mw67-m5p9",
+            "summary": "Django denial-of-service possibility in urlize and urlizetrunc template filters",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-7536"
+          },
+          {
+            "id": "GHSA-r3xc-prgr-mg9p",
+            "summary": "Django bypasses validation when using one form field to upload multiple files",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31047"
+          },
+          {
+            "id": "GHSA-r5cj-wv24-92p5",
+            "summary": "Django cross-site request forgery (CSRF) vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2008-3909"
+          },
+          {
+            "id": "GHSA-r7w6-p47g-vj53",
+            "summary": "Django Data leakage via admin history log",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-0305"
+          },
+          {
+            "id": "GHSA-r836-hh6v-rg5g",
+            "summary": "Django vulnerable to denial-of-service attack",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-41991"
+          },
+          {
+            "id": "GHSA-rf4j-j272-fj86",
+            "summary": "Django vulnerable to information leakage in AuthenticationForm",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-6188"
+          },
+          {
+            "id": "GHSA-rm2j-x595-q9cj",
+            "summary": "Django Vulnerable to Cache Poisoning",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4139"
+          },
+          {
+            "id": "GHSA-rqw2-ghq9-44m7",
+            "summary": "Django is vulnerable to SQL injection in column aliases",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-13372"
+          },
+          {
+            "id": "GHSA-rrqc-c2jx-6jgv",
+            "summary": "Django allows enumeration of user e-mail addresses",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-45231"
+          },
+          {
+            "id": "GHSA-rvq6-mrpv-m6rm",
+            "summary": "Code Injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0472"
+          },
+          {
+            "id": "GHSA-rw75-m7gp-92m3",
+            "summary": "Django data leakage via querystring manipulation in admin",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0483"
+          },
+          {
+            "id": "GHSA-rxjp-mfm9-w4wr",
+            "summary": "Path Traversal in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-31542"
+          },
+          {
+            "id": "GHSA-v6rh-hp5x-86rv",
+            "summary": "Potential bypass of an upstream access control based on URL paths in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44420"
+          },
+          {
+            "id": "GHSA-v9qg-3j8p-r63v",
+            "summary": "Uncontrolled Recursion in Django",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-14235"
+          },
+          {
+            "id": "GHSA-vfq6-hq5r-27r6",
+            "summary": "Django Potential account hijack via password reset form",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-19844"
+          },
+          {
+            "id": "GHSA-vjjp-9r83-22rc",
+            "summary": "Django Directory Traversal via ssi template tag",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-4315"
+          },
+          {
+            "id": "GHSA-vm8q-m57g-pff3",
+            "summary": "Regular expression denial-of-service in Django",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-27351"
+          },
+          {
+            "id": "GHSA-vq3h-3q7v-9prw",
+            "summary": "Django Allows Open Redirects",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-3730"
+          },
+          {
+            "id": "GHSA-vrcr-9hj9-jcg6",
+            "summary": "Django is vulnerable to DoS via XML serializer text extraction",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-64460"
+          },
+          {
+            "id": "GHSA-w24h-v9qh-8gxj",
+            "summary": "SQL Injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-28347"
+          },
+          {
+            "id": "GHSA-w26r-rmm8-9c29",
+            "summary": "Django has an Improper Handling of Length Parameter Inconsistency",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-5766"
+          },
+          {
+            "id": "GHSA-wh4h-v3f2-r2pp",
+            "summary": "Uncontrolled Memory Consumption in Django",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-6975"
+          },
+          {
+            "id": "GHSA-wpjr-j57x-wxfw",
+            "summary": "Data leakage via cache key collision in Django",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-13254"
+          },
+          {
+            "id": "GHSA-wqfg-m96j-85vm",
+            "summary": "Django Potential Denial of Service (DoS) on Windows ",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-27556"
+          },
+          {
+            "id": "GHSA-wqjj-hx84-v449",
+            "summary": "Django Vulnerable to MySQL Injection",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-0474"
+          },
+          {
+            "id": "GHSA-wxg3-mfph-qg9w",
+            "summary": "Django Might Allow CSRF Requests via URL Verification",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4138"
+          },
+          {
+            "id": "GHSA-x38m-486c-2wr9",
+            "summary": "Denial-of-service possibility in logout() view by filling session store",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-5964"
+          },
+          {
+            "id": "GHSA-x64m-686f-fmm3",
+            "summary": "XML External Entity (XXE) in Django",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2013-1665"
+          },
+          {
+            "id": "GHSA-x7q2-wr7g-xqmf",
+            "summary": "Django vulnerable to user enumeration attack",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-39329"
+          },
+          {
+            "id": "GHSA-x88j-93vc-wpmp",
+            "summary": "Session manipulation in Django",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4136"
+          },
+          {
+            "id": "GHSA-xgxc-v2qg-chmh",
+            "summary": "Directory Traversal in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28658"
+          },
+          {
+            "id": "GHSA-xpfp-f569-q3p2",
+            "summary": "SQL Injection in Django",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-35042"
+          },
+          {
+            "id": "GHSA-xxj9-f6rv-m3x4",
+            "summary": "Django denial-of-service attack in the intcomma template filter",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-24680"
+          },
+          {
+            "id": "PYSEC-2007-1",
             "summary": "",
             "severity": "",
-            "url": "https://github.com/joblib/joblib/commit/b90f10efeb670a2cc877fb88ebb3f2019189e059"
+            "url": "http://www.djangoproject.com/weblog/2007/oct/26/security-fix"
+          },
+          {
+            "id": "PYSEC-2008-1",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.djangoproject.com/weblog/2008/may/14/security/"
+          },
+          {
+            "id": "PYSEC-2008-2",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2008/09/03/4"
+          },
+          {
+            "id": "PYSEC-2009-3",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.securityfocus.com/bid/35859"
+          },
+          {
+            "id": "PYSEC-2009-4",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.securityfocus.com/bid/36655"
+          },
+          {
+            "id": "PYSEC-2010-12",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=632239"
+          },
+          {
+            "id": "PYSEC-2011-1",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=737366"
+          },
+          {
+            "id": "PYSEC-2011-10",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=676357"
+          },
+          {
+            "id": "PYSEC-2011-11",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=676359"
+          },
+          {
+            "id": "PYSEC-2011-12",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.djangoproject.com/weblog/2011/feb/08/security/"
+          },
+          {
+            "id": "PYSEC-2011-2",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=737366"
+          },
+          {
+            "id": "PYSEC-2011-3",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2011/sep/10/127/"
+          },
+          {
+            "id": "PYSEC-2011-4",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=737366"
+          },
+          {
+            "id": "PYSEC-2011-5",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=737366"
+          },
+          {
+            "id": "PYSEC-2011-8",
+            "summary": "",
+            "severity": "",
+            "url": "http://archives.neohapsis.com/archives/fulldisclosure/2010-12/0580.html"
+          },
+          {
+            "id": "PYSEC-2011-9",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.djangoproject.com/weblog/2010/dec/22/security/"
+          },
+          {
+            "id": "PYSEC-2012-2",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2012/jul/30/security-releases-issued/"
+          },
+          {
+            "id": "PYSEC-2012-3",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2012/07/31/2"
+          },
+          {
+            "id": "PYSEC-2012-4",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2012/07/31/1"
+          },
+          {
+            "id": "PYSEC-2012-7",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/django/django/commit/9305c0e12d43c4df999c3301a1f0c742264a657e"
+          },
+          {
+            "id": "PYSEC-2013-16",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2013/feb/19/security/"
+          },
+          {
+            "id": "PYSEC-2013-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2013/feb/19/security/"
+          },
+          {
+            "id": "PYSEC-2013-18",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2013/dsa-2758"
+          },
+          {
+            "id": "PYSEC-2013-19",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/django/django/commit/90363e388c61874add3f3557ee654a996ec75d78"
+          },
+          {
+            "id": "PYSEC-2013-20",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2013/dsa-2755"
+          },
+          {
+            "id": "PYSEC-2013-21",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.securitytracker.com/id/1028915"
+          },
+          {
+            "id": "PYSEC-2014-1",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2014/apr/21/security/"
+          },
+          {
+            "id": "PYSEC-2014-19",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2014/05/15/3"
+          },
+          {
+            "id": "PYSEC-2014-2",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2014/apr/21/security/"
+          },
+          {
+            "id": "PYSEC-2014-20",
+            "summary": "",
+            "severity": "",
+            "url": "http://ubuntu.com/usn/usn-2212-1"
+          },
+          {
+            "id": "PYSEC-2014-3",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2014/apr/21/security/"
+          },
+          {
+            "id": "PYSEC-2014-4",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2014/aug/20/security/"
+          },
+          {
+            "id": "PYSEC-2014-5",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2014/dsa-3010"
+          },
+          {
+            "id": "PYSEC-2014-6",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2014/dsa-3010"
+          },
+          {
+            "id": "PYSEC-2014-7",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/django/django/commit/2b31342cdf14fc20e07c43d258f1e7334ad664a6"
+          },
+          {
+            "id": "PYSEC-2015-10",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.ubuntu.com/usn/USN-2671-1"
+          },
+          {
+            "id": "PYSEC-2015-11",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2015/nov/24/security-releases-issued/"
+          },
+          {
+            "id": "PYSEC-2015-18",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.ubuntu.com/usn/USN-2539-1"
+          },
+          {
+            "id": "PYSEC-2015-19",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2015/may/20/security-release/"
+          },
+          {
+            "id": "PYSEC-2015-20",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.ubuntu.com/usn/USN-2671-1"
+          },
+          {
+            "id": "PYSEC-2015-21",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2015/jul/08/security-releases/"
+          },
+          {
+            "id": "PYSEC-2015-22",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2015/aug/18/security-releases/"
+          },
+          {
+            "id": "PYSEC-2015-23",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2015/aug/18/security-releases/"
+          },
+          {
+            "id": "PYSEC-2015-4",
+            "summary": "",
+            "severity": "",
+            "url": "http://secunia.com/advisories/62285"
+          },
+          {
+            "id": "PYSEC-2015-5",
+            "summary": "",
+            "severity": "",
+            "url": "http://secunia.com/advisories/62285"
+          },
+          {
+            "id": "PYSEC-2015-6",
+            "summary": "",
+            "severity": "",
+            "url": "http://secunia.com/advisories/62285"
+          },
+          {
+            "id": "PYSEC-2015-7",
+            "summary": "",
+            "severity": "",
+            "url": "http://secunia.com/advisories/62285"
+          },
+          {
+            "id": "PYSEC-2015-8",
+            "summary": "",
+            "severity": "",
+            "url": "https://code.djangoproject.com/ticket/24461"
+          },
+          {
+            "id": "PYSEC-2015-9",
+            "summary": "",
+            "severity": "",
+            "url": "http://ubuntu.com/usn/usn-2539-1"
+          },
+          {
+            "id": "PYSEC-2016-14",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.securitytracker.com/id/1034894"
+          },
+          {
+            "id": "PYSEC-2016-15",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/django/django/commit/c5544d289233f501917e25970c03ed444abbd4f0"
+          },
+          {
+            "id": "PYSEC-2016-16",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2016/mar/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2016-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/QXDKJYHN74BWY3P7AR2UZDVJREQMRE6S/"
+          },
+          {
+            "id": "PYSEC-2016-18",
+            "summary": "",
+            "severity": "",
+            "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/QXDKJYHN74BWY3P7AR2UZDVJREQMRE6S/"
+          },
+          {
+            "id": "PYSEC-2016-2",
+            "summary": "",
+            "severity": "",
+            "url": "http://packetstormsecurity.com/files/137965/Django-3.3.0-Script-Insertion.html"
+          },
+          {
+            "id": "PYSEC-2016-3",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.securitytracker.com/id/1036899"
+          },
+          {
+            "id": "PYSEC-2017-10",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2017/apr/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2017-44",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2017/sep/05/security-releases/"
+          },
+          {
+            "id": "PYSEC-2017-9",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2017/apr/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2018-2",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2018/aug/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2018-3",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2018/oct/01/security-release/"
+          },
+          {
+            "id": "PYSEC-2018-4",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2018/feb/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2018-5",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2018/mar/06/security-releases/"
+          },
+          {
+            "id": "PYSEC-2018-6",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2018/mar/06/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-10",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#!topic/django-announce/Is4kLY9ZcZQ"
+          },
+          {
+            "id": "PYSEC-2019-11",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-12",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-13",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-14",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/aug/01/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-15",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2019/12/02/1"
+          },
+          {
+            "id": "PYSEC-2019-16",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#!topic/django-announce/3oaB2rVH3a0"
+          },
+          {
+            "id": "PYSEC-2019-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/jan/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2019-18",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.openwall.com/lists/oss-security/2019/02/11/1"
+          },
+          {
+            "id": "PYSEC-2019-79",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2019/jun/03/security-releases/"
+          },
+          {
+            "id": "PYSEC-2020-31",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2020/jun/03/security-releases/"
+          },
+          {
+            "id": "PYSEC-2020-32",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2020/jun/03/security-releases/"
+          },
+          {
+            "id": "PYSEC-2020-33",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#!topic/django-announce/Gdqn58RqIDM"
+          },
+          {
+            "id": "PYSEC-2020-34",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#!topic/django-announce/Gdqn58RqIDM"
+          },
+          {
+            "id": "PYSEC-2020-35",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.openwall.com/lists/oss-security/2020/02/03/1"
+          },
+          {
+            "id": "PYSEC-2020-36",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#!topic/django-announce/fLUh_pOaKrY"
+          },
+          {
+            "id": "PYSEC-2021-109",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/3.2/releases/security/"
+          },
+          {
+            "id": "PYSEC-2021-439",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/3.2/releases/security/"
+          },
+          {
+            "id": "PYSEC-2021-6",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/g/django-announce/c/ePr5j-ngdPU"
+          },
+          {
+            "id": "PYSEC-2021-7",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2021/may/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2021-8",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/3.2/releases/security/"
+          },
+          {
+            "id": "PYSEC-2021-9",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/3.1/releases/security/"
+          },
+          {
+            "id": "PYSEC-2021-98",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/3.2/releases/security/"
+          },
+          {
+            "id": "PYSEC-2021-99",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/g/django-announce/c/sPyjSKMi8Eo"
+          },
+          {
+            "id": "PYSEC-2022-1",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-19",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-190",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2022/04/11/1"
+          },
+          {
+            "id": "PYSEC-2022-191",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2022/04/11/1"
+          },
+          {
+            "id": "PYSEC-2022-2",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-20",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-213",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2022/jul/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2022-245",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-3",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2022-304",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.0/releases/security/"
+          },
+          {
+            "id": "PYSEC-2023-100",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2023/jul/03/security-releases/"
+          },
+          {
+            "id": "PYSEC-2023-12",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.1/releases/security/"
+          },
+          {
+            "id": "PYSEC-2023-13",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.1/releases/security/"
+          },
+          {
+            "id": "PYSEC-2023-222",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/4.2/releases/security/"
+          },
+          {
+            "id": "PYSEC-2023-225",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2023/sep/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2023-226",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2023/oct/04/security-releases/"
+          },
+          {
+            "id": "PYSEC-2023-61",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2023/may/03/security-releases/"
+          },
+          {
+            "id": "PYSEC-2024-102",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-156",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-157",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-28",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#%21forum/django-announce"
+          },
+          {
+            "id": "PYSEC-2024-47",
+            "summary": "",
+            "severity": "",
+            "url": "https://groups.google.com/forum/#%21forum/django-announce"
+          },
+          {
+            "id": "PYSEC-2024-56",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-57",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-58",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-59",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-67",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-68",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-69",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2024-70",
+            "summary": "",
+            "severity": "",
+            "url": "https://docs.djangoproject.com/en/dev/releases/security/"
+          },
+          {
+            "id": "PYSEC-2025-1",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2025/jan/14/security-releases/"
+          },
+          {
+            "id": "PYSEC-2025-13",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2025/mar/06/security-releases/"
+          },
+          {
+            "id": "PYSEC-2025-14",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2025/apr/02/security-releases/"
+          },
+          {
+            "id": "PYSEC-2025-37",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2025/may/07/security-releases/"
+          },
+          {
+            "id": "PYSEC-2025-47",
+            "summary": "",
+            "severity": "",
+            "url": "https://www.djangoproject.com/weblog/2025/jun/04/security-releases/"
           }
         ]
-      },
-      {
-        "name": "mdurl",
-        "installed": "0.1.2",
-        "latest": "0.1.2",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "markdown-it-py",
@@ -9933,26 +11899,18 @@
         "cves": []
       },
       {
-        "name": "packaging",
-        "installed": "26.0",
-        "latest": "26.2",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pathspec",
-        "installed": "1.0.4",
-        "latest": "1.1.1",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "msgpack",
         "installed": "1.1.2",
         "latest": "1.1.2",
         "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "packaging",
+        "installed": "26.0",
+        "latest": "26.2",
+        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -9965,6 +11923,14 @@
         "cves": []
       },
       {
+        "name": "platformdirs",
+        "installed": "4.9.4",
+        "latest": "4.9.6",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "pluggy",
         "installed": "1.6.0",
         "latest": "1.6.0",
@@ -9973,9 +11939,9 @@
         "cves": []
       },
       {
-        "name": "platformdirs",
-        "installed": "4.9.4",
-        "latest": "4.9.6",
+        "name": "pathspec",
+        "installed": "1.0.4",
+        "latest": "1.1.1",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -10092,6 +12058,14 @@
         ]
       },
       {
+        "name": "prompt_toolkit",
+        "installed": "3.0.52",
+        "latest": "3.0.52",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "pre_commit",
         "installed": "4.5.1",
         "latest": "4.6.0",
@@ -10108,9 +12082,9 @@
         "cves": []
       },
       {
-        "name": "prompt_toolkit",
-        "installed": "3.0.52",
-        "latest": "3.0.52",
+        "name": "pyasn1_modules",
+        "installed": "0.4.2",
+        "latest": "0.4.2",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10128,14 +12102,6 @@
         "installed": "2.9.11",
         "latest": "2.9.12",
         "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pyasn1_modules",
-        "installed": "0.4.2",
-        "latest": "0.4.2",
-        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -10224,51 +12190,6 @@
         ]
       },
       {
-        "name": "PyJWT",
-        "installed": "2.12.1",
-        "latest": "2.12.1",
-        "outdated": false,
-        "cve_count": 6,
-        "cves": [
-          {
-            "id": "GHSA-752w-5fwx-jx9f",
-            "summary": "PyJWT accepts unknown `crit` header extensions",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
-          },
-          {
-            "id": "GHSA-75c5-xw7c-p5pm",
-            "summary": "PyJWT Issuer field partial matches allowed",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
-          },
-          {
-            "id": "GHSA-ffqj-6fqr-9h24",
-            "summary": "Key confusion through non-blocklisted public key formats",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          },
-          {
-            "id": "GHSA-r9jw-mwhq-wp62",
-            "summary": "PyJWT vulnerable to key confusion attacks",
-            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
-          },
-          {
-            "id": "PYSEC-2017-24",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/pull/277"
-          },
-          {
-            "id": "PYSEC-2022-202",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          }
-        ]
-      },
-      {
         "name": "pyOpenSSL",
         "installed": "26.0.0",
         "latest": "26.2.0",
@@ -10326,6 +12247,51 @@
         ]
       },
       {
+        "name": "PyJWT",
+        "installed": "2.12.1",
+        "latest": "2.12.1",
+        "outdated": false,
+        "cve_count": 6,
+        "cves": [
+          {
+            "id": "GHSA-752w-5fwx-jx9f",
+            "summary": "PyJWT accepts unknown `crit` header extensions",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
+          },
+          {
+            "id": "GHSA-75c5-xw7c-p5pm",
+            "summary": "PyJWT Issuer field partial matches allowed",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
+          },
+          {
+            "id": "GHSA-ffqj-6fqr-9h24",
+            "summary": "Key confusion through non-blocklisted public key formats",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
+          },
+          {
+            "id": "GHSA-r9jw-mwhq-wp62",
+            "summary": "PyJWT vulnerable to key confusion attacks",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
+          },
+          {
+            "id": "PYSEC-2017-24",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/pull/277"
+          },
+          {
+            "id": "PYSEC-2022-202",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
+          }
+        ]
+      },
+      {
         "name": "pyotp",
         "installed": "2.9.0",
         "latest": "2.9.0",
@@ -10361,32 +12327,17 @@
         ]
       },
       {
-        "name": "pytest",
-        "installed": "9.0.3",
-        "latest": "9.0.3",
-        "outdated": false,
-        "cve_count": 1,
-        "cves": [
-          {
-            "id": "GHSA-6w46-j5rx-g56g",
-            "summary": "pytest has vulnerable tmpdir handling",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
-          }
-        ]
-      },
-      {
-        "name": "python-crontab",
-        "installed": "3.3.0",
-        "latest": "3.3.0",
+        "name": "pytest-django",
+        "installed": "4.12.0",
+        "latest": "4.12.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "pytest-django",
-        "installed": "4.12.0",
-        "latest": "4.12.0",
+        "name": "python-crontab",
+        "installed": "3.3.0",
+        "latest": "3.3.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10408,17 +12359,24 @@
         "cves": []
       },
       {
+        "name": "pytest",
+        "installed": "9.0.3",
+        "latest": "9.0.3",
+        "outdated": false,
+        "cve_count": 1,
+        "cves": [
+          {
+            "id": "GHSA-6w46-j5rx-g56g",
+            "summary": "pytest has vulnerable tmpdir handling",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
+          }
+        ]
+      },
+      {
         "name": "pytokens",
         "installed": "0.4.1",
         "latest": "0.4.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "referencing",
-        "installed": "0.37.0",
-        "latest": "0.37.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10455,6 +12413,14 @@
             "url": "https://github.com/redis/redis-py/pull/2641"
           }
         ]
+      },
+      {
+        "name": "referencing",
+        "installed": "0.37.0",
+        "latest": "0.37.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "PyYAML",
@@ -10512,6 +12478,14 @@
             "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1860466"
           }
         ]
+      },
+      {
+        "name": "pydantic_core",
+        "installed": "2.41.5",
+        "latest": "2.46.4",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "rich",
@@ -10609,14 +12583,6 @@
         ]
       },
       {
-        "name": "pydantic_core",
-        "installed": "2.41.5",
-        "latest": "2.46.4",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "safety",
         "installed": "3.7.0",
         "latest": "3.7.0",
@@ -10646,14 +12612,6 @@
         "cves": []
       },
       {
-        "name": "service-identity",
-        "installed": "24.2.0",
-        "latest": "24.2.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "shellingham",
         "installed": "1.5.4",
         "latest": "1.5.4",
@@ -10662,9 +12620,17 @@
         "cves": []
       },
       {
-        "name": "rpds-py",
-        "installed": "0.30.0",
-        "latest": "0.30.0",
+        "name": "service-identity",
+        "installed": "24.2.0",
+        "latest": "24.2.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "six",
+        "installed": "1.17.0",
+        "latest": "1.17.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10673,6 +12639,22 @@
         "name": "ruamel.yaml",
         "installed": "0.19.1",
         "latest": "0.19.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "regex",
+        "installed": "2026.4.4",
+        "latest": "2026.5.9",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "rpds-py",
+        "installed": "0.30.0",
+        "latest": "0.30.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10697,14 +12679,6 @@
             "url": "https://github.com/getsentry/sentry-python/security/advisories/GHSA-g92j-qhmh-64v2"
           }
         ]
-      },
-      {
-        "name": "six",
-        "installed": "1.17.0",
-        "latest": "1.17.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "structlog",
@@ -10760,18 +12734,18 @@
         ]
       },
       {
-        "name": "tenacity",
-        "installed": "9.1.4",
-        "latest": "9.1.4",
-        "outdated": false,
+        "name": "ruff",
+        "installed": "0.15.9",
+        "latest": "0.15.13",
+        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "tomlkit",
-        "installed": "0.14.0",
-        "latest": "0.15.0",
-        "outdated": true,
+        "name": "tenacity",
+        "installed": "9.1.4",
+        "latest": "9.1.4",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -10784,26 +12758,10 @@
         "cves": []
       },
       {
-        "name": "regex",
-        "installed": "2026.4.4",
-        "latest": "2026.5.9",
+        "name": "tomlkit",
+        "installed": "0.14.0",
+        "latest": "0.15.0",
         "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "txaio",
-        "installed": "25.9.2",
-        "latest": "25.12.2",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "typing-inspection",
-        "installed": "0.4.2",
-        "latest": "0.4.2",
-        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -10835,6 +12793,22 @@
         ]
       },
       {
+        "name": "txaio",
+        "installed": "25.9.2",
+        "latest": "25.12.2",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typing-inspection",
+        "installed": "0.4.2",
+        "latest": "0.4.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "typer",
         "installed": "0.24.1",
         "latest": "0.25.1",
@@ -10847,30 +12821,6 @@
         "installed": "4.15.0",
         "latest": "4.15.0",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "tzlocal",
-        "installed": "5.3.1",
-        "latest": "5.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "tzdata",
-        "installed": "2025.3",
-        "latest": "2026.2",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "ruff",
-        "installed": "0.15.9",
-        "latest": "0.15.13",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -11044,6 +12994,22 @@
             "url": "https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2"
           }
         ]
+      },
+      {
+        "name": "tzdata",
+        "installed": "2025.3",
+        "latest": "2026.2",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "tzlocal",
+        "installed": "5.3.1",
+        "latest": "5.3.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "vine",
@@ -11306,7 +13272,7 @@
         "cves": []
       }
     ],
-    "total_cves": 248,
+    "total_cves": 523,
     "outdated_count": 37,
     "critical_cves": []
   },
@@ -11562,17 +13528,11 @@
     "commit": "0fbde74"
   },
   "fix_queue": {
-    "rec-0d1defb91013": {
-      "created_at": "2026-05-18T02:20:57.370851Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
-    },
     "rec-0e7d7923f699": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-0eea9f77a245": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -11590,55 +13550,43 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-15dfc2445298": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-18ce06b925da": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-1ccd906adfca": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-1fdb02c3f466": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-247c53012aac": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-28122bd19840": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
-    },
-    "rec-286f9b739882": {
-      "created_at": "2026-05-18T02:04:31.112246Z",
-      "notes": "",
-      "status": "open",
       "updated_at": "2026-05-18T02:04:31.112246Z"
-    },
-    "rec-2b53fe583678": {
-      "created_at": "2026-05-18T06:47:30.898137Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T06:47:30.898137Z"
     },
     "rec-2b7efb194e77": {
       "created_at": "2026-05-18T01:30:15.595311Z",
@@ -11650,61 +13598,61 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-3779c331bb91": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-37b84ba9e297": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T01:57:35.489327Z"
     },
     "rec-3bb88d74a46e": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-3de183b40438": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-3ff51a03ecbb": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-4134cdd72305": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-413c523fe966": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-469a89ef4252": {
       "created_at": "2026-05-18T01:57:35.489327Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:00:43.977261Z"
     },
     "rec-4a78be67a2fd": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-50fc7048f2bb": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -11716,157 +13664,157 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-56101d3e463f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-569330323798": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-572bf085876a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-57bc8a597fb4": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-5ef5f5a3769f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-6b1cce4e4c1d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-6c71f76c1f21": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-6d1908e66e17": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-6db98ba51d82": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-72200907e02e": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-73c2aa342b16": {
       "created_at": "2026-05-18T01:46:59.627603Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-75130f0805ae": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-7da7f006f6a9": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-7e4903faf4eb": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-81d2d7d49a6a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-8fa76898eb9e": {
       "created_at": "2026-05-18T01:52:25.446613Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:09:07.932312Z"
+      "updated_at": "2026-05-18T01:52:25.446613Z"
     },
     "rec-9b0141a799cd": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-9b0fa696b38a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-a109f234a66f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-ad22d769f151": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-af45b45cc28e": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-b4ea6fffcf4d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-b92d5511e737": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-bc5338fe104d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-c31a7752cef8": {
       "created_at": "2026-05-18T01:46:59.627603Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:09:07.932312Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-c3301e5ff0cd": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -11884,13 +13832,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-cba5960aa100": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-d4c15d7752df": {
       "created_at": "2026-05-18T01:06:08.061136Z",
@@ -11902,13 +13850,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-d8ab30d8a749": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-d962e861468f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
@@ -11920,228 +13868,54 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-e1778c7a6743": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-ed0927c954fa": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-ed7d0e7525f6": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-ef5dc6faee38": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-f1b6124396d6": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-f6b61d264109": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:09:07.932312Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
     "rec-fb488e9896e0": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-18T02:04:31.112246Z"
     },
-    "rec-94ef62e02eb0": {
+    "rec-286f9b739882": {
       "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-8968e86e99c9": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-3ae8f24fe890": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-1fabbb30dcd0": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-7615cbc144b5": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-15fd945fe68c": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-7bffad7a39bc": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-40361c343063": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-efa49c006432": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-f6c9eb53e2d2": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-8ce249e70f5e": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-8cad61aae0cf": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-3eced05fd428": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-71955968be5a": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-701609dca034": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-2a50afaba192": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-f8905dc49a34": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-49931e2f502c": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-b3ba7869a873": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-91e3d1cd25be": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-fd5e8ea66109": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-21a0943a8000": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-e1733dc82750": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-2fe77fdd1537": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-fbbde4c546f4": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-8a61f50a5065": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-270d6cbe9584": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-11aca4420a55": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-ae1290292536": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
-      "notes": ""
-    },
-    "rec-5eebe28243c2": {
-      "status": "open",
-      "created_at": "2026-05-18T07:41:22.941357Z",
-      "updated_at": "2026-05-18T07:41:22.941357Z",
+      "created_at": "2026-05-18T02:04:31.112246Z",
+      "updated_at": "2026-05-18T02:04:31.112246Z",
       "notes": ""
     }
   },
@@ -12158,10 +13932,13 @@
       "nexus_tournaments": 0.0,
       "nexus_content": 0
     },
-    "previous_timestamp": "2026-05-18T06:45:23.456670"
+    "previous_timestamp": "2026-05-18T01:59:10.604536"
   },
   "timeline": {
     "labels": [
+      "2026-05-16",
+      "2026-05-16",
+      "2026-05-16",
       "2026-05-17",
       "2026-05-17",
       "2026-05-17",
@@ -12180,10 +13957,7 @@
       "2026-05-17",
       "2026-05-17",
       "2026-05-17",
-      "2026-05-18",
-      "2026-05-18",
-      "2026-05-18",
-      "2026-05-18",
+      "2026-05-17",
       "2026-05-18",
       "2026-05-18",
       "2026-05-18",
@@ -12202,10 +13976,10 @@
         91.0,
         91.0,
         91.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
+        91.0,
+        91.0,
+        91.0,
+        91.0,
         100.0,
         100.0,
         100.0,
@@ -12234,10 +14008,10 @@
         0.0,
         0.0,
         0.0,
-        75.0,
-        75.0,
-        75.0,
-        75.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         75.0,
         75.0,
         75.0,
@@ -12266,10 +14040,10 @@
         46.0,
         46.0,
         46.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
+        46.0,
+        46.0,
+        46.0,
+        46.0,
         100.0,
         100.0,
         100.0,
@@ -12330,10 +14104,10 @@
         86.0,
         86.0,
         86.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
+        86.0,
+        86.0,
+        86.0,
+        86.0,
         100.0,
         100.0,
         100.0,
@@ -12362,10 +14136,10 @@
         59.0,
         59.0,
         59.0,
-        86.0,
-        86.0,
-        86.0,
-        86.0,
+        59.0,
+        59.0,
+        59.0,
+        59.0,
         86.0,
         86.0,
         86.0,
@@ -12394,10 +14168,10 @@
         63.0,
         63.0,
         63.0,
-        93.0,
-        93.0,
-        93.0,
-        93.0,
+        63.0,
+        63.0,
+        63.0,
+        63.0,
         93.0,
         93.0,
         93.0,
@@ -12427,10 +14201,10 @@
       62.7,
       62.7,
       62.7,
-      92.6,
-      92.6,
-      92.6,
-      92.6,
+      62.7,
+      62.7,
+      62.7,
+      62.7,
       92.6,
       92.6,
       92.6,

@@ -49,6 +49,401 @@ class EnhancedAuditReport:
             '</div>'
         )
 
+    def _inject_phase4_effort_support(self, template_content: str) -> str:
+        """Inject phase 4 effort controls into the dashboard template."""
+        effort_helpers = r"""
+const EFFORT_BUCKETS = {
+    quick: { rank: 0, label: 'Quick (< 1hr)', values: ['< 1 hour', '<1 hour', 'quick', 'small < 1h', 's'] },
+    half_day: { rank: 1, label: 'Half day', values: ['half day', 'half-day', '1/2 day', 'm'] },
+    multi_day: { rank: 2, label: 'Multi-day', values: ['1-2 days', '1 - 2 days', 'multi-day', 'l'] },
+    major: { rank: 3, label: 'Major', values: ['1 week', 'major refactor (2+ weeks)', 'major', 'xl'] },
+    unknown: { rank: 99, label: 'Unknown', values: ['unknown', ''] },
+};
+function normalizeFixEffort(raw) {
+    const value = String(raw || 'unknown').trim().toLowerCase();
+    for (const [key, bucket] of Object.entries(EFFORT_BUCKETS)) {
+        if (bucket.values.includes(value)) return key;
+    }
+    if (value.includes('1 week') || value.includes('2+ weeks') || value.includes('major')) return 'major';
+    if (value.includes('1-2 days') || value.includes('multi')) return 'multi_day';
+    if (value.includes('half')) return 'half_day';
+    if (value.includes('1 hour') || value.startsWith('<') || value.includes('quick') || value === 's') return 'quick';
+    if (value === 'm') return 'half_day';
+    if (value === 'l') return 'multi_day';
+    if (value === 'xl') return 'major';
+    return 'unknown';
+}
+function fixEffortRank(raw) {
+    const bucket = normalizeFixEffort(raw);
+    return (EFFORT_BUCKETS[bucket] || EFFORT_BUCKETS.unknown).rank;
+}
+function fixEffortLabel(raw) {
+    const bucket = normalizeFixEffort(raw);
+    return (EFFORT_BUCKETS[bucket] || EFFORT_BUCKETS.unknown).label;
+}
+function fixEffortColor(raw) {
+    const bucket = normalizeFixEffort(raw);
+    return bucket === 'quick' ? '#10b981' : bucket === 'half_day' ? '#3b82f6' : bucket === 'multi_day' ? '#f59e0b' : bucket === 'major' ? '#ef4444' : '#94a3b8';
+}
+function renderEffortSummary() {
+    const el = document.getElementById('effort-summary');
+    if (!el) return;
+    const counts = { quick: 0, half_day: 0, multi_day: 0, major: 0, unknown: 0 };
+    (recommendations || []).forEach(r => {
+        const bucket = normalizeFixEffort(r.fix_effort || r.effort || 'unknown');
+        counts[bucket] = (counts[bucket] || 0) + 1;
+    });
+    const current = window.__effortFilter || '';
+    const bits = [
+        ['quick', `Quick (< 1hr): ${counts.quick}`],
+        ['half_day', `Half day: ${counts.half_day}`],
+        ['multi_day', `Multi-day: ${counts.multi_day}`],
+        ['major', `Major: ${counts.major}`],
+    ];
+    const unknown = counts.unknown ? `<span style="color:#64748b;font-size:.78rem;">Unknown: ${counts.unknown}</span>` : '';
+    el.innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:0 0 10px;">
+        ${bits.map(([key, label]) => `<button type="button" class="status-btn${current === key ? ' active' : ''}" data-effort="${key}" style="padding:5px 10px;">${label}</button>`).join('')}
+        ${unknown}
+    </div>`;
+    el.querySelectorAll('[data-effort]').forEach(btn => {
+        btn.addEventListener('click', () => filterByEffort(btn.dataset.effort || ''));
+    });
+}
+function filterByEffort(effortKey) {
+    window.__effortFilter = effortKey || '';
+    const select = document.getElementById('rec-sort');
+    if (select && !select.value) {
+        select.value = 'effort-asc';
+    }
+    filterRecommendations();
+}
+function applyRecommendationSort(cards) {
+    const sortEl = document.getElementById('rec-sort');
+    const mode = (sortEl && sortEl.value) || '';
+    if (mode !== 'effort-asc' || !cards.length) return;
+    const parent = cards[0].parentElement;
+    if (!parent) return;
+    const ordered = Array.from(cards).sort((a, b) => {
+        const ar = Number(a.dataset.effortRank || 99);
+        const br = Number(b.dataset.effortRank || 99);
+        if (ar !== br) return ar - br;
+        return (a.dataset.priority || '').localeCompare(b.dataset.priority || '');
+    });
+    ordered.forEach(card => parent.appendChild(card));
+}
+"""
+        template_content = template_content.replace(
+            'const changeSummary    = ${change_summary_json};\n',
+            'const changeSummary    = ${change_summary_json};\n' + effort_helpers + '\n'
+        )
+        template_content = template_content.replace(
+            '<div id="recommendations" class="tab-content">\n',
+            '<div id="recommendations" class="tab-content">\n'
+            '            <div id="effort-summary" style="margin-bottom:12px;"></div>\n'
+        )
+        template_content = template_content.replace(
+            '</select>\n                <span id="rec-counter"',
+            '</select>\n                <select id="rec-sort" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid #475569; border-radius: 6px; color: #e2e8f0; font-size: 0.9rem;">\n'
+            '                    <option value="">Default order</option>\n'
+            '                    <option value="effort-asc">Sort by effort (quick first)</option>\n'
+            '                </select>\n                <span id="rec-counter"'
+        )
+        template_content = template_content.replace(
+            '        const effort = r.effort || \'\';\n',
+            '        const fixEffort = r.fix_effort || r.effort || \'unknown\';\n'
+            '        const effort = r.effort || \'\';\n'
+        )
+        template_content = template_content.replace(
+            'data-fix-status="$${fixStatus}" data-confidence="$${confidence}"',
+            'data-fix-status="$${fixStatus}" data-confidence="$${confidence}" data-fix-effort="$${fixEffort}" data-effort-rank="$${fixEffortRank(fixEffort)}"'
+        )
+        template_content = template_content.replace(
+            'effortColor[effort]||\'#94a3b8\'',
+            'fixEffortColor(fixEffort)'
+        )
+        template_content = template_content.replace(
+            'effortLabel[effort]||effort',
+            'fixEffortLabel(fixEffort)'
+        )
+        template_content = template_content.replace(
+            '        const confidence = Math.max(1, Math.min(10, Number(r.confidence ?? 5) || 5));\n',
+            '        const confidence = Math.max(1, Math.min(10, Number(r.confidence ?? 5) || 5));\n'
+            '        const gitBase = (gitContext || {}).github_base || \'\';\n'
+            '        const gitBranch = (gitContext || {}).branch || \'main\';\n'
+            '        const primaryModule = (r.affected_modules || [])[0] || r.file_path || \'\';\n'
+            '        const relativePath = primaryModule\n'
+            '            ? (primaryModule.includes(\'/\') || primaryModule.endsWith(\'.py\')\n'
+            '                ? primaryModule.replace(/^\\/+/, \'\')\n'
+            '                : primaryModule.replace(/\\./g, \'/\') + \'.py\')\n'
+            '            : \'\';\n'
+            '        const linkLine = Number(r.line_number || r.line || 0) || 0;\n'
+            '        const githubLink = gitBase && relativePath\n'
+            '            ? gitBase + \'/blob/\' + gitBranch + \'/\' + relativePath + (linkLine ? \'#L\' + linkLine : \'\')\n'
+            '            : \'\';\n'
+        )
+        template_content = template_content.replace(
+            '            </div>`;\n'
+            '        }\n'
+            '\n'
+            '        /* Upgrade Advisor fields */\n',
+            '            </div>`;\n'
+            '        }\n'
+            '        if (githubLink) {\n'
+            '            html += `<div style="margin-top:8px;font-size:.76rem;">\n'
+            '                <a href="$${githubLink}" target="_blank" rel="noopener" style="color:#7dd3fc;text-decoration:none;">View on GitHub</a>\n'
+            '            </div>`;\n'
+            '        }\n'
+            '\n'
+            '        /* Upgrade Advisor fields */\n'
+        )
+        template_content = template_content.replace(
+            'function persistFixQueueState(recId, status) {\n'
+            '    const current = fixQueueState[recId] || {};\n'
+            '    fixQueueState = Object.assign({}, fixQueueState, {\n'
+            '        [recId]: Object.assign({}, current, {\n'
+            '            status,\n'
+            '            updated_at: new Date().toISOString(),\n'
+            '        }),\n'
+            '    });\n'
+            '    try {\n'
+            '        localStorage.setItem(FIX_QUEUE_STORAGE_KEY, JSON.stringify(fixQueueState));\n'
+            '    } catch (err) {\n'
+            '        // Local storage is best-effort only.\n'
+            '    }\n'
+            '}\n',
+            'function persistFixQueueState(recId, status) {\n'
+            '    const current = fixQueueState[recId] || {};\n'
+            '    fixQueueState = Object.assign({}, fixQueueState, {\n'
+            '        [recId]: Object.assign({}, current, {\n'
+            '            status,\n'
+            '            updated_at: new Date().toISOString(),\n'
+            '        }),\n'
+            '    });\n'
+            '    try {\n'
+            '        localStorage.setItem(FIX_QUEUE_STORAGE_KEY, JSON.stringify(fixQueueState));\n'
+            '    } catch (err) {\n'
+            '        // Local storage is best-effort only.\n'
+            '    }\n'
+            '    if (USE_FIX_QUEUE_SERVER) {\n'
+            "        fetch('/fix-queue', {\n"
+            "            method: 'PUT',\n"
+            "            headers: { 'Content-Type': 'application/json' },\n"
+            "            body: JSON.stringify({ rec_id: recId, status, note: current.notes || '' }),\n"
+            '        });\n'
+            '    }\n'
+            '}\n'
+        )
+        template_content = template_content.replace(
+            '    const priorityVal = prioEl.value;\n',
+            '    const priorityVal = prioEl.value;\n'
+            '    const sortEl = document.getElementById(\'rec-sort\');\n'
+        )
+        template_content = template_content.replace(
+            '        const matchesPriority = !priorityVal || priority === priorityVal;\n'
+            '        const show = matchesSearch && matchesType && matchesPriority;\n',
+            '        const matchesPriority = !priorityVal || priority === priorityVal;\n'
+            '        const matchesEffort = !effortVal || (card.dataset.fixEffort || \'\').toLowerCase() === effortVal;\n'
+            '        const show = matchesSearch && matchesType && matchesPriority && matchesEffort;\n'
+        )
+        template_content = template_content.replace(
+            '    const total = cards.length;\n',
+            '    applyRecommendationSort(cards);\n'
+            '    const total = cards.length;\n'
+        )
+        template_content = template_content.replace(
+            '    const _ctr = document.getElementById(\'rec-counter\'); if (_ctr) _ctr.textContent = `Showing $${shown} of $${total}`;\n',
+            '    const _ctr = document.getElementById(\'rec-counter\'); if (_ctr) _ctr.textContent = `Showing $${shown} of $${total}`;\n'
+            '    const summary = document.getElementById(\'effort-summary\');\n'
+            '    if (summary) {\n'
+            '        summary.querySelectorAll(\'[data-effort]\').forEach(btn => btn.classList.toggle(\'active\', (window.__effortFilter || \'\') === btn.dataset.effort));\n'
+            '    }\n'
+        )
+        template_content = template_content.replace(
+            '    if (priorityFilter) priorityFilter.addEventListener(\'change\', filterRecommendations);\n',
+            '    if (priorityFilter) priorityFilter.addEventListener(\'change\', filterRecommendations);\n'
+            '    const sortSelect = document.getElementById(\'rec-sort\');\n'
+            '    if (sortSelect) sortSelect.addEventListener(\'change\', filterRecommendations);\n'
+        )
+        template_content = template_content.replace(
+            'filterRecommendations(); // Phase 4 fix: call AFTER rec-card elements exist\n',
+            'filterRecommendations(); // Phase 4 fix: call AFTER rec-card elements exist\n'
+            'renderEffortSummary();\n'
+            'document.getElementById(\'rec-sort\')?.addEventListener(\'change\', filterRecommendations);\n'
+        )
+        template_content = template_content.replace(
+            'document.querySelectorAll(\'.rec-card\').forEach(refreshFixQueueCard);\n',
+            'document.querySelectorAll(\'.rec-card\').forEach(refreshFixQueueCard);\n'
+            'renderEffortSummary();\n'
+            'hydrateFixQueueState();\n'
+        )
+        return template_content
+
+    def _inject_phase4_coupling_support(self, template_content: str) -> str:
+        """Inject the coupling heatmap tab and drill-down helpers."""
+        coupling_helpers = r"""
+function couplingColor(count) {
+    if (count >= 7) return '#450a0a';
+    if (count >= 4) return '#7c2d12';
+    if (count >= 1) return '#713f12';
+    return '#1e3a2f';
+}
+function couplingBorder(count) {
+    if (count >= 7) return '#991b1b';
+    if (count >= 4) return '#ea580c';
+    if (count >= 1) return '#f59e0b';
+    return '#14532d';
+}
+function couplingAppIndex() {
+    const apps = (couplingMatrix && couplingMatrix.apps) || [];
+    return Object.fromEntries(apps.map((app, idx) => [app, idx]));
+}
+function couplingDetailsFor(src, tgt) {
+    const key = `$${src}|$${tgt}`;
+    const details = (((couplingMatrix || {}).details || {})[key]) || [];
+    return Array.isArray(details) ? details : [];
+}
+function couplingRecommendationFor(src, tgt) {
+    const rec = (recommendations || []).find(r => {
+        const modules = r.affected_modules || [];
+        return modules.some(m => m.startsWith(src + '.') || m.startsWith(tgt + '.'));
+    });
+    return rec || null;
+}
+function renderCouplingPlan(src, tgt, count) {
+    const rec = couplingRecommendationFor(src, tgt);
+    const planText = rec && (rec.action || rec.description)
+        ? (rec.action || rec.description)
+        : 'Consider extracting shared logic to nexus_core.services';
+    if (count < 5) return '';
+    return `<div style="margin-top:12px;padding:14px 16px;border:1px solid #92400e;border-left:4px solid #f59e0b;border-radius:12px;background:rgba(120,53,15,.16);">
+        <div style="font-weight:700;color:#fcd34d;margin-bottom:6px;">Decoupling Plan</div>
+        <div style="font-size:.85rem;color:#fbbf24;">$${planText}</div>
+    </div>`;
+}
+function renderCouplingDrilldown(src, tgt) {
+    const panel = document.getElementById('coupling-drilldown');
+    if (!panel) return;
+    const appIndex = couplingAppIndex();
+    const srcIdx = appIndex[src];
+    const tgtIdx = appIndex[tgt];
+    const matrix = (couplingMatrix && couplingMatrix.matrix) || [];
+    const count = (matrix[srcIdx] || [])[tgtIdx] || 0;
+    const allowed = (couplingMatrix && couplingMatrix.allowed) || [];
+    const allowedCount = (allowed[srcIdx] || [])[tgtIdx] || 0;
+    const details = couplingDetailsFor(src, tgt);
+    if (!count) {
+        panel.innerHTML = `<div style="padding:14px 16px;border:1px dashed #334155;border-radius:12px;color:#94a3b8;">
+            <strong>$${src}</strong> → <strong>$${tgt}</strong>: no coupling violations.
+        </div>`;
+        return;
+    }
+    const rows = details.map(d => `<tr>
+        <td style="color:#e2e8f0;">$${d.module_path || ''}</td>
+        <td>$${d.violation_type || ''}</td>
+        <td>$${d.penalty_points || 0}</td>
+    </tr>`).join('');
+    panel.innerHTML = `<div style="padding:14px 16px;border:1px solid #334155;border-radius:12px;background:rgba(15,23,42,.55);">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
+            <div style="font-weight:700;color:#f1f5f9;">$${src} → $${tgt}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span class="badge badge-high">$${count} violation$${count === 1 ? '' : 's'}</span>
+                <span class="badge badge-low">$${allowedCount} allowed</span>
+            </div>
+        </div>
+        <table>
+            <thead><tr><th>Module Path</th><th>Violation Type</th><th>Penalty</th></tr></thead>
+            <tbody>$${rows}</tbody>
+        </table>
+        $${renderCouplingPlan(src, tgt, count)}
+    </div>`;
+}
+function generateCouplingMapTab() {
+    const apps = (couplingMatrix && couplingMatrix.apps) || [];
+    const matrix = (couplingMatrix && couplingMatrix.matrix) || [];
+    const allowed = (couplingMatrix && couplingMatrix.allowed) || [];
+    if (!apps.length) {
+        return '<p style="padding:16px;color:#94a3b8;">No coupling data available.</p>';
+    }
+    const summary = (couplingMatrix && couplingMatrix.summary) || {};
+    const totalPairs = summary.possible_pairs || (apps.length * (apps.length - 1));
+    const hitPairs = summary.violation_pairs || 0;
+    let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:.86rem;">$${hitPairs} of $${totalPairs} possible app pairs have coupling violations.</div>`;
+    html += `<div style="overflow:auto;border:1px solid #334155;border-radius:12px;">
+        <table style="min-width:100%;border-collapse:collapse;">
+            <thead><tr><th></th>$${apps.map(app => `<th style="text-transform:uppercase;font-size:.72rem;">$${app}</th>`).join('')}</tr></thead>
+            <tbody>`;
+    apps.forEach((src, i) => {
+        html += `<tr><th style="text-transform:uppercase;font-size:.72rem;white-space:nowrap;">$${src}</th>`;
+        apps.forEach((tgt, j) => {
+            const count = (matrix[i] || [])[j] || 0;
+            const allowedCount = (allowed[i] || [])[j] || 0;
+            const clickable = i !== j;
+            html += `<td data-src-app="$${src}" data-tgt-app="$${tgt}" onclick="$${clickable ? 'showCouplingDrilldown(this)' : ''}" style="background:$${couplingColor(count)};color:#f8fafc;text-align:center;cursor:$${clickable ? 'pointer' : 'default'};border:1px solid $${couplingBorder(count)};min-width:72px;font-weight:700;">
+                <div>$${count}</div>
+                <div style="font-size:.65rem;color:#d1fae5;">$${allowedCount} allowed</div>
+            </td>`;
+        });
+        html += '</tr>';
+    });
+    html += `</tbody></table></div>
+    <div id="coupling-drilldown" style="margin-top:14px;"></div>`;
+    return html;
+}
+function showCouplingDrilldown(cell) {
+    if (!cell) return;
+    renderCouplingDrilldown(cell.dataset.srcApp || '', cell.dataset.tgtApp || '');
+}
+"""
+        template_content = template_content.replace(
+            'const fixQueueData     = ${fix_queue_json};\n\n',
+            'const fixQueueData     = ${fix_queue_json};\n'
+            'const couplingMatrix   = ${coupling_matrix_json};\n'
+            'const gitContext       = ${git_context_json};\n\n'
+        )
+        template_content = template_content.replace(
+            'function getFixQueueState() {\n',
+            coupling_helpers + '\nfunction getFixQueueState() {\n'
+        )
+        template_content = template_content.replace(
+            "const FIX_QUEUE_STORAGE_KEY = 'nexus-audit-fix-queue';\n",
+            "const FIX_QUEUE_STORAGE_KEY = 'nexus-audit-fix-queue';\n"
+            "const USE_FIX_QUEUE_SERVER = window.location.hostname === 'localhost';\n"
+        )
+        template_content = template_content.replace(
+            'let fixQueueState = getFixQueueState();\n',
+            'let fixQueueState = getFixQueueState();\n'
+            'function hydrateFixQueueState() {\n'
+            '    if (!USE_FIX_QUEUE_SERVER) return;\n'
+            "    fetch('/fix-queue')\n"
+            '        .then(resp => resp.ok ? resp.json() : null)\n'
+            '        .then(data => {\n'
+            '            if (!data || typeof data !== \'object\') return;\n'
+            '            fixQueueState = Object.assign({}, fixQueueState, data);\n'
+            '            document.querySelectorAll(\'.rec-card\').forEach(refreshFixQueueCard);\n'
+            '        });\n'
+            '}\n'
+        )
+        template_content = template_content.replace(
+            '            <button class="tab" onclick="showTab(\'trends\')">📈 Trends</button>\n'
+            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n',
+            '            <button class="tab" onclick="showTab(\'trends\')">📈 Trends</button>\n'
+            '            <button class="tab" onclick="showTab(\'coupling-map\')">🔥 Coupling Map</button>\n'
+            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n'
+        )
+        template_content = template_content.replace(
+            '        <div id="trends"          class="tab-content"></div>\n'
+            '        <div id="recommendations" class="tab-content">\n',
+            '        <div id="trends"          class="tab-content"></div>\n'
+            '        <div id="coupling-map"    class="tab-content"></div>\n'
+            '        <div id="recommendations" class="tab-content">\n'
+        )
+        template_content = template_content.replace(
+            'document.getElementById(\'trends\').innerHTML          = generateTrendsTab();\n',
+            'document.getElementById(\'trends\').innerHTML          = generateTrendsTab();\n'
+            'document.getElementById(\'coupling-map\').innerHTML    = generateCouplingMapTab();\n'
+        )
+        return template_content
+
     def generate_html_dashboard(self) -> str:
         ts = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         trends_js = r"""
@@ -157,6 +552,8 @@ function drawTrendsChart() {
         template_path = os.path.join(os.path.dirname(__file__), 'dashboard_template.html')
         with open(template_path, 'r', encoding='utf-8') as f:
             template_content = f.read()
+        template_content = self._inject_phase4_effort_support(template_content)
+        template_content = self._inject_phase4_coupling_support(template_content)
 
         substitutions = {
             'apps_json': self._safe_json(self.data['applications']),
@@ -175,6 +572,8 @@ function drawTrendsChart() {
             'capabilities_json': self._safe_json(self.data['metadata'].get('capabilities', {})),
             'change_summary_json': self._safe_json(self.data.get('change_summary', {})),
             'fix_queue_json': self._safe_json(self.data.get('fix_queue', {})),
+            'coupling_matrix_json': self._safe_json(self.data.get('coupling_matrix', {})),
+            'git_context_json': self._safe_json(self.data.get('git_context', {})),
             'vis_js_content': get_vis_js(),
             'trends_js': trends_js,
             'ts': ts,

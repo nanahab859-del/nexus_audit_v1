@@ -104,6 +104,7 @@ def _make_template_recommendation(
     rec_type: str,
     effort: str = "",
     confidence: int = 7,
+    line_number: int = 0,
 ) -> Dict:
     return {
         "title": title,
@@ -114,6 +115,7 @@ def _make_template_recommendation(
         "rec_type": rec_type,
         "ai_generated": False,
         "confidence": confidence,
+        **({"line_number": line_number} if line_number else {}),
         **({"effort": effort} if effort else {}),
     }
 
@@ -128,6 +130,7 @@ def _violation_template(v: Violation) -> Optional[Dict]:
     if v_type in {"Cross-App Import", "Direct Cross-App Import"}:
         src_app = source.split(".")[0] if source else "unknown"
         tgt_app = target.split(".")[0] if target else "shared"
+        line_number = int(getattr(v, "line_number", 0) or getattr(v, "line", 0) or 0)
         title = f"Refactor {src_app} -> {tgt_app} import"
         description = (
             f"Direct import from {source} to {target} crosses app boundaries and "
@@ -146,10 +149,12 @@ def _violation_template(v: Violation) -> Optional[Dict]:
             rec_type="violation",
             effort="M",
             confidence=8,
+            line_number=line_number,
         )
 
     if v_type == "Test Cross-App Import":
         title = f"Decouple test import in {source_module}"
+        line_number = int(getattr(v, "line_number", 0) or getattr(v, "line", 0) or 0)
         description = (
             f"Test code in {source_module} crosses app boundaries by importing {target} directly."
         )
@@ -165,11 +170,13 @@ def _violation_template(v: Violation) -> Optional[Dict]:
             rec_type="test-violation",
             effort="S",
             confidence=7,
+            line_number=line_number,
         )
 
     if v_type in {"Hardcoded Password", "Hardcoded Secret", "Insecure Random", "Bare Except", "Security Issue"}:
         fix, follow_up = _security_guidance(v_type)
         affected = [p for p in [getattr(v, "file_path", ""), source] if p]
+        line_number = int(getattr(v, "line_number", 0) or getattr(v, "line", 0) or 0)
         title = f"Fix {v_type}"
         if affected and affected[0]:
             title = f"Fix {v_type} in {Path(affected[0]).name}"
@@ -182,6 +189,7 @@ def _violation_template(v: Violation) -> Optional[Dict]:
             rec_type="security",
             effort="S",
             confidence=8,
+            line_number=line_number,
         )
 
     return _make_template_recommendation(
@@ -196,6 +204,7 @@ def _violation_template(v: Violation) -> Optional[Dict]:
         rec_type="generic",
         effort="S",
         confidence=6,
+        line_number=int(getattr(v, "line_number", 0) or getattr(v, "line", 0) or 0),
     )
 
 

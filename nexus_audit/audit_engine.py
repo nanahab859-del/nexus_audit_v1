@@ -5,9 +5,11 @@ Core audit logic: app scoring, cross-app connection classification,
 circular dependency detection, and first-party app discovery.
 """
 
+import ast
 import importlib.util
 import sys
 import os
+import subprocess
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional, Any
 from collections import defaultdict
@@ -58,6 +60,82 @@ FIRST_PARTY_APPS_FALLBACK = [
 BOOTSTRAP_LEAVES = {
     'asgi', 'wsgi', 'settings', 'celery', 'manage', 'routing', 'apps', 'admin',
 }
+
+
+def get_git_context(project_path: str) -> Dict[str, str]:
+    """Detect GitHub remote, branch, and commit for the project."""
+    try:
+        remote = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            cwd=project_path,
+            capture_output=True,
+            text=True,
+            check=False,
+        ).stdout.strip()
+        branch = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=project_path,
+            capture_output=True,
+            text=True,
+            check=False,
+        ).stdout.strip()
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=project_path,
+            capture_output=True,
+            text=True,
+            check=False,
+        ).stdout.strip()[:7]
+        if not remote:
+            return {}
+        if remote.startswith("git@"):
+            remote_path = remote.split(":", 1)[1]
+            if remote_path.endswith(".git"):
+                remote_path = remote_path[:-4]
+            remote = "https://github.com/" + remote_path
+        elif remote.startswith("https://github.com/") and remote.endswith(".git"):
+            remote = remote[:-4]
+        return {"github_base": remote, "branch": branch, "commit": commit}
+    except Exception:
+        return {}
+
+
+def find_import_line(source_module: str, target_module: str, project_path: str) -> int:
+    """Best-effort AST lookup for the line number of a cross-app import."""
+    source_path = Path(project_path) / Path(source_module.replace(".", "/")).with_suffix(".py")
+    if not source_path.exists():
+        return 0
+    try:
+        tree = ast.parse(source_path.read_text(encoding="utf-8"))
+    except Exception:
+        return 0
+
+    source_root = source_module.split(".")[0]
+    target_root = target_module.split(".")[0]
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                name = alias.name or ""
+                if name == target_module or name.startswith(target_module + ".") or target_module.startswith(name + "."):
+                    return getattr(node, "lineno", 0) or 0
+                if name.split(".")[0] == target_root and source_root != target_root:
+                    return getattr(node, "lineno", 0) or 0
+        elif isinstance(node, ast.ImportFrom):
+            module_name = node.module or ""
+            if module_name == target_module or module_name.startswith(target_module + ".") or target_module.startswith(module_name + "."):
+                return getattr(node, "lineno", 0) or 0
+            if module_name.split(".")[0] == target_root and source_root != target_root:
+                return getattr(node, "lineno", 0) or 0
+
+    try:
+        for lineno, line in enumerate(source_path.read_text(encoding="utf-8").splitlines(), start=1):
+            stripped = line.strip()
+            if (stripped.startswith("import ") or stripped.startswith("from ")) and target_root in stripped:
+                return lineno
+    except Exception:
+        return 0
+    return 0
 
 
 def is_ghost_file(physical_file: str, dna_modules: Set[str]) -> bool:
@@ -299,4 +377,3 @@ def find_circular_dependencies_accurate(dna: Dict) -> List[Dict]:
         c['length']
     ))
     return unique_cycles
-

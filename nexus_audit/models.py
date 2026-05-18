@@ -44,6 +44,7 @@ class Violation:
     target: Optional[str] = None
     file_path: str = ""
     line: int = 0
+    line_number: int = 0
     description: str = ""
     code_snippet: str = ""
     recommendation: str = ""

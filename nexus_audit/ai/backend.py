@@ -316,6 +316,8 @@ def _parse_ai_json(raw: str) -> Optional[dict]:
         except Exception:
             confidence = 5
         parsed["confidence"] = max(1, min(10, confidence))
+        parsed["fix_effort"] = parsed.get("fix_effort", "unknown") or "unknown"
+        parsed["fix_effort_rationale"] = parsed.get("fix_effort_rationale", "") or ""
         return parsed
     if not raw:
         return None
@@ -358,7 +360,8 @@ def _ai_complete_best_of(
     score it by completeness, and return the best one.
     """
     REQUIRED = {"title", "why_harmful", "correct_location", "migration_steps",
-                "before_code", "after_code", "effort", "priority", "confidence"}
+                "before_code", "after_code", "effort", "priority", "confidence",
+                "fix_effort", "fix_effort_rationale"}
     OPTIONAL = {"what_breaks_today", "description", "action"}
 
     models = TASK_MODELS.get(task_type, GEMINI_MODELS)

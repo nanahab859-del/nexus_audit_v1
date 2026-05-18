@@ -25,13 +25,20 @@ from .config import (
 from .key_pool import key_pool
 from .models import Violation, AllowedCommunication
 from .scanners import run_bandit_enhanced, run_dead_code_scan, run_lizard_analysis
-from .audit_engine import is_ghost_file, classify_connection, find_circular_dependencies_accurate
+from .audit_engine import (
+    is_ghost_file,
+    classify_connection,
+    find_circular_dependencies_accurate,
+    find_import_line,
+    get_git_context,
+)
 from .dependency import run_tier2_dependency_scan
 from .report.html_report import EnhancedAuditReport
 from .report.markdown_report import generate_comprehensive_markdown
 
 from .ai.backend import _detect_ai_backend
 from .features.fix_queue import FixQueue
+from .features.coupling_map import build_coupling_matrix
 from .features.timeline import load_score_history
 
 from .ai.recommendations import run_ai_recommendations, generate_recommendations
@@ -120,6 +127,16 @@ def main():
         "--fast",
         action="store_true",
         help="Fast mode: static analysis only, no AI",
+    )
+    parser.add_argument(
+        "--serve",
+        action="store_true",
+        help="Serve the generated dashboard on localhost:8421",
+    )
+    parser.add_argument(
+        "--watch",
+        action="store_true",
+        help="Re-run the audit when Python files change (use with --serve)",
     )
     args = parser.parse_args()
     if args.fast:
@@ -240,11 +257,14 @@ def main():
             if is_violation:
                 tgt_app  = imp.split('.')[0]
                 pair_key = f"{app}|{tgt_app}"
+                line_number = find_import_line(module, imp, str(PROJECT_PATH))
                 violations.append(Violation(
                     type=conn_type,
                     severity='HIGH',
                     source=module,
                     target=imp,
+                    line=line_number,
+                    line_number=line_number,
                     description=f"{conn_type}: {module} → {imp}",
                     recommendation="Replace with Django signal, Celery task, or REST API call."
                 ))
@@ -388,6 +408,8 @@ def main():
         'dead_code':                 dead_code,
         'recommendations':           [],   # filled below after AI run
         'dependency_scan':           dep_scan,
+        'coupling_matrix':           build_coupling_matrix(violations, allowed_comms, FIRST_PARTY_APPS),
+        'git_context':               get_git_context(str(NEXUS_ROOT)),
     }
 
     # ── AI recommendations (or Tier-1 template fallback) ─────────────────
@@ -534,6 +556,11 @@ def main():
         print(f"⚠️  {len(cycles)} circular dependency cycle(s) — see Cycles tab.")
     if ghost_files:
         print(f"⚠️  {len(ghost_files)} ghost file(s) — see Ghost Files tab.")
+
+    if args.serve:
+        from .features.server import serve
+
+        serve(html_path, json_path, str(fix_queue_path), open_browser=True, watch=args.watch)
 
     print()
 
