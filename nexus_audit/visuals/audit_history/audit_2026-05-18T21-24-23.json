@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "timestamp": "2026-05-18T22:15:52.519950",
+    "timestamp": "2026-05-18T21:24:23.033728",
     "project_path": "/home/yusupha/my_tools/nexus_project_copy",
     "total_modules": 238,
     "total_physical_files": 211,
     "total_violations": 13,
     "total_raw_imports": 123,
-    "total_cycles": 15,
+    "total_cycles": 16,
     "ghost_files": [
       "nexus_tournaments.management.commands.dispatch_outbox_events",
       "nexus_core.serializers.token",
@@ -51,7 +51,7 @@
         "direction": "\u2192"
       },
       "_meta": {
-        "previous_timestamp": "2026-05-18T22:00:12",
+        "previous_timestamp": "2026-05-18T07:35:58",
         "cross_violations_prev": 13,
         "cross_violations_curr": 13,
         "cross_violations_delta": 0
@@ -72,17 +72,16 @@
       "dependency_freshness": true,
       "cve_enrichment": true
     },
-    "ai_backend": "Google Gemini + templates",
-    "ai_fallback_reason": "no_ai_output",
+    "ai_backend": "Google Gemini",
     "fix_queue": {
-      "tracked_recommendations": 54,
-      "tracked_entries": 105,
+      "tracked_recommendations": 7,
+      "tracked_entries": 104,
       "reappeared_done": [],
       "reappeared_done_count": 0,
       "status_counts": {
         "done": 0,
         "in_progress": 0,
-        "open": 54,
+        "open": 7,
         "snoozed": 0
       }
     }
@@ -7807,8 +7806,21 @@
     },
     {
       "nodes": [
-        "nexus_tournaments.views.results",
-        "nexus_tournaments.views"
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.results"
+      ],
+      "length": 2,
+      "severity": "high",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.announcements"
       ],
       "length": 2,
       "severity": "high",
@@ -7834,19 +7846,6 @@
     {
       "nodes": [
         "nexus_tournaments.views",
-        "nexus_tournaments.views.moderation"
-      ],
-      "length": 2,
-      "severity": "high",
-      "cross_app": false,
-      "apps": [
-        "nexus_tournaments"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
-        "nexus_tournaments.views",
         "nexus_tournaments.views.matches"
       ],
       "length": 2,
@@ -7860,7 +7859,7 @@
     {
       "nodes": [
         "nexus_tournaments.views",
-        "nexus_tournaments.views.announcements"
+        "nexus_tournaments.views.moderation"
       ],
       "length": 2,
       "severity": "high",
@@ -7898,15 +7897,14 @@
     },
     {
       "nodes": [
-        "nexus_tournaments.services.match_service",
-        "nexus_tournaments.tasks",
-        "nexus_tournaments.services.diagnostic_service"
+        "nexus_economy.tasks",
+        "nexus_economy.tasks.refund"
       ],
-      "length": 3,
-      "severity": "medium",
+      "length": 2,
+      "severity": "high",
       "cross_app": false,
       "apps": [
-        "nexus_tournaments"
+        "nexus_economy"
       ],
       "django_pattern": false
     },
@@ -7921,6 +7919,34 @@
       "cross_app": false,
       "apps": [
         "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_tournaments.services.match_service",
+        "nexus_tournaments.tasks",
+        "nexus_tournaments.services.diagnostic_service"
+      ],
+      "length": 3,
+      "severity": "medium",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_economy.tasks",
+        "nexus_economy.tasks.payout",
+        "nexus_economy.services.payout_service"
+      ],
+      "length": 3,
+      "severity": "medium",
+      "cross_app": false,
+      "apps": [
+        "nexus_economy"
       ],
       "django_pattern": false
     },
@@ -7941,22 +7967,8 @@
     {
       "nodes": [
         "nexus_economy.tasks",
-        "nexus_economy.tasks.payout",
-        "nexus_economy.services.payout_service"
-      ],
-      "length": 3,
-      "severity": "medium",
-      "cross_app": false,
-      "apps": [
-        "nexus_economy"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
         "nexus_economy.tasks.refund",
-        "nexus_economy.services.refund_service",
-        "nexus_economy.tasks"
+        "nexus_economy.services.refund_service"
       ],
       "length": 3,
       "severity": "medium",
@@ -8266,904 +8278,139 @@
   "dead_code": [],
   "recommendations": [
     {
-      "title": "Refactor nexus_content boundary",
-      "priority": "CRITICAL",
-      "description": "1 cross-app violation(s) point at nexus_content. Apps involved: nexus_core.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_core.views.games",
-        "nexus_content"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-0e7d7923f699",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor nexus_core boundary",
-      "priority": "CRITICAL",
-      "description": "3 cross-app violation(s) point at nexus_core. Apps involved: nexus_social, nexus_tournaments.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
+      "title": "Refactor: move events to correct app",
+      "priority": "HIGH",
+      "description": "```json\n{\n  \"title\": \"Relocate social event utilities from core to social app\",\n\n  \"why_harmful\": \"This direct import creates tight coupling where `nexus_social` is dependent on the internal implementation details and file path of `nexus_",
+      "action": "Move nexus_core.utils.events to nexus_core or appropriate shared module.",
       "affected_modules": [
         "nexus_social.services.event_consumers",
-        "nexus_social.views.events",
-        "nexus_tournaments.services.verification_service",
-        "nexus_core"
+        "nexus_social.views.events"
       ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
       "effort": "M",
-      "rec_id": "rec-18ce06b925da",
+      "rec_id": "rec-c524c82b7cb2",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Refactor utils boundary",
-      "priority": "CRITICAL",
-      "description": "3 cross-app violation(s) point at nexus_core.utils. Apps involved: nexus_social, nexus_tournaments.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_social.services.event_consumers",
-        "nexus_social.views.events",
-        "nexus_tournaments.services.verification_service",
-        "nexus_core.utils"
+      "title": "Redirect Match Service Import to Gateway",
+      "why_harmful": "This direct import creates tight coupling between nexus_gateway and nexus_tournaments. Specifically, nexus_gateway's consumers now directly depend on the internal implementation details of nexus_tournaments' services. A change in nexus_tournaments.services.match_service's interface, such as renaming a method or altering a parameter, would immediately break nexus_gateway's consumers, potentially causing a full service outage. This violates the principle of strict app boundaries, hindering independent deployment and development of gateway and tournament features.",
+      "what_breaks_today": "The team likely experiences increased friction during development when modifying either the gateway consumers or the match service, as changes in one necessitate immediate updates and testing in the other. This can lead to longer release cycles and a higher risk of regressions due to the interconnectedness.",
+      "correct_location": "nexus_gateway.services.match_gateway_service.MatchGatewayService",
+      "migration_steps": [
+        "Create a new file: `nexus_gateway/services/match_gateway_service.py`.",
+        "In `nexus_gateway/services/match_gateway_service.py`, define a new service class `MatchGatewayService`. This class will encapsulate the logic previously imported from `nexus_tournaments.services.match_service`. It should expose a clean, gateway-centric interface. If direct calls to `nexus_tournaments` are still required, this service will make those calls, but the consumers will import from here.",
+        "Update `nexus_gateway/consumers.py` to import and use `MatchGatewayService` from `nexus_gateway.services.match_gateway_service` instead of directly importing from `nexus_tournaments.services.match_service`.",
+        "Run `python manage.py test nexus_gateway` and `python manage.py test nexus_tournaments` to ensure all tests pass. Perform a smoke test of the WebSocket functionality related to matches."
       ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
+      "before_code": "# CURRENT (violation)\nfrom nexus_tournaments.services.match_service import MatchService  # in nexus_gateway.consumers",
+      "after_code": "# FIXED\nfrom nexus_gateway.services.match_gateway_service import MatchGatewayService  # in nexus_gateway.consumers",
+      "fix_effort": "< 1 day",
+      "fix_effort_rationale": "Requires creating a new service layer within nexus_gateway to abstract the dependency, and updating consumers. This is more than a simple import redirect but avoids complex signal/task refactoring for a direct service call.",
       "effort": "M",
-      "rec_id": "rec-3de183b40438",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor events boundary",
-      "priority": "CRITICAL",
-      "description": "2 cross-app violation(s) point at nexus_core.utils.events. Apps involved: nexus_social.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_social.services.event_consumers",
-        "nexus_social.views.events",
-        "nexus_core.utils.events"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-af45b45cc28e",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor feature_flags boundary",
-      "priority": "CRITICAL",
-      "description": "1 cross-app violation(s) point at nexus_core.utils.feature_flags. Apps involved: nexus_tournaments.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_tournaments.services.verification_service",
-        "nexus_core.utils.feature_flags"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-ad22d769f151",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor nexus_tournaments boundary",
-      "priority": "CRITICAL",
-      "description": "1 cross-app violation(s) point at nexus_tournaments. Apps involved: nexus_gateway.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_gateway.consumers",
-        "nexus_tournaments"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-9b0141a799cd",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor services boundary",
-      "priority": "CRITICAL",
-      "description": "1 cross-app violation(s) point at nexus_tournaments.services. Apps involved: nexus_gateway.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_gateway.consumers",
-        "nexus_tournaments.services"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-532e80a58c21",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor match_service boundary",
-      "priority": "CRITICAL",
-      "description": "1 cross-app violation(s) point at nexus_tournaments.services.match_service. Apps involved: nexus_gateway.",
-      "action": "Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.",
-      "affected_modules": [
-        "nexus_gateway.consumers",
-        "nexus_tournaments.services.match_service"
-      ],
-      "rec_type": "violation",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "M",
-      "rec_id": "rec-6b1cce4e4c1d",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Fix Bare Except",
-      "priority": "MEDIUM",
-      "description": "11 bare except finding(s) were detected by Bandit.",
-      "action": "Replace broad exception handling with specific exception types. Narrow each catch block to the real failure mode and preserve the stack trace where needed.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/middleware.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/admin_panel.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_gateway/consumers.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/apps.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/auto_flag.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/push_notifications.py"
-      ],
-      "rec_type": "security",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "S",
-      "rec_id": "rec-81d2d7d49a6a",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Fix Hardcoded Password",
-      "priority": "MEDIUM",
-      "description": "99 hardcoded password finding(s) were detected by Bandit.",
-      "action": "Move the password into an environment variable or secret manager. Replace hardcoded credentials with settings-backed secrets and rotate the exposed value.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tests/test_views.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_admin_panel.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_auth.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_new_endpoints.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_sessions_mfa_deletion.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_signals.py",
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_users.py"
-      ],
-      "rec_type": "security",
-      "ai_generated": false,
-      "confidence": 8,
-      "effort": "S",
-      "rec_id": "rec-ed7d0e7525f6",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor LoginView",
-      "priority": "MEDIUM",
-      "description": "LoginView in auth.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-6d1908e66e17",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor post",
-      "priority": "MEDIUM",
-      "description": "post in auth.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-ed0927c954fa",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor generate_single_elimination",
-      "priority": "MEDIUM",
-      "description": "generate_single_elimination in bracket_service.py has cyclomatic complexity 13.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/bracket_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-57bc8a597fb4",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor EscrowService",
-      "priority": "MEDIUM",
-      "description": "EscrowService in escrow_service.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-75130f0805ae",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor lock",
-      "priority": "MEDIUM",
-      "description": "lock in escrow_service.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-15dfc2445298",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor ingest_event",
-      "priority": "MEDIUM",
-      "description": "ingest_event in events.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/events.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-1ccd906adfca",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor HandshakeRecheckService",
       "priority": "HIGH",
-      "description": "HandshakeRecheckService in handshake_recheck_service.py has cyclomatic complexity 22.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "confidence": 1,
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
       "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py"
+        "nexus_gateway.consumers"
       ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
+      "rec_id": "rec-0e4b4aead673",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "NEXUS_SOCIAL \u2014 Health Analysis",
+      "priority": "MEDIUM",
+      "description": "**Health Narrative:**\nThe nexus_social app'",
+      "action": "Fix 6 boundary violation(s) first (+30 pts), then 12 security finding(s) (+36 pts). Projected score: 100%.",
+      "affected_modules": [
+        "nexus_social",
+        "nexus_social.admin",
+        "nexus_social.apps",
+        "nexus_social.consumers",
+        "nexus_social.logging"
+      ],
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
       "effort": "L",
-      "rec_id": "rec-bc5338fe104d",
+      "rec_id": "rec-079ed838eff0",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Refactor recheck",
+      "title": "Extract Shared Utility: nexus_core.utils",
       "priority": "HIGH",
-      "description": "recheck in handshake_recheck_service.py has cyclomatic complexity 21.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "L",
-      "rec_id": "rec-d8ab30d8a749",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor create_tournament",
-      "priority": "MEDIUM",
-      "description": "create_tournament in league_service.py has cyclomatic complexity 20.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/league_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-f1b6124396d6",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _try_activate",
-      "priority": "MEDIUM",
-      "description": "_try_activate in match_service.py has cyclomatic complexity 14.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-b4ea6fffcf4d",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor handle_timeout",
-      "priority": "HIGH",
-      "description": "handle_timeout in match_service.py has cyclomatic complexity 21.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "L",
-      "rec_id": "rec-572bf085876a",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor join_tournament",
-      "priority": "MEDIUM",
-      "description": "join_tournament in participation_service.py has cyclomatic complexity 19.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/participation_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-7da7f006f6a9",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor PayoutService",
-      "priority": "MEDIUM",
-      "description": "PayoutService in payout_service.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/payout_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-569330323798",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor patch",
-      "priority": "MEDIUM",
-      "description": "patch in preferences.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/preferences.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-3779c331bb91",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor MarkReadView",
-      "priority": "MEDIUM",
-      "description": "MarkReadView in receipts.py has cyclomatic complexity 13.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-6c71f76c1f21",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor post",
-      "priority": "MEDIUM",
-      "description": "post in receipts.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-3bb88d74a46e",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor auto_snatcher_backfill",
-      "priority": "MEDIUM",
-      "description": "auto_snatcher_backfill in tasks.py has cyclomatic complexity 13.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-b92d5511e737",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor fourteen_day_sweep",
-      "priority": "MEDIUM",
-      "description": "fourteen_day_sweep in tasks.py has cyclomatic complexity 15.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-cba5960aa100",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_01_env",
-      "priority": "HIGH",
-      "description": "_check_01_env in verify_backend.py has cyclomatic complexity 23.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "L",
-      "rec_id": "rec-e1778c7a6743",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_02_models",
-      "priority": "MEDIUM",
-      "description": "_check_02_models in verify_backend.py has cyclomatic complexity 19.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-fb488e9896e0",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_06_imports",
-      "priority": "MEDIUM",
-      "description": "_check_06_imports in verify_backend.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-9b0fa696b38a",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_08_websockets",
-      "priority": "MEDIUM",
-      "description": "_check_08_websockets in verify_backend.py has cyclomatic complexity 13.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-d889fde825e1",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_10_security",
-      "priority": "MEDIUM",
-      "description": "_check_10_security in verify_backend.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-a109f234a66f",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_11_financial",
-      "priority": "HIGH",
-      "description": "_check_11_financial in verify_backend.py has cyclomatic complexity 26.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "L",
-      "rec_id": "rec-3ff51a03ecbb",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _check_12_invariants",
-      "priority": "MEDIUM",
-      "description": "_check_12_invariants in verify_backend.py has cyclomatic complexity 19.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-56101d3e463f",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _render_json",
-      "priority": "MEDIUM",
-      "description": "_render_json in verify_backend.py has cyclomatic complexity 14.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-72200907e02e",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor _render_text",
-      "priority": "MEDIUM",
-      "description": "_render_text in verify_backend.py has cyclomatic complexity 16.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-ef5dc6faee38",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor handle",
-      "priority": "MEDIUM",
-      "description": "handle in verify_backend.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-4134cdd72305",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor WalletDepositView",
-      "priority": "MEDIUM",
-      "description": "WalletDepositView in wallet.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-130e5950c0bf",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor WalletWithdrawView",
-      "priority": "MEDIUM",
-      "description": "WalletWithdrawView in wallet.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-1fdb02c3f466",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor post",
-      "priority": "MEDIUM",
-      "description": "post in wallet.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-6db98ba51d82",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor modempay_webhook_handler",
-      "priority": "MEDIUM",
-      "description": "modempay_webhook_handler in webhooks.py has cyclomatic complexity 15.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/webhooks.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-da11b4479a3c",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor WithdrawalService",
-      "priority": "MEDIUM",
-      "description": "WithdrawalService in withdrawal_service.py has cyclomatic complexity 12.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-413c523fe966",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Refactor process",
-      "priority": "MEDIUM",
-      "description": "process in withdrawal_service.py has cyclomatic complexity 11.",
-      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
-      "affected_modules": [
-        "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py"
-      ],
-      "rec_type": "performance",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-5ef5f5a3769f",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Review ghost files in nexus_core",
-      "priority": "LOW",
-      "description": "4 ghost file(s) were discovered for nexus_core.",
-      "action": "Remove dead files that are no longer imported, or register the missing modules properly if they are still required.",
-      "affected_modules": [
-        "nexus_core.serializers.token",
-        "nexus_core.serializers.users",
-        "nexus_core.serializers.auth",
-        "nexus_core.management.commands.dispatch_outbox_events"
-      ],
-      "rec_type": "health",
-      "ai_generated": false,
-      "confidence": 6,
-      "effort": "S",
-      "rec_id": "rec-30c25d881bbd",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Review ghost files in nexus_tournaments",
-      "priority": "LOW",
-      "description": "1 ghost file(s) were discovered for nexus_tournaments.",
-      "action": "Remove dead files that are no longer imported, or register the missing modules properly if they are still required.",
-      "affected_modules": [
-        "nexus_tournaments.management.commands.dispatch_outbox_events"
-      ],
-      "rec_type": "health",
-      "ai_generated": false,
-      "confidence": 6,
-      "effort": "S",
-      "rec_id": "rec-247c53012aac",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_core.utils -> nexus_core.utils.decorators",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
+      "description": "`nexus_core.utils` is imported by 2 app(s) (nexus_social, nexus_tournaments) as a cross-app violation. One refactor eliminates all 2 violations.",
+      "action": "Here's the concrete extraction plan for `nexus_core.utils`:\n\n1.  **New Module Path**: Create a new app named `nexus_shared_utils`. The utility functions will reside in `nexus_shared_utils/utils.py`.\n\n2.  **Changes in `nexus_core.utils`**:\n    *   Identify the specific utility functions within `nexus_core.utils` that are *not* intrinsically tied to core user authentication, tokens, or core models. These are the candidates for extraction.\n    *   Move these identified functions from `nexus_core.utils.py` to `nexus_shared_utils/utils.py`.\n    *   In `nexus_core.utils.py`, add a comment indicating that certain utilities have been moved to `nexus_shared_utils`. For example:\n        ```python\n        # NOTE: Some utilities have been moved to nexus_shared_utils.utils.\n        # Please import from there for general utility functions.\n        # This file now primarily contains utilities strictly related to nexus_core.\n        ```\n    *   Ensure `nexus_core.utils` still contains functions *essential* to `nexus_core`'s functionality and that these remain in `nexus_core.utils.py`.\n\n3.  **Updating Importing Apps**:\n    *   **`nexus_social`**:\n        *   In any file importing from `nexus_core.utils` (e.g., `nexus_social/models.py`, `nexus_social/services.py`), change the import statement.\n        *   **From**: `from nexus_core.utils import some_utility_function`\n        *   **To**: `from nexus_shared_utils.utils import some_utility_function`\n    *   **`nexus_tournaments`**:\n        *   In any file importing from `",
       "affected_modules": [
         "nexus_core.utils",
-        "nexus_core.utils.decorators"
+        "nexus_social",
+        "nexus_tournaments"
       ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
       "effort": "M",
-      "rec_id": "rec-ca75899f4f32",
+      "rec_id": "rec-cfc4165eb775",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Resolve intra-app cycle",
+      "upgrade_command": "pip install \"Authlib==1.7.2\"",
+      "why_upgrade": "Upgrading Authlib addresses critical CVEs in version 1.6.9, mitigating security vulnerabilities. The latest version also includes bug fixes and potential performance enhancements, ensuring a more robust and secure authentication and authorization system.",
+      "breaking_changes": "None known. Authlib 1.7.x is generally a backward-compatible patch release. Thorough testing is still recommended.",
+      "test_after": "python manage.py test nexus_core nexus_gateway",
+      "risk_if_skipped": "Continued exposure to known security vulnerabilities (CVEs) in Authlib 1.6.9, potentially leading to unauthorized access, data breaches, or denial-of-service attacks on the Nexus platform.",
+      "confidence": 1,
+      "fix_effort": "unknown",
+      "fix_effort_rationale": "",
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
+      "title": "Upgrade Authlib: 1.6.9 \u2192 1.7.2",
       "priority": "HIGH",
-      "description": "nexus_tournaments.services.match_service -> nexus_tournaments.tasks",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
-        "nexus_tournaments.services.match_service",
-        "nexus_tournaments.tasks"
+        "Authlib"
       ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-4a78be67a2fd",
+      "rec_type": "upgrade",
+      "action": "pip install \"Authlib==1.7.2\"\n\nBreaking changes: None known. Authlib 1.7.x is generally a backward-compatible patch release. Thorough testing is still recommended.\n\nVerify: python manage.py test nexus_core nexus_gateway",
+      "rec_id": "rec-fbcb4a59c598",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Resolve intra-app cycle",
+      "title": "Upgrade black: 26.3.1 \u2192 26.5.1",
       "priority": "HIGH",
-      "description": "nexus_tournaments.views.results -> nexus_tournaments.views",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
+      "action": "pip install black==26.5.1\n\n*   Role: Senior Django Architect (modular monolith, strict boundaries).\n    *   Context: NEXUS PROJECT (modular monolith with specific apps: `nexus_core`, `nexus_economy`, etc.).\n    *   Constraint: No direct cross-app imports; use signals, Celery, or REST via `nexus_gateway`.\n    *   Task: Upgrade",
       "affected_modules": [
-        "nexus_tournaments.views.results",
-        "nexus_tournaments.views"
+        "black"
       ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-0836b2bbf6d6",
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
+      "rec_type": "upgrade",
+      "rec_id": "rec-c0dd77ab8aa4",
       "fix_status": "open",
       "fix_notes": ""
     },
     {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_tournaments.views -> nexus_tournaments.views.leagues",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
+      "upgrade_command": "pip install click==8.4.0",
+      "why_upgrade": "Improves CLI stability and argument parsing reliability for management commands. Ensures compatibility with the underlying shell environments used by nexus_economy Celery workers.",
+      "breaking_changes": "None known",
+      "test_after": "python manage.py help",
+      "risk_if_skipped": "Risk of non-deterministic behavior in nexus_economy management commands or automated CI/CD scripts that parse CLI output.",
+      "confidence": 1,
+      "fix_effort": "unknown",
+      "fix_effort_rationale": "",
+      "ai_generated": true,
+      "ai_backend": "Google Gemini",
+      "title": "Upgrade click: 8.3.1 \u2192 8.4.0",
+      "priority": "MEDIUM",
       "affected_modules": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.leagues"
+        "click"
       ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-73c2aa342b16",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_tournaments.views -> nexus_tournaments.views.moderation",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
-      "affected_modules": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.moderation"
-      ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-f6b61d264109",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_tournaments.views -> nexus_tournaments.views.matches",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
-      "affected_modules": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.matches"
-      ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-7e4903faf4eb",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_tournaments.views -> nexus_tournaments.views.announcements",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
-      "affected_modules": [
-        "nexus_tournaments.views",
-        "nexus_tournaments.views.announcements"
-      ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-37b84ba9e297",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
-      "description": "nexus_economy.tasks -> nexus_economy.tasks.payout",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
-      "affected_modules": [
-        "nexus_economy.tasks",
-        "nexus_economy.tasks.payout"
-      ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-469a89ef4252",
+      "rec_type": "upgrade",
+      "action": "pip install click==8.4.0\n\nBreaking changes: None known\n\nVerify: python manage.py help",
+      "rec_id": "rec-80b9dc0b50c7",
       "fix_status": "open",
       "fix_notes": ""
     }
@@ -9171,25 +8418,9 @@
   "dependency_scan": {
     "packages": [
       {
-        "name": "attrs",
-        "installed": "26.1.0",
-        "latest": "26.1.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "annotated-doc",
         "installed": "0.0.4",
         "latest": "0.0.4",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "async-timeout",
-        "installed": "5.0.1",
-        "latest": "5.0.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9203,9 +8434,9 @@
         "cves": []
       },
       {
-        "name": "amqp",
-        "installed": "5.3.1",
-        "latest": "5.3.1",
+        "name": "async-timeout",
+        "installed": "5.0.1",
+        "latest": "5.0.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9214,6 +8445,22 @@
         "name": "annotated-types",
         "installed": "0.7.0",
         "latest": "0.7.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "attrs",
+        "installed": "26.1.0",
+        "latest": "26.1.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "amqp",
+        "installed": "5.3.1",
+        "latest": "5.3.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9233,6 +8480,27 @@
         "outdated": false,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "autobahn",
+        "installed": "24.4.2",
+        "latest": "25.12.2",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-gwp7-vqr5-h33h",
+            "summary": "Open Redirect in autobahn",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35678"
+          },
+          {
+            "id": "PYSEC-2020-25",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/crossbario/autobahn-python/compare/v20.12.2...v20.12.3"
+          }
+        ]
       },
       {
         "name": "Authlib",
@@ -9316,27 +8584,6 @@
         ]
       },
       {
-        "name": "autobahn",
-        "installed": "24.4.2",
-        "latest": "25.12.2",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-gwp7-vqr5-h33h",
-            "summary": "Open Redirect in autobahn",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35678"
-          },
-          {
-            "id": "PYSEC-2020-25",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/crossbario/autobahn-python/compare/v20.12.2...v20.12.3"
-          }
-        ]
-      },
-      {
         "name": "billiard",
         "installed": "4.2.4",
         "latest": "4.2.4",
@@ -9359,39 +8606,6 @@
         "outdated": false,
         "cve_count": 0,
         "cves": []
-      },
-      {
-        "name": "celery",
-        "installed": "5.6.3",
-        "latest": "5.6.3",
-        "outdated": false,
-        "cve_count": 4,
-        "cves": [
-          {
-            "id": "GHSA-q4xr-rc97-m4xx",
-            "summary": "OS Command Injection in celery",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
-          },
-          {
-            "id": "GHSA-rpc6-h455-3rx5",
-            "summary": "Celery local privilege escalation vulnerability",
-            "severity": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
-          },
-          {
-            "id": "PYSEC-2011-17",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
-          },
-          {
-            "id": "PYSEC-2021-858",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
-          }
-        ]
       },
       {
         "name": "certifi",
@@ -9508,6 +8722,14 @@
         ]
       },
       {
+        "name": "cfgv",
+        "installed": "3.5.0",
+        "latest": "3.5.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "black",
         "installed": "26.3.1",
         "latest": "26.5.1",
@@ -9535,12 +8757,37 @@
         ]
       },
       {
-        "name": "cfgv",
-        "installed": "3.5.0",
-        "latest": "3.5.0",
+        "name": "celery",
+        "installed": "5.6.3",
+        "latest": "5.6.3",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
+        "cve_count": 4,
+        "cves": [
+          {
+            "id": "GHSA-q4xr-rc97-m4xx",
+            "summary": "OS Command Injection in celery",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
+          },
+          {
+            "id": "GHSA-rpc6-h455-3rx5",
+            "summary": "Celery local privilege escalation vulnerability",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
+          },
+          {
+            "id": "PYSEC-2011-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
+          },
+          {
+            "id": "PYSEC-2021-858",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
+          }
+        ]
       },
       {
         "name": "channels",
@@ -9564,6 +8811,14 @@
         ]
       },
       {
+        "name": "cffi",
+        "installed": "2.0.0",
+        "latest": "2.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "channels_redis",
         "installed": "4.3.0",
         "latest": "4.3.0",
@@ -9580,10 +8835,10 @@
         "cves": []
       },
       {
-        "name": "cffi",
-        "installed": "2.0.0",
-        "latest": "2.0.0",
-        "outdated": false,
+        "name": "click",
+        "installed": "8.3.1",
+        "latest": "8.4.0",
+        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -9591,6 +8846,14 @@
         "name": "click-repl",
         "installed": "0.3.0",
         "latest": "0.3.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "click-plugins",
+        "installed": "1.1.1.2",
+        "latest": "1.1.1.2",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9604,22 +8867,6 @@
         "cves": []
       },
       {
-        "name": "click",
-        "installed": "8.3.1",
-        "latest": "8.4.0",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "click-plugins",
-        "installed": "1.1.1.2",
-        "latest": "1.1.1.2",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "cron-descriptor",
         "installed": "1.4.5",
         "latest": "2.0.8",
@@ -9628,9 +8875,25 @@
         "cves": []
       },
       {
+        "name": "daphne",
+        "installed": "4.2.1",
+        "latest": "4.2.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "distlib",
         "installed": "0.4.0",
         "latest": "0.4.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "django-celery-beat",
+        "installed": "2.9.0",
+        "latest": "2.9.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9648,190 +8911,6 @@
         "installed": "7.2.1",
         "latest": "7.2.1",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "daphne",
-        "installed": "4.2.1",
-        "latest": "4.2.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "charset-normalizer",
-        "installed": "3.4.7",
-        "latest": "3.4.7",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "djangorestframework",
-        "installed": "3.17.1",
-        "latest": "3.17.1",
-        "outdated": false,
-        "cve_count": 3,
-        "cves": [
-          {
-            "id": "GHSA-fx83-3ph3-9j2q",
-            "summary": "Cross-site Scripting (XSS) in Django REST Framework",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-25626"
-          },
-          {
-            "id": "GHSA-gw84-84pc-xp82",
-            "summary": "Cross-site Scripting in djangorestframework",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-21520"
-          },
-          {
-            "id": "PYSEC-2020-263",
-            "summary": "",
-            "severity": "",
-            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1878635"
-          }
-        ]
-      },
-      {
-        "name": "djangorestframework_simplejwt",
-        "installed": "5.5.1",
-        "latest": "5.5.1",
-        "outdated": false,
-        "cve_count": 1,
-        "cves": [
-          {
-            "id": "GHSA-5vcc-86wm-547q",
-            "summary": "Improper Privilege Management in djangorestframework-simplejwt",
-            "severity": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22513"
-          }
-        ]
-      },
-      {
-        "name": "dparse",
-        "installed": "0.6.4",
-        "latest": "0.6.4",
-        "outdated": false,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-8fg9-p83m-x5pq",
-            "summary": "ReDoS issue in dparse",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://github.com/pyupio/dparse/security/advisories/GHSA-8fg9-p83m-x5pq"
-          },
-          {
-            "id": "PYSEC-2022-301",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/pyupio/dparse/commit/8c990170bbd6c0cf212f1151e9025486556062d5"
-          }
-        ]
-      },
-      {
-        "name": "h11",
-        "installed": "0.16.0",
-        "latest": "0.16.0",
-        "outdated": false,
-        "cve_count": 1,
-        "cves": [
-          {
-            "id": "GHSA-vqfr-h8mv-ghfj",
-            "summary": "h11 accepts some malformed Chunked-Encoding bodies",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
-            "url": "https://github.com/python-hyper/h11/security/advisories/GHSA-vqfr-h8mv-ghfj"
-          }
-        ]
-      },
-      {
-        "name": "django-celery-beat",
-        "installed": "2.9.0",
-        "latest": "2.9.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "filelock",
-        "installed": "3.25.2",
-        "latest": "3.29.0",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-qmgc-5h2g-mvrw",
-            "summary": "filelock Time-of-Check-Time-of-Use (TOCTOU) Symlink Vulnerability in SoftFileLock",
-            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:H",
-            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-qmgc-5h2g-mvrw"
-          },
-          {
-            "id": "GHSA-w853-jp5j-5j7f",
-            "summary": "filelock has a TOCTOU race condition which allows symlink attacks during lock file creation",
-            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:H",
-            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-w853-jp5j-5j7f"
-          }
-        ]
-      },
-      {
-        "name": "hyperlink",
-        "installed": "21.0.0",
-        "latest": "21.0.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "identify",
-        "installed": "2.6.18",
-        "latest": "2.6.19",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "idna",
-        "installed": "3.11",
-        "latest": "3.15",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-jjg7-2v4v-x38h",
-            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
-          },
-          {
-            "id": "PYSEC-2024-60",
-            "summary": "",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
-          }
-        ]
-      },
-      {
-        "name": "Incremental",
-        "installed": "24.11.0",
-        "latest": "24.11.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "exceptiongroup",
-        "installed": "1.3.1",
-        "latest": "1.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "Django",
-        "installed": "5.2.12",
-        "latest": "6.0.5",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -10013,6 +9092,166 @@
         ]
       },
       {
+        "name": "djangorestframework",
+        "installed": "3.17.1",
+        "latest": "3.17.1",
+        "outdated": false,
+        "cve_count": 3,
+        "cves": [
+          {
+            "id": "GHSA-fx83-3ph3-9j2q",
+            "summary": "Cross-site Scripting (XSS) in Django REST Framework",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-25626"
+          },
+          {
+            "id": "GHSA-gw84-84pc-xp82",
+            "summary": "Cross-site Scripting in djangorestframework",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-21520"
+          },
+          {
+            "id": "PYSEC-2020-263",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1878635"
+          }
+        ]
+      },
+      {
+        "name": "djangorestframework_simplejwt",
+        "installed": "5.5.1",
+        "latest": "5.5.1",
+        "outdated": false,
+        "cve_count": 1,
+        "cves": [
+          {
+            "id": "GHSA-5vcc-86wm-547q",
+            "summary": "Improper Privilege Management in djangorestframework-simplejwt",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22513"
+          }
+        ]
+      },
+      {
+        "name": "exceptiongroup",
+        "installed": "1.3.1",
+        "latest": "1.3.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "dparse",
+        "installed": "0.6.4",
+        "latest": "0.6.4",
+        "outdated": false,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-8fg9-p83m-x5pq",
+            "summary": "ReDoS issue in dparse",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/pyupio/dparse/security/advisories/GHSA-8fg9-p83m-x5pq"
+          },
+          {
+            "id": "PYSEC-2022-301",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/pyupio/dparse/commit/8c990170bbd6c0cf212f1151e9025486556062d5"
+          }
+        ]
+      },
+      {
+        "name": "hyperlink",
+        "installed": "21.0.0",
+        "latest": "21.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "h11",
+        "installed": "0.16.0",
+        "latest": "0.16.0",
+        "outdated": false,
+        "cve_count": 1,
+        "cves": [
+          {
+            "id": "GHSA-vqfr-h8mv-ghfj",
+            "summary": "h11 accepts some malformed Chunked-Encoding bodies",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://github.com/python-hyper/h11/security/advisories/GHSA-vqfr-h8mv-ghfj"
+          }
+        ]
+      },
+      {
+        "name": "Incremental",
+        "installed": "24.11.0",
+        "latest": "24.11.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "filelock",
+        "installed": "3.25.2",
+        "latest": "3.29.0",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-qmgc-5h2g-mvrw",
+            "summary": "filelock Time-of-Check-Time-of-Use (TOCTOU) Symlink Vulnerability in SoftFileLock",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:H",
+            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-qmgc-5h2g-mvrw"
+          },
+          {
+            "id": "GHSA-w853-jp5j-5j7f",
+            "summary": "filelock has a TOCTOU race condition which allows symlink attacks during lock file creation",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:H",
+            "url": "https://github.com/tox-dev/filelock/security/advisories/GHSA-w853-jp5j-5j7f"
+          }
+        ]
+      },
+      {
+        "name": "idna",
+        "installed": "3.11",
+        "latest": "3.15",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-jjg7-2v4v-x38h",
+            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
+          },
+          {
+            "id": "PYSEC-2024-60",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
+          }
+        ]
+      },
+      {
+        "name": "charset-normalizer",
+        "installed": "3.4.7",
+        "latest": "3.4.7",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "identify",
+        "installed": "2.6.18",
+        "latest": "2.6.19",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "iniconfig",
         "installed": "2.3.0",
         "latest": "2.3.0",
@@ -10021,30 +9260,9 @@
         "cves": []
       },
       {
-        "name": "joblib",
-        "installed": "1.5.3",
-        "latest": "1.5.3",
-        "outdated": false,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-6hrg-qmvc-2xh8",
-            "summary": "joblib vulnerable to arbitrary code execution",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-21797"
-          },
-          {
-            "id": "PYSEC-2022-288",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/joblib/joblib/commit/b90f10efeb670a2cc877fb88ebb3f2019189e059"
-          }
-        ]
-      },
-      {
-        "name": "jsonschema",
-        "installed": "4.19.0",
-        "latest": "4.26.0",
+        "name": "Django",
+        "installed": "5.2.12",
+        "latest": "6.0.5",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -10157,6 +9375,35 @@
         "cves": []
       },
       {
+        "name": "joblib",
+        "installed": "1.5.3",
+        "latest": "1.5.3",
+        "outdated": false,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-6hrg-qmvc-2xh8",
+            "summary": "joblib vulnerable to arbitrary code execution",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-21797"
+          },
+          {
+            "id": "PYSEC-2022-288",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/joblib/joblib/commit/b90f10efeb670a2cc877fb88ebb3f2019189e059"
+          }
+        ]
+      },
+      {
+        "name": "jsonschema",
+        "installed": "4.19.0",
+        "latest": "4.26.0",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "markdown-it-py",
         "installed": "4.0.0",
         "latest": "4.2.0",
@@ -10206,22 +9453,6 @@
         "cves": []
       },
       {
-        "name": "MarkupSafe",
-        "installed": "3.0.3",
-        "latest": "3.0.3",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "mypy_extensions",
-        "installed": "1.1.0",
-        "latest": "1.1.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "marshmallow",
         "installed": "4.3.0",
         "latest": "4.3.0",
@@ -10249,6 +9480,22 @@
         ]
       },
       {
+        "name": "mypy_extensions",
+        "installed": "1.1.0",
+        "latest": "1.1.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "MarkupSafe",
+        "installed": "3.0.3",
+        "latest": "3.0.3",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "nodeenv",
         "installed": "1.10.0",
         "latest": "1.10.0",
@@ -10261,6 +9508,38 @@
         "installed": "26.0",
         "latest": "26.2",
         "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "msgpack",
+        "installed": "1.1.2",
+        "latest": "1.1.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "pathspec",
+        "installed": "1.0.4",
+        "latest": "1.1.1",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "platformdirs",
+        "installed": "4.9.4",
+        "latest": "4.9.6",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "pluggy",
+        "installed": "1.6.0",
+        "latest": "1.6.0",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -10376,25 +9655,9 @@
         ]
       },
       {
-        "name": "pathspec",
-        "installed": "1.0.4",
-        "latest": "1.1.1",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pluggy",
-        "installed": "1.6.0",
-        "latest": "1.6.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "msgpack",
-        "installed": "1.1.2",
-        "latest": "1.1.2",
+        "name": "prometheus_client",
+        "installed": "0.25.0",
+        "latest": "0.25.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10408,18 +9671,10 @@
         "cves": []
       },
       {
-        "name": "prometheus_client",
-        "installed": "0.25.0",
-        "latest": "0.25.0",
+        "name": "pycparser",
+        "installed": "3.0",
+        "latest": "3.0",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "platformdirs",
-        "installed": "4.9.4",
-        "latest": "4.9.6",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -10427,14 +9682,6 @@
         "name": "prompt_toolkit",
         "installed": "3.0.52",
         "latest": "3.0.52",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pycparser",
-        "installed": "3.0",
-        "latest": "3.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10475,6 +9722,33 @@
         "outdated": true,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "pydantic",
+        "installed": "2.12.5",
+        "latest": "2.13.4",
+        "outdated": true,
+        "cve_count": 3,
+        "cves": [
+          {
+            "id": "GHSA-5jqp-qgf6-3pvh",
+            "summary": "Use of \"infinity\" as an input to datetime and date fields causes infinite loop in pydantic",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L",
+            "url": "https://github.com/samuelcolvin/pydantic/security/advisories/GHSA-5jqp-qgf6-3pvh"
+          },
+          {
+            "id": "GHSA-mr82-8j83-vxmv",
+            "summary": "Pydantic regular expression denial of service",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-3772"
+          },
+          {
+            "id": "PYSEC-2021-47",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/samuelcolvin/pydantic/security/advisories/GHSA-5jqp-qgf6-3pvh"
+          }
+        ]
       },
       {
         "name": "Pygments",
@@ -10540,59 +9814,6 @@
         ]
       },
       {
-        "name": "PyJWT",
-        "installed": "2.12.1",
-        "latest": "2.12.1",
-        "outdated": false,
-        "cve_count": 6,
-        "cves": [
-          {
-            "id": "GHSA-752w-5fwx-jx9f",
-            "summary": "PyJWT accepts unknown `crit` header extensions",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
-          },
-          {
-            "id": "GHSA-75c5-xw7c-p5pm",
-            "summary": "PyJWT Issuer field partial matches allowed",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
-          },
-          {
-            "id": "GHSA-ffqj-6fqr-9h24",
-            "summary": "Key confusion through non-blocklisted public key formats",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          },
-          {
-            "id": "GHSA-r9jw-mwhq-wp62",
-            "summary": "PyJWT vulnerable to key confusion attacks",
-            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
-          },
-          {
-            "id": "PYSEC-2017-24",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/pull/277"
-          },
-          {
-            "id": "PYSEC-2022-202",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          }
-        ]
-      },
-      {
-        "name": "pyotp",
-        "installed": "2.9.0",
-        "latest": "2.9.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "pyOpenSSL",
         "installed": "26.0.0",
         "latest": "26.2.0",
@@ -10650,46 +9871,57 @@
         ]
       },
       {
-        "name": "pytest",
-        "installed": "9.0.3",
-        "latest": "9.0.3",
+        "name": "PyJWT",
+        "installed": "2.12.1",
+        "latest": "2.12.1",
         "outdated": false,
-        "cve_count": 1,
+        "cve_count": 6,
         "cves": [
           {
-            "id": "GHSA-6w46-j5rx-g56g",
-            "summary": "pytest has vulnerable tmpdir handling",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
+            "id": "GHSA-752w-5fwx-jx9f",
+            "summary": "PyJWT accepts unknown `crit` header extensions",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
+          },
+          {
+            "id": "GHSA-75c5-xw7c-p5pm",
+            "summary": "PyJWT Issuer field partial matches allowed",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
+          },
+          {
+            "id": "GHSA-ffqj-6fqr-9h24",
+            "summary": "Key confusion through non-blocklisted public key formats",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
+          },
+          {
+            "id": "GHSA-r9jw-mwhq-wp62",
+            "summary": "PyJWT vulnerable to key confusion attacks",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
+          },
+          {
+            "id": "PYSEC-2017-24",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/pull/277"
+          },
+          {
+            "id": "PYSEC-2022-202",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
           }
         ]
       },
       {
-        "name": "pydantic",
-        "installed": "2.12.5",
-        "latest": "2.13.4",
-        "outdated": true,
-        "cve_count": 3,
-        "cves": [
-          {
-            "id": "GHSA-5jqp-qgf6-3pvh",
-            "summary": "Use of \"infinity\" as an input to datetime and date fields causes infinite loop in pydantic",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L",
-            "url": "https://github.com/samuelcolvin/pydantic/security/advisories/GHSA-5jqp-qgf6-3pvh"
-          },
-          {
-            "id": "GHSA-mr82-8j83-vxmv",
-            "summary": "Pydantic regular expression denial of service",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-3772"
-          },
-          {
-            "id": "PYSEC-2021-47",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/samuelcolvin/pydantic/security/advisories/GHSA-5jqp-qgf6-3pvh"
-          }
-        ]
+        "name": "pyotp",
+        "installed": "2.9.0",
+        "latest": "2.9.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "pytest-django",
@@ -10708,6 +9940,29 @@
         "cves": []
       },
       {
+        "name": "pytest",
+        "installed": "9.0.3",
+        "latest": "9.0.3",
+        "outdated": false,
+        "cve_count": 1,
+        "cves": [
+          {
+            "id": "GHSA-6w46-j5rx-g56g",
+            "summary": "pytest has vulnerable tmpdir handling",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
+          }
+        ]
+      },
+      {
+        "name": "python-discovery",
+        "installed": "1.2.2",
+        "latest": "1.3.1",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "python-dateutil",
         "installed": "2.9.0.post0",
         "latest": "2.9.0.post0",
@@ -10716,9 +9971,9 @@
         "cves": []
       },
       {
-        "name": "python-discovery",
-        "installed": "1.2.2",
-        "latest": "1.3.1",
+        "name": "pydantic_core",
+        "installed": "2.41.5",
+        "latest": "2.46.4",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -10830,14 +10085,6 @@
         ]
       },
       {
-        "name": "rich",
-        "installed": "14.3.3",
-        "latest": "15.0.0",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "requests",
         "installed": "2.33.1",
         "latest": "2.34.2",
@@ -10925,9 +10172,9 @@
         ]
       },
       {
-        "name": "safety-schemas",
-        "installed": "0.0.16",
-        "latest": "0.0.18",
+        "name": "rich",
+        "installed": "14.3.3",
+        "latest": "15.0.0",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -10962,9 +10209,25 @@
         "cves": []
       },
       {
+        "name": "safety-schemas",
+        "installed": "0.0.16",
+        "latest": "0.0.18",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "shellingham",
         "installed": "1.5.4",
         "latest": "1.5.4",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "ruamel.yaml",
+        "installed": "0.19.1",
+        "latest": "0.19.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10994,22 +10257,6 @@
         "name": "six",
         "installed": "1.17.0",
         "latest": "1.17.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pydantic_core",
-        "installed": "2.41.5",
-        "latest": "2.46.4",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "ruamel.yaml",
-        "installed": "0.19.1",
-        "latest": "0.19.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11068,6 +10315,14 @@
         "cves": []
       },
       {
+        "name": "tenacity",
+        "installed": "9.1.4",
+        "latest": "9.1.4",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "regex",
         "installed": "2026.4.4",
         "latest": "2026.5.9",
@@ -11076,17 +10331,9 @@
         "cves": []
       },
       {
-        "name": "rpds-py",
-        "installed": "0.30.0",
-        "latest": "0.30.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "tenacity",
-        "installed": "9.1.4",
-        "latest": "9.1.4",
+        "name": "tomli",
+        "installed": "2.4.1",
+        "latest": "2.4.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11100,10 +10347,50 @@
         "cves": []
       },
       {
+        "name": "rpds-py",
+        "installed": "0.30.0",
+        "latest": "0.30.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "tomlkit",
         "installed": "0.14.0",
         "latest": "0.15.0",
         "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "txaio",
+        "installed": "25.9.2",
+        "latest": "25.12.2",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typing-inspection",
+        "installed": "0.4.2",
+        "latest": "0.4.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typer",
+        "installed": "0.24.1",
+        "latest": "0.25.1",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typing_extensions",
+        "installed": "4.15.0",
+        "latest": "4.15.0",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -11135,38 +10422,6 @@
         ]
       },
       {
-        "name": "tomli",
-        "installed": "2.4.1",
-        "latest": "2.4.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "txaio",
-        "installed": "25.9.2",
-        "latest": "25.12.2",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "typing-inspection",
-        "installed": "0.4.2",
-        "latest": "0.4.2",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "typer",
-        "installed": "0.24.1",
-        "latest": "0.25.1",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "tzdata",
         "installed": "2025.3",
         "latest": "2026.2",
@@ -11175,9 +10430,17 @@
         "cves": []
       },
       {
-        "name": "typing_extensions",
-        "installed": "4.15.0",
-        "latest": "4.15.0",
+        "name": "vine",
+        "installed": "5.1.0",
+        "latest": "5.1.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "tzlocal",
+        "installed": "5.3.1",
+        "latest": "5.3.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11354,75 +10617,12 @@
         ]
       },
       {
-        "name": "tzlocal",
-        "installed": "5.3.1",
-        "latest": "5.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "vine",
-        "installed": "5.1.0",
-        "latest": "5.1.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "wcwidth",
         "installed": "0.6.0",
         "latest": "0.7.0",
         "outdated": true,
         "cve_count": 0,
         "cves": []
-      },
-      {
-        "name": "websocket-client",
-        "installed": "1.9.0",
-        "latest": "1.9.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "virtualenv",
-        "installed": "21.2.0",
-        "latest": "21.3.3",
-        "outdated": true,
-        "cve_count": 5,
-        "cves": [
-          {
-            "id": "GHSA-3jhc-wjqf-5f2c",
-            "summary": "Virtualenv Allows Symlink Attack on /tmp/",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4617"
-          },
-          {
-            "id": "GHSA-597g-3phw-6986",
-            "summary": "virtualenv Has TOCTOU Vulnerabilities in Directory Creation",
-            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:L",
-            "url": "https://github.com/pypa/virtualenv/security/advisories/GHSA-597g-3phw-6986"
-          },
-          {
-            "id": "GHSA-rqc4-2hc7-8c8v",
-            "summary": "virtualenv allows command injection through activation scripts for a virtual environment",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-53899"
-          },
-          {
-            "id": "PYSEC-2011-23",
-            "summary": "",
-            "severity": "",
-            "url": "http://openwall.com/lists/oss-security/2011/12/19/5"
-          },
-          {
-            "id": "PYSEC-2024-187",
-            "summary": "",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://github.com/pypa/virtualenv/issues/2768"
-          }
-        ]
       },
       {
         "name": "urllib3",
@@ -11610,6 +10810,53 @@
             "summary": "",
             "severity": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
             "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-g4mx-q9vg-27p4"
+          }
+        ]
+      },
+      {
+        "name": "websocket-client",
+        "installed": "1.9.0",
+        "latest": "1.9.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "virtualenv",
+        "installed": "21.2.0",
+        "latest": "21.3.3",
+        "outdated": true,
+        "cve_count": 5,
+        "cves": [
+          {
+            "id": "GHSA-3jhc-wjqf-5f2c",
+            "summary": "Virtualenv Allows Symlink Attack on /tmp/",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4617"
+          },
+          {
+            "id": "GHSA-597g-3phw-6986",
+            "summary": "virtualenv Has TOCTOU Vulnerabilities in Directory Creation",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:L",
+            "url": "https://github.com/pypa/virtualenv/security/advisories/GHSA-597g-3phw-6986"
+          },
+          {
+            "id": "GHSA-rqc4-2hc7-8c8v",
+            "summary": "virtualenv allows command injection through activation scripts for a virtual environment",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-53899"
+          },
+          {
+            "id": "PYSEC-2011-23",
+            "summary": "",
+            "severity": "",
+            "url": "http://openwall.com/lists/oss-security/2011/12/19/5"
+          },
+          {
+            "id": "PYSEC-2024-187",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://github.com/pypa/virtualenv/issues/2768"
           }
         ]
       },
@@ -11878,29 +11125,17 @@
     "commit": "0fbde74"
   },
   "fix_queue": {
-    "rec-079ed838eff0": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
-    },
     "rec-0d1defb91013": {
       "created_at": "2026-05-18T02:20:57.370851Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T02:20:57.370851Z"
     },
-    "rec-0e4b4aead673": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
-    },
     "rec-0e7d7923f699": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-0eea9f77a245": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -11924,13 +11159,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-15dfc2445298": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-15fd945fe68c": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11942,13 +11177,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-1ccd906adfca": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-1fabbb30dcd0": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11960,7 +11195,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-21a0943a8000": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11972,7 +11207,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-270d6cbe9584": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11984,7 +11219,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-286f9b739882": {
       "created_at": "2026-05-18T02:04:31.112246Z",
@@ -12020,19 +11255,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-3779c331bb91": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-37b84ba9e297": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-3ae8f24fe890": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12044,13 +11279,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-3de183b40438": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-3eced05fd428": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12062,7 +11297,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-40361c343063": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12074,19 +11309,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-413c523fe966": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-469a89ef4252": {
       "created_at": "2026-05-18T01:57:35.489327Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-49931e2f502c": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12098,7 +11333,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-50fc7048f2bb": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -12110,31 +11345,31 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-56101d3e463f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-569330323798": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-572bf085876a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-57bc8a597fb4": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-5eebe28243c2": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12146,31 +11381,31 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-6b1cce4e4c1d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-6c71f76c1f21": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-6d1908e66e17": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-6db98ba51d82": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-701609dca034": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12188,19 +11423,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-73c2aa342b16": {
       "created_at": "2026-05-18T01:46:59.627603Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-75130f0805ae": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-7615cbc144b5": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12218,25 +11453,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-7e4903faf4eb": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
-    },
-    "rec-80b9dc0b50c7": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-81d2d7d49a6a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-8968e86e99c9": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12266,7 +11495,7 @@
       "created_at": "2026-05-18T01:52:25.446613Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-18T02:09:07.932312Z"
     },
     "rec-91e3d1cd25be": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12284,25 +11513,25 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-9b0fa696b38a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-a109f234a66f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-ad22d769f151": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-ae1290292536": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12314,7 +11543,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-b3ba7869a873": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12326,25 +11555,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-b92d5511e737": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-bc5338fe104d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
-    },
-    "rec-c0dd77ab8aa4": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-c31a7752cef8": {
       "created_at": "2026-05-18T01:46:59.627603Z",
@@ -12358,12 +11581,6 @@
       "status": "open",
       "updated_at": "2026-05-18T01:17:18.267024Z"
     },
-    "rec-c524c82b7cb2": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
-    },
     "rec-c7fb5da6d55c": {
       "created_at": "2026-05-18T01:12:38.607133Z",
       "notes": "",
@@ -12374,19 +11591,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-cba5960aa100": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
-    },
-    "rec-cfc4165eb775": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-d4c15d7752df": {
       "created_at": "2026-05-18T01:06:08.061136Z",
@@ -12398,25 +11609,25 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-d8ab30d8a749": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-d962e861468f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-18T01:30:15.595311Z"
     },
     "rec-da11b4479a3c": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-e1733dc82750": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12428,25 +11639,25 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-ed0927c954fa": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-ed7d0e7525f6": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-ef5dc6faee38": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-efa49c006432": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12458,13 +11669,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-f6b61d264109": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:09:07.932312Z"
     },
     "rec-f6c9eb53e2d2": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12482,7 +11693,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-18T02:20:57.370851Z"
     },
     "rec-fbbde4c546f4": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12490,22 +11701,52 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
-    "rec-fbcb4a59c598": {
-      "created_at": "2026-05-18T21:30:20.009049Z",
-      "notes": "",
-      "status": "open",
-      "updated_at": "2026-05-18T21:30:20.009049Z"
-    },
     "rec-fd5e8ea66109": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
-    "rec-0836b2bbf6d6": {
+    "rec-c524c82b7cb2": {
       "status": "open",
-      "created_at": "2026-05-18T22:17:28.783916Z",
-      "updated_at": "2026-05-18T22:17:28.783916Z",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-0e4b4aead673": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-079ed838eff0": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-cfc4165eb775": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-fbcb4a59c598": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-c0dd77ab8aa4": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
+      "notes": ""
+    },
+    "rec-80b9dc0b50c7": {
+      "status": "open",
+      "created_at": "2026-05-18T21:30:20.009049Z",
+      "updated_at": "2026-05-18T21:30:20.009049Z",
       "notes": ""
     }
   },
@@ -12522,7 +11763,7 @@
       "nexus_tournaments": 0.0,
       "nexus_content": 0
     },
-    "previous_timestamp": "2026-05-18T22:00:12.295626"
+    "previous_timestamp": "2026-05-18T07:35:58.879089"
   },
   "timeline": {
     "labels": [
@@ -12541,8 +11782,8 @@
       "2026-05-17",
       "2026-05-17",
       "2026-05-17",
-      "2026-05-18",
-      "2026-05-18",
+      "2026-05-17",
+      "2026-05-17",
       "2026-05-18",
       "2026-05-18",
       "2026-05-18",
@@ -12563,8 +11804,8 @@
         91.0,
         91.0,
         91.0,
-        100.0,
-        100.0,
+        91.0,
+        91.0,
         100.0,
         100.0,
         100.0,
@@ -12595,8 +11836,8 @@
         0.0,
         0.0,
         0.0,
-        75.0,
-        75.0,
+        0.0,
+        0.0,
         75.0,
         75.0,
         75.0,
@@ -12627,8 +11868,8 @@
         46.0,
         46.0,
         46.0,
-        100.0,
-        100.0,
+        46.0,
+        46.0,
         100.0,
         100.0,
         100.0,
@@ -12691,8 +11932,8 @@
         86.0,
         86.0,
         86.0,
-        100.0,
-        100.0,
+        86.0,
+        86.0,
         100.0,
         100.0,
         100.0,
@@ -12723,8 +11964,8 @@
         59.0,
         59.0,
         59.0,
-        86.0,
-        86.0,
+        59.0,
+        59.0,
         86.0,
         86.0,
         86.0,
@@ -12755,8 +11996,8 @@
         63.0,
         63.0,
         63.0,
-        93.0,
-        93.0,
+        63.0,
+        63.0,
         93.0,
         93.0,
         93.0,
@@ -12788,8 +12029,8 @@
       62.7,
       62.7,
       62.7,
-      92.6,
-      92.6,
+      62.7,
+      62.7,
       92.6,
       92.6,
       92.6,
