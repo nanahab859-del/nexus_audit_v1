@@ -21,6 +21,7 @@ from enum import Enum
 # urllib imported for Tier 2 online features only — Tier 1 never uses it
 import urllib.request
 import urllib.error
+import time
 
 # ============================================================================
 # .ENV LOADER
@@ -62,6 +63,9 @@ def _load_dotenv() -> Dict[str, str]:
                     # Skip blank lines and comments
                     if not line or line.startswith('#'):
                         continue
+                    # Strip bash "export " prefix — common mistake in .env files
+                    if line.lower().startswith('export '):
+                        line = line[7:].strip()
                     if '=' not in line:
                         continue
                     key, _, value = line.partition('=')
@@ -83,6 +87,10 @@ def _load_dotenv() -> Dict[str, str]:
 
 # Load .env before anything else reads os.environ
 _dotenv_keys = _load_dotenv()
+
+# Rate-limit sentinel: set True when Gemini returns 429.
+# Checked before every _ai_complete call in run_ai_recommendations.
+_GEMINI_RATE_LIMITED: bool = False
 #
 # TIER 1 — ALWAYS AVAILABLE (zero internet required)
 #   • Full DNA audit and violation detection
@@ -265,7 +273,33 @@ def run_tier2_dependency_scan(project_path: str) -> Dict:
 
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 CLAUDE_MODEL      = "claude-sonnet-4-20250514"
-GEMINI_API_URL    = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+_GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
+# Every model here has an independent daily quota bucket.
+# Ordered: most capable/likely-to-have-quota first.
+# Excludes: TTS, image-gen, robotics, computer-use, music, deep-research,
+#           and alias names (gemini-flash-latest etc.) that share quota.
+GEMINI_MODELS = [
+    # ── Gemini 3.x generation (newest, own quota buckets) ────────────
+    "gemini-3.1-pro-preview",       # most capable gen-3
+    "gemini-3.1-flash-lite",        # fast gen-3, large free quota
+    "gemini-3.1-flash-lite-preview",# preview bucket (separate)
+    "gemini-3-pro-preview",         # gen-3 pro stable preview
+    "gemini-3-flash-preview",       # gen-3 flash preview
+    # ── Gemini 2.5 generation ─────────────────────────────────────────
+    "gemini-2.5-pro",               # highest capability 2.5
+    "gemini-2.5-flash",             # fast 2.5, own bucket
+    "gemini-2.5-flash-lite",        # lightest 2.5, largest free RPD
+    # ── Gemini 2.0 generation ─────────────────────────────────────────
+    "gemini-2.0-flash",             # reliable primary
+    "gemini-2.0-flash-001",         # pinned stable (own bucket)
+    "gemini-2.0-flash-lite",        # lite, high RPD
+    "gemini-2.0-flash-lite-001",    # pinned lite
+    # ── Gemma open models (own quota buckets) ─────────────────────────
+    "gemma-4-31b-it",               # largest open Gemma
+    "gemma-4-26b-a4b-it",           # efficient open Gemma
+]
+GEMINI_API_URL          = f"{_GEMINI_BASE}/gemini-2.0-flash:generateContent"
+GEMINI_API_URL_FALLBACK = f"{_GEMINI_BASE}/gemini-2.0-flash-lite:generateContent"
 OLLAMA_URL        = "http://localhost:11434/api/generate"
 OLLAMA_MODEL      = "llama3"
 
@@ -338,25 +372,99 @@ def _ai_complete(prompt: str, system: str,
             return data.get("response", "").strip()
 
         elif backend == "gemini":
-            url = f"{GEMINI_API_URL}?key={api_key}"
-            payload = json.dumps({
-                "system_instruction": {"parts": [{"text": system}]},
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "maxOutputTokens": max_tokens,
-                    "temperature": 0.3,
-                },
-            }).encode()
-            req = urllib.request.Request(
-                url, data=payload,
-                headers={"Content-Type": "application/json"}
-            )
-            resp = urllib.request.urlopen(req, timeout=timeout)
-            data = json.loads(resp.read())
-            candidates = data.get("candidates", [])
-            if candidates:
-                parts = candidates[0].get("content", {}).get("parts", [])
-                return "".join(p.get("text", "") for p in parts).strip()
+            # Iterate over all 4 models in order.
+            # Each model has an independent daily quota bucket (RPD).
+            # On RPD 429  → skip to next model immediately (no wait).
+            # On RPM 429  → wait 65s and retry the same model.
+            # On 403/401  → abort entirely (all models share same key).
+            for _model in GEMINI_MODELS:
+                try:
+                    url = f"{_GEMINI_BASE}/{_model}:generateContent?key={api_key}"
+                    payload = json.dumps({
+                        "contents": [{"parts": [{"text": f"{system}\n\n{prompt}"}]}],
+                        "generationConfig": {
+                            "maxOutputTokens": max_tokens,
+                            "temperature": 0.3,
+                        },
+                    }).encode()
+                    req = urllib.request.Request(
+                        url, data=payload,
+                        headers={"Content-Type": "application/json"}
+                    )
+                    resp = urllib.request.urlopen(req, timeout=timeout)
+                    data = json.loads(resp.read())
+                    candidates = data.get("candidates", [])
+                    if candidates:
+                        parts = candidates[0].get("content", {}).get("parts", [])
+                        text = "".join(
+                            p.get("text", "") for p in parts
+                            if "text" in p and "thoughtSignature" not in p
+                        ).strip()
+                        if text:
+                            return text
+
+                except urllib.error.HTTPError as _gemini_http_err:
+                    _body = b""
+                    try:
+                        _body = _gemini_http_err.read()
+                    except Exception:
+                        pass
+                    _body_str = _body.decode("utf-8", errors="ignore")
+
+                    if (_gemini_http_err.code == 403
+                            or "allowlist" in _body_str.lower()
+                            or "API_KEY_HTTP_REFERRER_BLOCKED" in _body_str):
+                        print()
+                        print("   \u2716 Gemini 403 \u2014 API key has HTTP referrer restrictions.")
+                        print("     Fix: console.cloud.google.com \u2192 Credentials \u2192 Application restrictions \u2192 None")
+                        print()
+                        return None  # All models share the same key
+
+                    elif (_gemini_http_err.code == 401
+                            or "API_KEY_INVALID" in _body_str
+                            or "INVALID_ARGUMENT" in _body_str):
+                        print()
+                        print("   \u2716 Gemini 401 \u2014 API key invalid or revoked.")
+                        print("     Check GEMINI_API_KEY in .env  |  New key: aistudio.google.com")
+                        print()
+                        return None  # Wrong key - no point trying other models
+
+                    elif _gemini_http_err.code == 429:
+                        global _GEMINI_RATE_LIMITED
+                        # Distinguish RPM (per-minute) vs RPD (daily quota) exhaustion.
+                        # Google puts RESOURCE_EXHAUSTED in body for daily limits.
+                        _is_daily = (
+                            "RESOURCE_EXHAUSTED" in _body_str
+                            or "quota" in _body_str.lower()
+                            or "daily" in _body_str.lower()
+                        )
+                        if _is_daily:
+                            # Daily quota gone - roll over to next model instantly
+                            print(f"       \u21b3 {_model}: daily quota exhausted \u2014 trying next", flush=True)
+                            continue
+                        else:
+                            # Per-minute limit - wait and retry same model
+                            _GEMINI_RATE_LIMITED = True
+                            _backoff = 65
+                            print(f"\n   \u26a0 [{_model}] rate limit hit."
+                                  f" Cooling down {_backoff}s ", end="", flush=True)
+                            for _tick in range(_backoff):
+                                time.sleep(1)
+                                print("|" if (_tick + 1) % 5 == 0 else ".", end="", flush=True)
+                            print(" ready", flush=True)
+                            _GEMINI_RATE_LIMITED = False
+                            continue  # retry same model
+
+                    else:
+                        print(f"   \u26a0 Gemini HTTP {_gemini_http_err.code} [{_model}]: "
+                              f"{_body_str[:120].strip()}")
+                        continue
+
+                except Exception:
+                    continue   # Network/timeout - try next model
+
+            # All 4 models tried and exhausted
+            print("       \u2716 all models exhausted \u2014 using smart templates")
             return None
 
         elif backend == "claude":
@@ -407,23 +515,39 @@ _AI_SYSTEM = (
 
 
 def _parse_ai_json(raw: str) -> Optional[Dict]:
-    """Robustly parse JSON from LLM output — strips markdown fences."""
+    """Robustly parse JSON from LLM output.
+    Handles: markdown fences, prose before/after JSON, partial truncation.
+    Strategy: strip fences, try direct parse, then find first balanced { } block.
+    """
     if not raw:
         return None
     clean = raw.strip()
-    # Strip ```json ... ``` or ``` ... ```
-    if clean.startswith("```"):
-        lines = clean.split("\n")
-        clean = "\n".join(lines[1:] if lines[0].startswith("```") else lines)
-    if clean.endswith("```"):
-        clean = "\n".join(clean.split("\n")[:-1])
-    # Sometimes the model outputs "json\n{...}"
+    # Strip ```json...``` or ```...``` fences
+    clean = re.sub(r"^```(?:json)?\s*", "", clean, flags=re.IGNORECASE)
+    clean = re.sub(r"\s*```$", "", clean).strip()
+    # Strip leading label like "json\n{..." that Gemini sometimes adds
     if clean.lower().startswith("json"):
         clean = clean[4:].strip()
+    # Try direct parse first
     try:
-        return json.loads(clean.strip())
+        return json.loads(clean)
     except json.JSONDecodeError:
-        return None
+        pass
+    # Find first balanced { ... } block — handles prose before/after the JSON
+    start = clean.find("{")
+    if start != -1:
+        depth = 0
+        for i, ch in enumerate(clean[start:], start):
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        return json.loads(clean[start : i + 1])
+                    except json.JSONDecodeError:
+                        break   # malformed even after extraction — give up
+    return None
 
 
 def run_ai_recommendations(
@@ -448,19 +572,71 @@ def run_ai_recommendations(
              "gemini": "Google Gemini",
              "claude": "Claude (Anthropic)"}.get(backend, backend)
 
+    # ── Rate-limit controls ───────────────────────────────────────────────
+    # Gemini free tier: 15 RPM  →  1 call per 4 s keeps us safely under the cap.
+    # Ollama / Claude have no meaningful RPM limit so the sleep is a no-op for them.
+    INTER_CALL_DELAY    = 4      # seconds between every AI call
+    MAX_VIOLATION_CALLS = 5      # cap Layer 1 to the 5 highest-impact violations
+    MAX_CONSEC_429      = 2      # abort AI recs after this many consecutive 429s
+
+    _consec_429   = 0            # consecutive 429 counter (reset on any success)
+    _total_calls  = 0            # total calls made this session
+
+    def _throttled_complete(prompt, system, backend, api_key, max_tokens=800, desc=""):
+        """Wrapper: log progress, pace calls, track consecutive 429s."""
+        nonlocal _consec_429, _total_calls
+        call_n = _total_calls + 1
+        # Print the call header on its OWN line so model-fallback messages
+        # from _ai_complete appear cleanly indented underneath it.
+        if desc:
+            print(f"\n   [{call_n}] {desc}", flush=True)
+        if _total_calls > 0:
+            # Pace calls to stay under Gemini free-tier 15 RPM.
+            print("       pacing ", end="", flush=True)
+            for _w in range(INTER_CALL_DELAY):
+                time.sleep(1)
+                print(".", end="", flush=True)
+            print(flush=True)
+        _total_calls += 1
+        result = _ai_complete(prompt, system, backend, api_key, max_tokens=max_tokens)
+        if result is None:
+            _consec_429 += 1
+            if desc:
+                print("       ✗ failed", flush=True)
+        else:
+            _consec_429 = 0
+            if desc:
+                print("       ✓ done", flush=True)
+        return result
+
+    def _rate_limited():
+        """True if we should stop making calls."""
+        return _consec_429 >= MAX_CONSEC_429
+
     # ── Layer 1: per-violation deep analysis ──────────────────────────────
     by_target: Dict[str, Dict] = {}
     for v in violations:
         if getattr(v, "type", "") != "Cross-App Import":
             continue
         tgt = getattr(v, "target", "")
-        src = getattr(v, "source", "")
+        src_mod = getattr(v, "source", "")
         if tgt not in by_target:
             by_target[tgt] = {"sources": [], "src_apps": set()}
-        by_target[tgt]["sources"].append(src)
-        by_target[tgt]["src_apps"].add(src.split(".")[0])
+        by_target[tgt]["sources"].append(src_mod)
+        by_target[tgt]["src_apps"].add(src_mod.split(".")[0])
 
-    for tgt, info in by_target.items():
+    # Sort by number of importing apps (most impactful first), cap to MAX_VIOLATION_CALLS
+    sorted_targets = sorted(
+        by_target.items(),
+        key=lambda kv: len(kv[1]["src_apps"]),
+        reverse=True
+    )[:MAX_VIOLATION_CALLS]
+
+    if len(by_target) > MAX_VIOLATION_CALLS:
+        print(f"   ℹ {len(by_target)} unique violation targets — analysing top "
+              f"{MAX_VIOLATION_CALLS} by impact to respect rate limits")
+
+    for tgt, info in sorted_targets:
         src_apps = sorted(info["src_apps"])
         src_mods = info["sources"][:5]
         tgt_app  = tgt.split(".")[0]
@@ -469,23 +645,42 @@ def run_ai_recommendations(
         prompt = f"""{_ARCH_CONTEXT}
 
 VIOLATION TO ANALYSE:
-  Misplaced module : {tgt}  (currently lives in {tgt_app})
+  Module path      : {tgt}
+  Currently in app : {tgt_app}
   Imported by      : {", ".join(src_mods)}
   Importing apps   : {", ".join(src_apps)} ({len(src_apps)} app(s))
 
-Return ONLY a JSON object (no markdown) with these exact keys:
+This is a STRICT cross-app boundary violation. Analyse it deeply and return ONLY a
+valid JSON object — no markdown fences, no prose before or after, just the raw JSON.
+
 {{
-  "title":            "Short action title (max 10 words)",
-  "why_harmful":      "1-2 sentences explaining why THIS specific coupling is harmful",
-  "correct_location": "exact.module.path where code should live",
-  "migration_steps":  ["step 1 naming actual files", "step 2", "step 3"],
-  "before_code":      "# current pattern\\nfrom {tgt} import something",
-  "after_code":       "# fixed pattern\\nfrom correct.location import something",
-  "effort":           "S",
-  "priority":         "HIGH"
+  "title": "Concise fix title (max 10 words, starts with a verb)",
+
+  "why_harmful": "3-4 sentences that explain: (1) exactly what coupling this creates between {tgt_app} and the importing apps, (2) a CONCRETE real-world consequence — e.g. which deployment, test suite, or feature would break if {tgt} changes its interface, (3) what Django modularity principle this violates and why that principle exists.",
+
+  "what_breaks_today": "One specific, concrete example of actual pain the team is experiencing RIGHT NOW because of this import — e.g. a test that must mock both apps, a redeployment that cascades, a circular import risk.",
+
+  "correct_location": "exact.dotted.module.path where this code belongs and why that app owns it",
+
+  "migration_steps": [
+    "Step 1: specific file to create/move, naming the exact path",
+    "Step 2: what to change inside the moved module",
+    "Step 3: how to update each importing module with the new import path",
+    "Step 4: how to verify nothing broke (test command or smoke test)"
+  ],
+
+  "before_code": "# CURRENT (violation)\nfrom {tgt} import Something  # in {src_apps[0] if src_apps else tgt_app}",
+  "after_code":  "# FIXED\nfrom correct.location import Something  # update this path",
+
+  "effort": "S or M or L or XL",
+  "priority": "HIGH"
 }}"""
 
-        raw = _ai_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=800)
+        if _rate_limited():
+            print(f"   ⚠ Too many consecutive failures — skipping remaining violation analyses")
+            break
+        raw = _throttled_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=1400,
+                                    desc=f"Violation: {tgt_leaf} ← {len(src_apps)} app(s)")
         rec = _parse_ai_json(raw)
         if rec and isinstance(rec, dict):
             rec["ai_generated"]    = True
@@ -529,7 +724,11 @@ Write a 4-sentence health narrative (plain text, no JSON, no bullet points):
 4. One sentence on long-term risk if left unfixed
 Use "{app}" not "the application"."""
 
-        narrative = _ai_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=250)
+        if _rate_limited():
+            print(f"   ⚠ Rate-limited — skipping health narrative for {app}")
+            continue
+        narrative = _throttled_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=250,
+                                          desc=f"Health narrative: {app} ({score}%)")
         if narrative:
             ai_recs.append({
                 "title":           f"{app.upper()} — Health Analysis",
@@ -562,7 +761,11 @@ Write a concrete extraction plan (plain text, numbered steps, no JSON):
 4. Migration order to avoid breaking tests
 5. Effort estimate"""
 
-        plan = _ai_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=400)
+        if _rate_limited():
+            print(f"   ⚠ Rate-limited — skipping extraction plan for {tgt}")
+            continue
+        plan = _throttled_complete(prompt, _AI_SYSTEM, backend, api_key, max_tokens=400,
+                                    desc=f"Extract plan: {tgt.split(chr(46))[-1]}")
         if plan:
             ai_recs.append({
                 "title":           f"Extract Shared Utility: {'.'.join(tgt.split('.')[-2:])}",
@@ -580,6 +783,21 @@ Write a concrete extraction plan (plain text, numbered steps, no JSON):
             })
             print(f"   ✔ [{label}] extraction plan: {tgt}")
 
+    global _GEMINI_RATE_LIMITED
+    if _GEMINI_RATE_LIMITED and backend == "gemini":
+        total_planned = len(by_target) + sum(
+            1 for s in app_stats.values() if s.get("score", 100) < 90
+        ) + min(3, len(shared_util_candidates))
+        skipped = max(0, total_planned - len(ai_recs))
+        print()
+        print("   ⚠  Gemini free-tier 429: rate window exhausted.")
+        if ai_recs:
+            print(f"     ✓  {len(ai_recs)} recommendation(s) generated before limit.")
+        if skipped > 0:
+            print(f"     □  {skipped} call(s) skipped — re-run in ~60 s for the rest.")
+        print("     Tip: `ollama run llama3` = local AI with zero rate limits.")
+        print()
+        _GEMINI_RATE_LIMITED = False
     return ai_recs, label
 
 
@@ -2368,7 +2586,10 @@ function generateRecommendations() {{
             </div>`;
 
         if (r.why_harmful) {{
-            html += `<p style="font-size:.82rem;color:#fcd34d;margin-bottom:8px;"><strong>Why harmful:</strong> ${{r.why_harmful}}</p>`;
+            html += `<p style="font-size:.84rem;color:#fcd34d;margin-bottom:8px;line-height:1.55;"><strong>\u26a0\ufe0f Why this is harmful:</strong><br>${{r.why_harmful}}</p>`;
+        }}
+        if (r.what_breaks_today) {{
+            html += `<p style="font-size:.84rem;color:#fb923c;margin-bottom:8px;line-height:1.55;border-left:2px solid #fb923c;padding-left:8px;"><strong>🔥 What breaks today:</strong><br>${{r.what_breaks_today}}</p>`;
         }}
         if (r.description) {{
             html += `<p style="font-size:.82rem;color:#94a3b8;margin-bottom:8px;">${{r.description}}</p>`;

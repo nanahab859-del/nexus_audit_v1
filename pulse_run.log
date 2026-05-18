@@ -1,0 +1,237 @@
+   ✔ .env loaded from /home/yusupha/my_tools/nexus_audit/.env (1 key(s): GEMINI_API_KEY)
+⚠️ Error parsing settings: No module named 'celery'. Using fallback.
+🎯 First-party apps discovered: ['nexus_core', 'nexus_economy', 'nexus_gaming', 'nexus_gateway', 'nexus_social', 'nexus_tournaments', 'nexus_content']
+   Key pool: 1 key(s) loaded
+MAIN STARTED
+
+======================================================================
+🛡️ NEXUS AUDIT COMMAND CENTER - STRICT MODULARITY EDITION
+======================================================================
+
+🌐 Detecting tier capabilities...
+Tier detection done
+   ✔ Internet available — Tier 2 ONLINE mode activated
+     + Package vulnerability scan (OSV)
+     + Dependency freshness check (PyPI)
+
+📊 First-party physical files: 211, DNA modules: 238
+
+   Running scanners in parallel (bandit + dead code + complexity)...
+   Scanners complete — 107 security findings, 0 dead code items
+🔍 Tier 2: scanning dependencies for vulnerabilities and freshness...
+   Scanning package versions and CVEs (in parallel)...
+   [1/116] annotated-doc                  0.0.4 | ✔ current
+   [2/116] Automat                        25.4.16 | ✔ current
+   [3/116] annotated-types                0.7.0 | ✔ current
+   [4/116] asgiref                        3.11.1 | ✔ current
+   [5/116] attrs                          26.1.0 | ✔ current
+   [6/116] async-timeout                  5.0.1 | ✔ current
+   [7/116] anyio                          4.13.0 | ✔ current
+   [8/116] amqp                           5.3.1 | ✔ current
+   [9/116] autobahn                       24.4.2 | ↗ 25.12.2 available | ⚠ 2 CVE(s)
+   [10/116] Authlib                        1.6.9 | ↗ 1.7.2 available | ⚠ 12 CVE(s)
+   [11/116] backports-datetime-fromisoformat 2.0.3 | ✔ current
+   [12/116] billiard                       4.2.4 | ✔ current
+   [13/116] cfgv                           3.5.0 | ✔ current
+   [14/116] bcrypt                         5.0.0 | ✔ current
+   [15/116] celery                         5.6.3 | ✔ current | ⚠ 4 CVE(s)
+   [16/116] black                          26.3.1 | ✔ current | ⚠ 3 CVE(s)
+   [17/116] bleach                         6.3.0 | ✔ current | ⚠ 10 CVE(s)
+   [18/116] cffi                           2.0.0 | ✔ current
+   [19/116] channels                       4.3.2 | ✔ current | ⚠ 2 CVE(s)
+   [20/116] channels_redis                 4.3.0 | ✔ current
+   [21/116] click-didyoumean               0.3.1 | ✔ current
+   [22/116] click                          8.3.1 | ↗ 8.3.3 available
+   [23/116] click-plugins                  1.1.1.2 | ✔ current
+   [24/116] click-repl                     0.3.0 | ✔ current
+   [25/116] certifi                        2026.2.25 | ↗ 2026.4.22 available | ⚠ 6 CVE(s)
+   [26/116] constantly                     23.10.4 | ✔ current
+   [27/116] cron-descriptor                1.4.5 | ↗ 2.0.8 available
+   [28/116] charset-normalizer             3.4.7 | ✔ current
+   [29/116] daphne                         4.2.1 | ✔ current
+   [30/116] distlib                        0.4.0 | ✔ current
+   [31/116] django-ratelimit               4.1.0 | ✔ current
+   [32/116] django-timezone-field          7.2.1 | ✔ current
+   [33/116] djangorestframework_simplejwt  5.5.1 | ✔ current | ⚠ 1 CVE(s)
+   [34/116] djangorestframework            3.17.1 | ✔ current | ⚠ 3 CVE(s)
+   [35/116] dparse                         0.6.4 | ✔ current | ⚠ 2 CVE(s)
+   [36/116] exceptiongroup                 1.3.1 | ✔ current
+   [37/116] django-celery-beat             2.9.0 | ✔ current
+   [38/116] filelock                       3.25.2 | ↗ 3.29.0 available | ⚠ 2 CVE(s)
+   [39/116] h11                            0.16.0 | ✔ current | ⚠ 1 CVE(s)
+   [40/116] hyperlink                      21.0.0 | ✔ current
+   [41/116] Django                         5.2.12 | ↗ 6.0.5 available
+   [42/116] Incremental                    24.11.0 | ✔ current
+   [43/116] identify                       2.6.18 | ↗ 2.6.19 available
+   [44/116] iniconfig                      2.3.0 | ✔ current
+   [45/116] idna                           3.11 | ↗ 3.15 available | ⚠ 2 CVE(s)
+   [46/116] Jinja2                         3.1.6 | ✔ current | ⚠ 15 CVE(s)
+   [47/116] jsonschema-specifications      2025.9.1 | ✔ current
+   [48/116] jsonschema                     4.19.0 | ↗ 4.26.0 available
+   [49/116] joblib                         1.5.3 | ✔ current | ⚠ 2 CVE(s)
+   [50/116] kombu                          5.6.2 | ✔ current
+   [51/116] markdown-it-py                 4.0.0 | ↗ 4.2.0 available | ⚠ 4 CVE(s)
+   [52/116] cryptography                   46.0.6 | ↗ 48.0.0 available | ⚠ 28 CVE(s)
+   [53/116] mdurl                          0.1.2 | ✔ current
+   [54/116] MarkupSafe                     3.0.3 | ✔ current
+   [55/116] marshmallow                    4.3.0 | ✔ current | ⚠ 3 CVE(s)
+   [56/116] mypy_extensions                1.1.0 | ✔ current
+   [57/116] nodeenv                        1.10.0 | ✔ current
+   [58/116] packaging                      26.0 | ↗ 26.2 available
+   [59/116] msgpack                        1.1.2 | ✔ current
+   [60/116] pathspec                       1.0.4 | ↗ 1.1.1 available
+   [61/116] platformdirs                   4.9.4 | ↗ 4.9.6 available
+   [62/116] pluggy                         1.6.0 | ✔ current
+   [63/116] prometheus_client              0.25.0 | ✔ current
+   [64/116] pre_commit                     4.5.1 | ↗ 4.6.0 available
+   [65/116] nltk                           3.9.4 | ✔ current | ⚠ 17 CVE(s)
+   [66/116] prompt_toolkit                 3.0.52 | ✔ current
+   [67/116] pycparser                      3.0 | ✔ current
+   [68/116] pyasn1_modules                 0.4.2 | ✔ current
+   [69/116] pyasn1                         0.6.3 | ✔ current | ⚠ 2 CVE(s)
+   [70/116] Pygments                       2.20.0 | ✔ current | ⚠ 9 CVE(s)
+   [71/116] psycopg2-binary                2.9.11 | ↗ 2.9.12 available
+   [72/116] pyOpenSSL                      26.0.0 | ↗ 26.2.0 available | ⚠ 8 CVE(s)
+   [73/116] pyotp                          2.9.0 | ✔ current
+   [74/116] PyJWT                          2.12.1 | ✔ current | ⚠ 6 CVE(s)
+   [75/116] pytest-django                  4.12.0 | ✔ current
+   [76/116] pytest                         9.0.3 | ✔ current | ⚠ 1 CVE(s)
+   [77/116] pydantic                       2.12.5 | ↗ 2.13.4 available | ⚠ 3 CVE(s)
+   [78/116] python-crontab                 3.3.0 | ✔ current
+   [79/116] python-dateutil                2.9.0.post0 | ✔ current
+   [80/116] python-discovery               1.2.2 | ↗ 1.3.1 available
+   [81/116] pytokens                       0.4.1 | ✔ current
+   [82/116] redis                          7.4.0 | ✔ current | ⚠ 4 CVE(s)
+   [83/116] PyYAML                         6.0.3 | ✔ current | ⚠ 8 CVE(s)
+   [84/116] referencing                    0.37.0 | ✔ current
+   [85/116] requests                       2.33.1 | ↗ 2.34.2 available | ⚠ 13 CVE(s)
+   [86/116] rich                           14.3.3 | ↗ 15.0.0 available
+   [87/116] pydantic_core                  2.41.5 | ↗ 2.46.4 available
+   [88/116] regex                          2026.4.4 | ↗ 2026.5.9 available
+   [89/116] safety-schemas                 0.0.16 | ↗ 0.0.18 available
+   [90/116] safety                         3.7.0 | ✔ current | ⚠ 2 CVE(s)
+   [91/116] service-identity               24.2.0 | ✔ current
+   [92/116] shellingham                    1.5.4 | ✔ current
+   [93/116] sentry-sdk                     2.58.0 | ↗ 2.60.0 available | ⚠ 2 CVE(s)
+   [94/116] ruamel.yaml                    0.19.1 | ✔ current
+   [95/116] six                            1.17.0 | ✔ current
+   [96/116] tomlkit                        0.14.0 | ↗ 0.15.0 available
+   [97/116] tenacity                       9.1.4 | ✔ current
+   [98/116] structlog                      25.5.0 | ✔ current
+   [99/116] sqlparse                       0.5.5 | ✔ current | ⚠ 6 CVE(s)
+   [100/116] tomli                          2.4.1 | ✔ current
+   [101/116] rpds-py                        0.30.0 | ✔ current
+   [102/116] tqdm                           4.67.3 | ✔ current | ⚠ 3 CVE(s)
+   [103/116] ruff                           0.15.9 | ↗ 0.15.13 available
+   [104/116] typing-inspection              0.4.2 | ✔ current
+   [105/116] tzdata                         2025.3 | ↗ 2026.2 available
+   [106/116] typing_extensions              4.15.0 | ✔ current
+   [107/116] typer                          0.24.1 | ↗ 0.25.1 available
+   [108/116] tzlocal                        5.3.1 | ✔ current
+   [109/116] vine                           5.1.0 | ✔ current
+   [110/116] txaio                          25.9.2 | ↗ 25.12.2 available
+   [111/116] Twisted                        25.5.0 | ↗ 26.4.0 available | ⚠ 27 CVE(s)
+   [112/116] virtualenv                     21.2.0 | ↗ 21.3.3 available | ⚠ 5 CVE(s)
+   [113/116] websocket-client               1.9.0 | ✔ current
+   [114/116] urllib3                        2.6.3 | ↗ 2.7.0 available | ⚠ 30 CVE(s)
+   [115/116] zope.interface                 8.2 | ↗ 8.4 available
+   [116/116] wcwidth                        0.6.0 | ↗ 0.7.0 available
+   ✔ Scanned 116 package(s)
+   ⚠  248 CVE(s) found across packages
+   ⚠  36 package(s) are outdated
+
+👻 Found 5 ghost files
+
+   ✔ Trend data loaded from previous run (2026-05-15T21:37:28)
+
+🤖 Detecting AI backend...
+   ✔ Backend: gemini
+💡 Running AI-powered recommendations...
+   Probing model availability...xxxx.
+     ✅ Available  :        gemini-3.1-flash-lite
+     ⌛ Exhausted  : gemini-2.5-pro, gemini-2.5-flash, gemini-2.0-flash, gemini-3.1-pro-preview
+     ℹ  24h rolling window — quota resets as yesterday's requests age out.
+
+   ℹ 8 unique violation targets — analysing top 5 by impact to respect rate limits
+
+   [1] [violation_analysis] Violation: nexus_core ← 2 app(s)
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.5-pro: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-3.1-pro-preview: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-3-pro-preview: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.5-flash: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-pro-latest: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.0-flash: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.0-flash-001: daily quota exhausted — trying next model
+       ✖ all models exhausted — using smart templates
+       ✗ failed
+
+   [2] [violation_analysis] Violation: utils ← 2 app(s)
+       pacing ....
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.5-pro: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-3.1-pro-preview: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-3-pro-preview: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.5-flash: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-pro-latest: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.0-flash: daily quota exhausted — trying next model
+   Daily quota exhausted AIzaSyDZDz... rotating
+       ↳ gemini-2.0-flash-001: daily quota exhausted — trying next model
+       ✖ all models exhausted — using smart templates
+       ✗ failed
+   ⚠ Too many consecutive failures — skipping remaining violation analyses
+[AI] nexus_core ⏳  nexus_economy ⏳  nexus_gateway ⏳  nexus_social ⏳  nexus_tournaments ⏳   0/5   ⚠ Rate-limited — skipping health narrative for nexus_core
+   ⚠ Rate-limited — skipping health narrative for nexus_economy
+   ⚠ Rate-limited — skipping health narrative for nexus_social
+   ⚠ Rate-limited — skipping health narrative for nexus_tournaments
+   ⚠ Rate-limited — skipping health narrative for nexus_gateway
+[AI] nexus_core ⏳  nexus_economy ⏳  nexus_gateway ✅  nexus_social ⏳  nexus_tournaments ⏳   1/5[AI] nexus_core ⏳  nexus_economy ✅  nexus_gateway ✅  nexus_social ⏳  nexus_tournaments ⏳   2/5[AI] nexus_core ⏳  nexus_economy ✅  nexus_gateway ✅  nexus_social ✅  nexus_tournaments ⏳   3/5[AI] nexus_core ⏳  nexus_economy ✅  nexus_gateway ✅  nexus_social ✅  nexus_tournaments ✅   4/5[AI] nexus_core ✅  nexus_economy ✅  nexus_gateway ✅  nexus_social ✅  nexus_tournaments ✅   5/5
+   ⚠ Rate-limited — skipping extraction plan for nexus_core
+   ⚠ Rate-limited — skipping extraction plan for nexus_core.utils
+   ✔ 0 AI recommendation(s) generated
+
+   ✔ JSON data  → /home/yusupha/my_tools/nexus_audit/visuals/audit_data_complete.json
+   ✔ History     → /home/yusupha/my_tools/nexus_audit/visuals/audit_history/audit_2026-05-15T23-24-33.json
+   ✔ vis-network.min.js loaded (456KB) from /home/yusupha/my_tools/nexus_audit/vis-network.min.js
+   ✔ HTML dash  → /home/yusupha/my_tools/nexus_audit/visuals/NEXUS_AUDIT_DASHBOARD.html
+   ✔ Markdown   → /home/yusupha/my_tools/nexus_audit/visuals/AUDIT_REPORT_COMPREHENSIVE.md
+
+ ╔════════════════════════════════════════════════════════════╗
+ ║     NEXUS AUDIT COMPLETE — Tier 2 — ONLINE                 ║
+ ╠════════════════════════════════════════════════════════════╣
+ ║Apps audited             : 7                                ║
+ ║Modules scanned          : 238                              ║
+ ║Cross-app violations     : 13                               ║
+ ║Allowed comms            : 28                               ║
+ ║Security findings        : 107                              ║
+ ║Ghost files              : 5                                ║
+ ║Cycles detected          : 15                               ║
+ ║Fleet avg score          : 62.0%                            ║
+ ╠════════════════════════════════════════════════════════════╣
+ ║[T2] CVEs found          : 248                              ║
+ ║[T2] Outdated pkgs       : 36                               ║
+ ╠════════════════════════════════════════════════════════════╣
+ ║nexus_content          █████████░  91%                      ║
+ ║nexus_core             ░░░░░░░░░░   0%                      ║
+ ║nexus_economy          ████░░░░░░  46%                      ║
+ ║nexus_gaming           █████████░  94%                      ║
+ ║nexus_gateway          ████████░░  86%                      ║
+ ║nexus_social           █████░░░░░  59%                      ║
+ ║nexus_tournaments      ██████░░░░  63%                      ║
+ ╚════════════════════════════════════════════════════════════╝
+
+⚠️  13 cross-app violation(s) — see Violations tab.
+⚠️  15 circular dependency cycle(s) — see Cycles tab.
+⚠️  5 ghost file(s) — see Ghost Files tab.
+

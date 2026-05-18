@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-05-14T23:33:05.111160",
+  "project_path": "C:\\Users\\yusup/my_tools/nexus_project_copy",
+  "total_modules": 237,
+  "total_physical_files": 210,
+  "total_violations": 13,
+  "total_raw_imports": 13,
+  "total_cycles": 15,
+  "ghost_files": [
+    "nexus_tournaments.management.commands.dispatch_outbox_events",
+    "nexus_core.serializers.token",
+    "nexus_core.serializers.users",
+    "nexus_core.serializers.auth",
+    "nexus_core.management.commands.dispatch_outbox_events"
+  ],
+  "capabilities": {
+    "tier": 2,
+    "online": true,
+    "dna_audit": true,
+    "violation_detection": true,
+    "security_scan": true,
+    "complexity_analysis": true,
+    "ghost_file_detection": true,
+    "cycle_detection": true,
+    "trend_tracking": true,
+    "shared_util_detection": true,
+    "package_vuln_scan": true,
+    "dependency_freshness": true,
+    "cve_enrichment": true
+  }
+}

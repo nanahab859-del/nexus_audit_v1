@@ -1,0 +1,38 @@
+Total lines: 4642
+41: def _load_dotenv() -> Dict[str, str]:
+95: class KeyPool:
+183: def _load_requirements_packages() -> tuple:
+212: def _detect_internet(timeout: int = TIER2_TIMEOUT) -> bool:
+228: def _pypi_get(package: str, timeout: int = TIER2_TIMEOUT) -> Optional[Dict]:
+238: def _osv_query(package: str, ecosystem: str = 'PyPI',
+263: def run_tier2_dependency_scan(project_path: str) -> Dict:
+485: def _detect_ai_backend() -> Tuple[Optional[str], Optional[str]]:
+521: def _ai_complete(prompt: str, system: str,
+693: def _parse_ai_json(raw: str) -> Optional[Dict]:
+730: def _ai_complete_best_of(
+804: def _probe_available_models(api_key: str, timeout: int = 10) -> dict:
+873: def run_ai_recommendations(
+1706: def get_first_party_apps(project_path: str) -> List[str]:
+1782: class Severity(Enum):
+1789: class ViolationType(Enum):
+1799: class Violation:
+1812: class AllowedCommunication:
+1820: class ModuleMetrics:
+1835: class AppHealth:
+1849: def is_first_party(module_name: str) -> bool:
+1854: def is_django_framework(module_name: str) -> bool:
+1859: def is_stdlib(module_name: str) -> bool:
+1868: def get_recommendation(test_id: str) -> str:
+1879: def run_bandit_enhanced(project_path: str) -> List[Violation]:
+1920: def run_dead_code_scan(project_path: str) -> List[Dict]:
+1952: def run_complexity_analysis(project_path: str) -> Dict[str, Any]:
+2011: def run_lizard_analysis(project_path: str) -> Dict[str, Any]:
+2064: def is_ghost_file(physical_file: str, dna_modules: Set[str]) -> bool:
+2074: def classify_connection(source: str, target: str) -> Tuple[str, int, bool, Optional[str]]:
+2162: def calculate_app_score(app_name: str, metrics_data: Dict[str, Any]) -> float:
+2194: def find_circular_dependencies_accurate(dna: Dict) -> List[Dict]:
+2318: def get_vis_js() -> str:
+2339: class EnhancedAuditReport:
+3695: def generate_comprehensive_markdown(audit_data: Dict) -> str:
+4031: def generate_recommendations(violations: List[Violation], metrics: Dict, cycles: List, ghost_files: 
+4215: def build_audit_fortress_enhanced():

@@ -1,0 +1,8 @@
+SKIP Fix 1 - Not found!
+SKIP Fix 2 - Not found!
+SKIP Fix 3 - Not found!
+SKIP Fix 4 - Not found!
+Applying Fix 5...
+SKIP Fix 6a - Not found!
+SKIP Fix 6b - Not found!
+Patching complete.

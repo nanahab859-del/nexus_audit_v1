@@ -1,0 +1,4 @@
+Read 213327 bytes from source
+Found EnhancedAuditReport! len: 68082
+Found generate_comprehensive_markdown! len: 14514
+Extraction done.

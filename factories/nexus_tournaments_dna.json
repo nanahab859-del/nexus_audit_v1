@@ -4,27 +4,33 @@
         "imports": [
             "nexus_tournaments",
             "nexus_tournaments.admin",
-            "nexus_tournaments.api",
-            "nexus_tournaments.api.serializers",
-            "nexus_tournaments.api.urls",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.apps",
             "nexus_tournaments.generate_tree",
             "nexus_tournaments.models",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.outbox",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.serializers.announcements",
+            "nexus_tournaments.serializers.base",
+            "nexus_tournaments.serializers.leagues",
+            "nexus_tournaments.serializers.matches",
+            "nexus_tournaments.serializers.moderation",
+            "nexus_tournaments.serializers.results",
             "nexus_tournaments.services",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.bracket_service",
@@ -40,11 +46,23 @@
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.urls",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.base",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "name": "__main__",
         "path": null
@@ -53,15 +71,17 @@
         "bacon": 2,
         "imported_by": [
             "django.utils.timezone",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.generate_tree",
             "nexus_tournaments.services.diagnostic_service",
             "nexus_tournaments.services.match_service",
+            "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_announcement_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.views.leagues"
         ],
         "imports": [
             "math"
@@ -72,7 +92,6 @@
     "decimal": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.api.serializers",
             "nexus_tournaments.models.league",
             "nexus_tournaments.models.match",
             "nexus_tournaments.services.league_service",
@@ -81,6 +100,7 @@
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
@@ -94,6 +114,7 @@
         "bacon": 2,
         "imported_by": [
             "django",
+            "django.conf",
             "django.contrib.admin",
             "django.contrib.auth",
             "django.core.cache",
@@ -105,24 +126,24 @@
             "django.test",
             "django.utils.text",
             "django.utils.timezone",
-            "nexus_core.models",
+            "nexus_economy.signals",
             "nexus_tournaments.admin",
-            "nexus_tournaments.api.serializers",
-            "nexus_tournaments.api.urls",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.apps",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.outbox",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record",
             "nexus_tournaments.receivers",
             "nexus_tournaments.services.announcement_service",
@@ -138,15 +159,25 @@
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "imports": [
             "django",
             "django.apps",
+            "django.conf",
             "django.urls",
             "django.utils"
         ],
@@ -158,8 +189,6 @@
         "imported_by": [
             "django",
             "django.contrib.auth",
-            "nexus_tournaments.api.serializers",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.apps",
             "nexus_tournaments.receivers",
             "nexus_tournaments.services.announcement_service",
@@ -171,22 +200,51 @@
             "nexus_tournaments.services.participation_service",
             "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tasks",
-            "nexus_tournaments.tests.test_invariants"
+            "nexus_tournaments.tests.test_final_contract_gaps",
+            "nexus_tournaments.tests.test_invariants",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "name": "django.apps",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/apps/__init__.py"
+    },
+    "django.conf": {
+        "bacon": 2,
+        "imported_by": [
+            "django",
+            "django.conf",
+            "django.contrib.auth",
+            "django.utils.timezone",
+            "nexus_tournaments.models.league_standing",
+            "nexus_tournaments.models.tournament_template"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.core",
+            "django.urls",
+            "django.utils",
+            "os",
+            "pathlib"
+        ],
+        "name": "django.conf",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/conf/__init__.py"
     },
     "django.contrib": {
         "bacon": 2,
         "imported_by": [
             "django.contrib.admin",
             "django.contrib.auth",
-            "nexus_core.models",
             "nexus_tournaments.admin",
             "nexus_tournaments.services.match_service",
+            "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
@@ -215,11 +273,12 @@
         "bacon": 2,
         "imported_by": [
             "django.contrib.auth",
-            "nexus_core.models",
             "nexus_tournaments.services.match_service",
+            "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
@@ -229,6 +288,7 @@
         "imports": [
             "django",
             "django.apps",
+            "django.conf",
             "django.contrib",
             "django.contrib.auth",
             "django.core",
@@ -240,13 +300,14 @@
     "django.core": {
         "bacon": 2,
         "imported_by": [
+            "django.conf",
             "django.contrib.auth",
             "django.core.cache",
             "django.db",
             "django.db.models",
             "django.utils.text",
-            "nexus_tournaments.api.views",
-            "nexus_tournaments.tasks"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.views.moderation"
         ],
         "name": "django.core",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/core/__init__.py"
@@ -255,8 +316,8 @@
         "bacon": 2,
         "imported_by": [
             "django.core.cache",
-            "nexus_tournaments.api.views",
-            "nexus_tournaments.tasks"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.views.moderation"
         ],
         "imports": [
             "django",
@@ -273,19 +334,21 @@
             "django.db",
             "django.db.models",
             "django.db.transaction",
-            "nexus_core.models",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.outbox",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.bracket_service",
@@ -310,19 +373,21 @@
         "bacon": 2,
         "imported_by": [
             "django.db.models",
-            "nexus_core.models",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.outbox",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record",
             "nexus_tournaments.services.announcement_service"
         ],
@@ -356,6 +421,7 @@
         "bacon": 2,
         "imported_by": [
             "django.dispatch",
+            "nexus_economy.signals",
             "nexus_tournaments.receivers",
             "nexus_tournaments.signals"
         ],
@@ -369,7 +435,11 @@
     "django.shortcuts": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.api.views"
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "imports": [
             "django",
@@ -386,6 +456,7 @@
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
@@ -403,8 +474,11 @@
         "bacon": 2,
         "imported_by": [
             "django",
+            "django.conf",
             "django.shortcuts",
-            "nexus_tournaments.api.urls"
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.urls.moderation"
         ],
         "name": "django.urls",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/urls/__init__.py"
@@ -413,14 +487,15 @@
         "bacon": 2,
         "imported_by": [
             "django",
+            "django.conf",
             "django.contrib.admin",
             "django.contrib.auth",
             "django.core.cache",
             "django.db",
             "django.shortcuts",
             "django.utils.text",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.models.invite",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.diagnostic_service",
             "nexus_tournaments.services.league_service",
@@ -429,11 +504,14 @@
             "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.moderation"
         ],
         "name": "django.utils",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/utils/__init__.py"
@@ -455,8 +533,8 @@
     "django.utils.timezone": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.api.views",
             "nexus_tournaments.models.invite",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.diagnostic_service",
             "nexus_tournaments.services.league_service",
@@ -465,15 +543,19 @@
             "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.moderation"
         ],
         "imports": [
             "datetime",
-            "django"
+            "django",
+            "django.conf"
         ],
         "name": "django.utils.timezone",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/utils/timezone.py"
@@ -489,7 +571,6 @@
     "logging": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.api.views",
             "nexus_tournaments.receivers",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.bracket_service",
@@ -499,7 +580,9 @@
             "nexus_tournaments.services.match_service",
             "nexus_tournaments.services.participation_service",
             "nexus_tournaments.services.verification_service",
-            "nexus_tournaments.tasks"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation"
         ],
         "imports": [
             "os"
@@ -520,60 +603,74 @@
     "nexus_core": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.tests.test_announcement_service"
+            "nexus_core.utils",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.tasks"
         ],
         "name": "nexus_core",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/__init__.py"
     },
-    "nexus_core.models": {
+    "nexus_core.utils": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.tests.test_announcement_service"
-        ],
-        "imports": [
-            "django",
-            "django.contrib",
-            "django.contrib.auth",
-            "django.db",
-            "django.db.models",
-            "uuid"
-        ],
-        "name": "nexus_core.models",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/models.py"
-    },
-    "nexus_gaming": {
-        "bacon": 2,
-        "imported_by": [
+            "nexus_core.utils",
             "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tasks"
         ],
-        "name": "nexus_gaming",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_gaming/__init__.py"
+        "imports": [
+            "nexus_core",
+            "nexus_core.utils",
+            "nexus_core.utils.feature_flags"
+        ],
+        "name": "nexus_core.utils",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/utils/__init__.py"
     },
-    "nexus_gaming.feature_flags": {
+    "nexus_core.utils.feature_flags": {
         "bacon": 2,
         "imported_by": [
+            "nexus_core.utils",
             "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tasks"
         ],
         "imports": [
             "os"
         ],
-        "name": "nexus_gaming.feature_flags",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_gaming/feature_flags.py"
+        "name": "nexus_core.utils.feature_flags",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/utils/feature_flags.py"
+    },
+    "nexus_economy": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.receivers"
+        ],
+        "name": "nexus_economy",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/__init__.py"
+    },
+    "nexus_economy.signals": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.receivers"
+        ],
+        "imports": [
+            "django",
+            "django.dispatch"
+        ],
+        "name": "nexus_economy.signals",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_economy/signals.py"
     },
     "nexus_tournaments": {
         "bacon": 1,
         "imported_by": [
             "__main__",
             "nexus_tournaments.admin",
-            "nexus_tournaments.api.serializers",
-            "nexus_tournaments.api.urls",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.apps",
             "nexus_tournaments.models",
             "nexus_tournaments.models.league",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.serializers.leagues",
+            "nexus_tournaments.serializers.matches",
+            "nexus_tournaments.services.bracket_service",
             "nexus_tournaments.services.diagnostic_service",
             "nexus_tournaments.services.league_service",
             "nexus_tournaments.services.match_service",
@@ -583,11 +680,23 @@
             "nexus_tournaments.tests.test_announcement_moderation",
             "nexus_tournaments.tests.test_announcement_service",
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
-            "nexus_tournaments.tests.test_tasks"
+            "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.urls",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.base",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "name": "nexus_tournaments",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/__init__.py"
@@ -606,77 +715,6 @@
         ],
         "name": "nexus_tournaments.admin",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/admin.py"
-    },
-    "nexus_tournaments.api": {
-        "bacon": 1,
-        "imported_by": [
-            "__main__",
-            "nexus_tournaments.api.urls",
-            "nexus_tournaments.api.views"
-        ],
-        "name": "nexus_tournaments.api",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/api/__init__.py"
-    },
-    "nexus_tournaments.api.serializers": {
-        "bacon": 1,
-        "imported_by": [
-            "__main__",
-            "nexus_tournaments.api.views"
-        ],
-        "imports": [
-            "decimal",
-            "django",
-            "django.apps",
-            "nexus_tournaments",
-            "nexus_tournaments.models"
-        ],
-        "name": "nexus_tournaments.api.serializers",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/api/serializers.py"
-    },
-    "nexus_tournaments.api.urls": {
-        "bacon": 1,
-        "imported_by": [
-            "__main__"
-        ],
-        "imports": [
-            "django",
-            "django.urls",
-            "nexus_tournaments",
-            "nexus_tournaments.api",
-            "nexus_tournaments.api.views"
-        ],
-        "name": "nexus_tournaments.api.urls",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/api/urls.py"
-    },
-    "nexus_tournaments.api.views": {
-        "bacon": 1,
-        "imported_by": [
-            "__main__",
-            "nexus_tournaments.api.urls"
-        ],
-        "imports": [
-            "datetime",
-            "django",
-            "django.apps",
-            "django.core",
-            "django.core.cache",
-            "django.shortcuts",
-            "django.utils",
-            "django.utils.timezone",
-            "logging",
-            "nexus_tournaments",
-            "nexus_tournaments.api",
-            "nexus_tournaments.api.serializers",
-            "nexus_tournaments.services",
-            "nexus_tournaments.services.announcement_service",
-            "nexus_tournaments.services.league_service",
-            "nexus_tournaments.services.match_service",
-            "nexus_tournaments.services.participation_service",
-            "nexus_tournaments.services.verification_service",
-            "secrets"
-        ],
-        "name": "nexus_tournaments.api.views",
-        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/api/views.py"
     },
     "nexus_tournaments.apps": {
         "bacon": 1,
@@ -711,9 +749,10 @@
         "imported_by": [
             "__main__",
             "nexus_tournaments.admin",
-            "nexus_tournaments.api.serializers",
             "nexus_tournaments.models",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.serializers.leagues",
+            "nexus_tournaments.serializers.matches",
             "nexus_tournaments.services.league_service",
             "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tests.test_announcement_moderation",
@@ -729,17 +768,20 @@
             "nexus_tournaments",
             "nexus_tournaments.models",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.outbox",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record"
         ],
         "name": "nexus_tournaments.models",
@@ -759,6 +801,21 @@
         ],
         "name": "nexus_tournaments.models.announcement",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/announcement.py"
+    },
+    "nexus_tournaments.models.bracket_seed": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.models"
+        ],
+        "imports": [
+            "django",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_tournaments.models.bracket_seed",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/bracket_seed.py"
     },
     "nexus_tournaments.models.dispute": {
         "bacon": 1,
@@ -840,6 +897,24 @@
         ],
         "name": "nexus_tournaments.models.league",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/league.py"
+    },
+    "nexus_tournaments.models.league_standing": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.models"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models",
+            "django.utils",
+            "django.utils.timezone",
+            "uuid"
+        ],
+        "name": "nexus_tournaments.models.league_standing",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/league_standing.py"
     },
     "nexus_tournaments.models.match": {
         "bacon": 1,
@@ -932,6 +1007,22 @@
         "name": "nexus_tournaments.models.submission",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/submission.py"
     },
+    "nexus_tournaments.models.tournament_template": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.models"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "django.db",
+            "django.db.models",
+            "uuid"
+        ],
+        "name": "nexus_tournaments.models.tournament_template",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/models/tournament_template.py"
+    },
     "nexus_tournaments.models.verification_record": {
         "bacon": 1,
         "imported_by": [
@@ -958,28 +1049,125 @@
             "django.apps",
             "django.dispatch",
             "logging",
+            "nexus_economy",
+            "nexus_economy.signals",
             "nexus_tournaments",
             "nexus_tournaments.services",
             "nexus_tournaments.services.bracket_service",
             "nexus_tournaments.services.leaderboard_service",
             "nexus_tournaments.services.match_service",
-            "nexus_tournaments.signals"
+            "nexus_tournaments.signals",
+            "nexus_tournaments.tasks"
         ],
         "name": "nexus_tournaments.receivers",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/receivers.py"
+    },
+    "nexus_tournaments.serializers": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.base",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.serializers.announcements",
+            "nexus_tournaments.serializers.base",
+            "nexus_tournaments.serializers.leagues",
+            "nexus_tournaments.serializers.matches",
+            "nexus_tournaments.serializers.moderation",
+            "nexus_tournaments.serializers.results"
+        ],
+        "name": "nexus_tournaments.serializers",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/__init__.py"
+    },
+    "nexus_tournaments.serializers.announcements": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "name": "nexus_tournaments.serializers.announcements",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/announcements.py"
+    },
+    "nexus_tournaments.serializers.base": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "name": "nexus_tournaments.serializers.base",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/base.py"
+    },
+    "nexus_tournaments.serializers.leagues": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.models"
+        ],
+        "name": "nexus_tournaments.serializers.leagues",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/leagues.py"
+    },
+    "nexus_tournaments.serializers.matches": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.models"
+        ],
+        "name": "nexus_tournaments.serializers.matches",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/matches.py"
+    },
+    "nexus_tournaments.serializers.moderation": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "name": "nexus_tournaments.serializers.moderation",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/moderation.py"
+    },
+    "nexus_tournaments.serializers.results": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.serializers"
+        ],
+        "name": "nexus_tournaments.serializers.results",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/serializers/results.py"
     },
     "nexus_tournaments.services": {
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.services.bracket_service",
             "nexus_tournaments.services.diagnostic_service",
+            "nexus_tournaments.services.participation_service",
             "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_announcement_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_ruleset_restrictions",
-            "nexus_tournaments.tests.test_services"
+            "nexus_tournaments.tests.test_services",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "name": "nexus_tournaments.services",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/__init__.py"
@@ -988,8 +1176,8 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
-            "nexus_tournaments.tests.test_announcement_service"
+            "nexus_tournaments.tests.test_announcement_service",
+            "nexus_tournaments.views.announcements"
         ],
         "imports": [
             "django",
@@ -1008,6 +1196,7 @@
         "imported_by": [
             "__main__",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_services"
         ],
         "imports": [
@@ -1017,6 +1206,9 @@
             "django.db.transaction",
             "logging",
             "math",
+            "nexus_tournaments",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.match_service",
             "random"
         ],
         "name": "nexus_tournaments.services.bracket_service",
@@ -1026,7 +1218,8 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.tasks"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.tests.test_final_contract_gaps"
         ],
         "imports": [
             "datetime",
@@ -1047,6 +1240,7 @@
         "imported_by": [
             "__main__",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_services"
         ],
         "imports": [
@@ -1063,10 +1257,10 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_ruleset_restrictions",
-            "nexus_tournaments.tests.test_services"
+            "nexus_tournaments.tests.test_services",
+            "nexus_tournaments.views.leagues"
         ],
         "imports": [
             "decimal",
@@ -1090,11 +1284,15 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.receivers",
+            "nexus_tournaments.services.bracket_service",
             "nexus_tournaments.services.diagnostic_service",
+            "nexus_tournaments.services.participation_service",
             "nexus_tournaments.tasks",
-            "nexus_tournaments.tests.test_invariants"
+            "nexus_tournaments.tests.test_final_contract_gaps",
+            "nexus_tournaments.tests.test_invariants",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.results"
         ],
         "imports": [
             "datetime",
@@ -1119,9 +1317,9 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.tests.test_ruleset_restrictions",
-            "nexus_tournaments.tests.test_services"
+            "nexus_tournaments.tests.test_services",
+            "nexus_tournaments.views.leagues"
         ],
         "imports": [
             "decimal",
@@ -1133,6 +1331,8 @@
             "django.utils.timezone",
             "logging",
             "nexus_tournaments",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.match_service",
             "nexus_tournaments.signals",
             "secrets"
         ],
@@ -1143,17 +1343,23 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
-            "nexus_tournaments.api.views",
-            "nexus_tournaments.tests.test_services"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.tests.test_final_contract_gaps",
+            "nexus_tournaments.tests.test_services",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
         ],
         "imports": [
             "django",
             "django.apps",
+            "django.contrib",
+            "django.contrib.auth",
             "django.db",
             "django.db.transaction",
             "logging",
-            "nexus_gaming",
-            "nexus_gaming.feature_flags",
+            "nexus_core",
+            "nexus_core.utils",
+            "nexus_core.utils.feature_flags",
             "nexus_tournaments",
             "nexus_tournaments.models",
             "nexus_tournaments.signals"
@@ -1170,6 +1376,7 @@
             "nexus_tournaments.services.match_service",
             "nexus_tournaments.services.participation_service",
             "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants"
         ],
         "imports": [
@@ -1183,11 +1390,14 @@
         "bacon": 1,
         "imported_by": [
             "__main__",
+            "nexus_tournaments.receivers",
             "nexus_tournaments.services.match_service",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_tasks"
         ],
         "imports": [
+            "datetime",
             "django",
             "django.apps",
             "django.core",
@@ -1195,13 +1405,17 @@
             "django.utils",
             "django.utils.timezone",
             "logging",
-            "nexus_gaming",
-            "nexus_gaming.feature_flags",
+            "nexus_core",
+            "nexus_core.utils",
+            "nexus_core.utils.feature_flags",
             "nexus_tournaments",
             "nexus_tournaments.services",
+            "nexus_tournaments.services.bracket_service",
             "nexus_tournaments.services.diagnostic_service",
+            "nexus_tournaments.services.leaderboard_service",
             "nexus_tournaments.services.league_service",
-            "nexus_tournaments.services.match_service"
+            "nexus_tournaments.services.match_service",
+            "nexus_tournaments.services.verification_service"
         ],
         "name": "nexus_tournaments.tasks",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/tasks.py"
@@ -1248,8 +1462,6 @@
             "django.test",
             "django.utils",
             "django.utils.timezone",
-            "nexus_core",
-            "nexus_core.models",
             "nexus_tournaments",
             "nexus_tournaments.models",
             "nexus_tournaments.services",
@@ -1277,6 +1489,34 @@
         ],
         "name": "nexus_tournaments.tests.test_api",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/tests/test_api.py"
+    },
+    "nexus_tournaments.tests.test_final_contract_gaps": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "datetime",
+            "decimal",
+            "django",
+            "django.apps",
+            "django.contrib",
+            "django.contrib.auth",
+            "django.test",
+            "django.utils",
+            "django.utils.timezone",
+            "nexus_tournaments",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.diagnostic_service",
+            "nexus_tournaments.services.match_service",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.signals",
+            "nexus_tournaments.tasks",
+            "unittest",
+            "unittest.mock"
+        ],
+        "name": "nexus_tournaments.tests.test_final_contract_gaps",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/tests/test_final_contract_gaps.py"
     },
     "nexus_tournaments.tests.test_invariants": {
         "bacon": 1,
@@ -1403,11 +1643,240 @@
         "name": "nexus_tournaments.tests.test_tasks",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/tests/test_tasks.py"
     },
+    "nexus_tournaments.urls": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.urls",
+            "nexus_tournaments.urls.leagues"
+        ],
+        "name": "nexus_tournaments.urls",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/urls/__init__.py"
+    },
+    "nexus_tournaments.urls.leagues": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls"
+        ],
+        "imports": [
+            "django",
+            "django.urls",
+            "nexus_tournaments",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
+        ],
+        "name": "nexus_tournaments.urls.leagues",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/urls/leagues.py"
+    },
+    "nexus_tournaments.urls.matches": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.urls",
+            "nexus_tournaments",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.results"
+        ],
+        "name": "nexus_tournaments.urls.matches",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/urls/matches.py"
+    },
+    "nexus_tournaments.urls.moderation": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__"
+        ],
+        "imports": [
+            "django",
+            "django.urls",
+            "nexus_tournaments",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.moderation"
+        ],
+        "name": "nexus_tournaments.urls.moderation",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/urls/moderation.py"
+    },
+    "nexus_tournaments.views": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
+        ],
+        "name": "nexus_tournaments.views",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/__init__.py"
+    },
+    "nexus_tournaments.views.announcements": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.views"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.shortcuts",
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.announcement_service",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.base"
+        ],
+        "name": "nexus_tournaments.views.announcements",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/announcements.py"
+    },
+    "nexus_tournaments.views.base": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.views.announcements",
+            "nexus_tournaments.views.leagues",
+            "nexus_tournaments.views.matches",
+            "nexus_tournaments.views.moderation",
+            "nexus_tournaments.views.results"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.serializers"
+        ],
+        "name": "nexus_tournaments.views.base",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/base.py"
+    },
+    "nexus_tournaments.views.leagues": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.views"
+        ],
+        "imports": [
+            "datetime",
+            "django",
+            "django.apps",
+            "django.shortcuts",
+            "django.utils",
+            "django.utils.timezone",
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.league_service",
+            "nexus_tournaments.services.participation_service",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.base",
+            "secrets"
+        ],
+        "name": "nexus_tournaments.views.leagues",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/leagues.py"
+    },
+    "nexus_tournaments.views.matches": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.views"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.shortcuts",
+            "logging",
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.match_service",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.base"
+        ],
+        "name": "nexus_tournaments.views.matches",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/matches.py"
+    },
+    "nexus_tournaments.views.moderation": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.views"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.core",
+            "django.core.cache",
+            "django.shortcuts",
+            "django.utils",
+            "django.utils.timezone",
+            "logging",
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.base"
+        ],
+        "name": "nexus_tournaments.views.moderation",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/moderation.py"
+    },
+    "nexus_tournaments.views.results": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.urls.leagues",
+            "nexus_tournaments.urls.matches",
+            "nexus_tournaments.views"
+        ],
+        "imports": [
+            "django",
+            "django.apps",
+            "django.shortcuts",
+            "nexus_tournaments",
+            "nexus_tournaments.serializers",
+            "nexus_tournaments.services",
+            "nexus_tournaments.services.match_service",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.views",
+            "nexus_tournaments.views.base"
+        ],
+        "name": "nexus_tournaments.views.results",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/views/results.py"
+    },
     "os": {
         "bacon": 2,
         "imported_by": [
+            "django.conf",
             "logging",
-            "nexus_gaming.feature_flags",
+            "nexus_core.utils.feature_flags",
             "nexus_tournaments.generate_tree",
             "os",
             "pathlib",
@@ -1423,6 +1892,7 @@
     "pathlib": {
         "bacon": 2,
         "imported_by": [
+            "django.conf",
             "nexus_tournaments.generate_tree"
         ],
         "imports": [
@@ -1449,9 +1919,9 @@
         "bacon": 2,
         "imported_by": [
             "django.utils.text",
-            "nexus_tournaments.api.views",
             "nexus_tournaments.services.participation_service",
-            "nexus_tournaments.tests.test_models"
+            "nexus_tournaments.tests.test_models",
+            "nexus_tournaments.views.leagues"
         ],
         "imports": [
             "random"
@@ -1471,6 +1941,7 @@
         "bacon": 2,
         "imported_by": [
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_services",
             "nexus_tournaments.tests.test_tasks",
@@ -1483,6 +1954,7 @@
         "bacon": 2,
         "imported_by": [
             "nexus_tournaments.tests.test_api",
+            "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
             "nexus_tournaments.tests.test_services",
             "nexus_tournaments.tests.test_tasks"
@@ -1496,18 +1968,20 @@
     "uuid": {
         "bacon": 2,
         "imported_by": [
-            "nexus_core.models",
             "nexus_tournaments.models.announcement",
+            "nexus_tournaments.models.bracket_seed",
             "nexus_tournaments.models.dispute",
             "nexus_tournaments.models.health",
             "nexus_tournaments.models.invite",
             "nexus_tournaments.models.leaderboard",
             "nexus_tournaments.models.league",
+            "nexus_tournaments.models.league_standing",
             "nexus_tournaments.models.match",
             "nexus_tournaments.models.moderation",
             "nexus_tournaments.models.progression",
             "nexus_tournaments.models.rules",
             "nexus_tournaments.models.submission",
+            "nexus_tournaments.models.tournament_template",
             "nexus_tournaments.models.verification_record",
             "nexus_tournaments.tests.test_api",
             "nexus_tournaments.tests.test_models",
