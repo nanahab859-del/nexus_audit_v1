@@ -26,7 +26,7 @@
             "nexus_gateway.tests.test_consumers"
         ],
         "name": "asgiref",
-        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/asgiref/__init__.py"
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/asgiref/__init__.py"
     },
     "asgiref.sync": {
         "bacon": 2,
@@ -38,7 +38,7 @@
             "asyncio"
         ],
         "name": "asgiref.sync",
-        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/asgiref/sync.py"
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/asgiref/sync.py"
     },
     "asyncio": {
         "bacon": 2,

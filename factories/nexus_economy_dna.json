@@ -1940,7 +1940,7 @@
             "requests"
         ],
         "name": "requests",
-        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/requests/__init__.py"
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/requests/__init__.py"
     },
     "threading": {
         "bacon": 2,

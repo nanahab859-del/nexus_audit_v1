@@ -38,6 +38,22 @@
         "name": "datetime",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/datetime.py"
     },
+    "dateutil": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_content.tasks"
+        ],
+        "name": "dateutil",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/dateutil/__init__.py"
+    },
+    "dateutil.parser": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_content.tasks"
+        ],
+        "name": "dateutil.parser",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/dateutil/parser/__init__.py"
+    },
     "django": {
         "bacon": 2,
         "imported_by": [
@@ -497,6 +513,8 @@
         ],
         "imports": [
             "datetime",
+            "dateutil",
+            "dateutil.parser",
             "django",
             "django.apps",
             "django.conf",
@@ -678,7 +696,7 @@
             "requests"
         ],
         "name": "requests",
-        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/requests/__init__.py"
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/requests/__init__.py"
     },
     "unittest": {
         "bacon": 2,

@@ -659,6 +659,18 @@
         "name": "json",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/json/__init__.py"
     },
+    "jsonschema": {
+        "bacon": 2,
+        "imported_by": [
+            "jsonschema",
+            "nexus_core.utils.events"
+        ],
+        "imports": [
+            "jsonschema"
+        ],
+        "name": "jsonschema",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/jsonschema/__init__.py"
+    },
     "logging": {
         "bacon": 2,
         "imported_by": [
@@ -1296,6 +1308,7 @@
             "enum",
             "hashlib",
             "json",
+            "jsonschema",
             "typing",
             "uuid"
         ],

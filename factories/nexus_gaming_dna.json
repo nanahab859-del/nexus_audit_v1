@@ -19,9 +19,6 @@
             "nexus_gaming.generate_tree",
             "nexus_gaming.settings"
         ],
-        "imports": [
-            "sys"
-        ],
         "name": "datetime",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/datetime.py"
     },
@@ -180,8 +177,7 @@
         "imports": [
             "datetime",
             "os",
-            "pathlib",
-            "sys"
+            "pathlib"
         ],
         "name": "nexus_gaming.settings",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_gaming/settings.py"
@@ -280,9 +276,6 @@
             "nexus_gaming.wsgi",
             "pathlib"
         ],
-        "imports": [
-            "sys"
-        ],
         "name": "os",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/os.py"
     },
@@ -293,31 +286,15 @@
             "nexus_gaming.settings"
         ],
         "imports": [
-            "os",
-            "sys"
+            "os"
         ],
         "name": "pathlib",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/pathlib.py"
-    },
-    "sys": {
-        "bacon": 2,
-        "imported_by": [
-            "datetime",
-            "nexus_gaming.settings",
-            "os",
-            "pathlib",
-            "typing"
-        ],
-        "name": "sys",
-        "path": null
     },
     "typing": {
         "bacon": 2,
         "imported_by": [
             "nexus_gaming.generate_tree"
-        ],
-        "imports": [
-            "sys"
         ],
         "name": "typing",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/typing.py"
