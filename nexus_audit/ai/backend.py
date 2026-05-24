@@ -49,9 +49,6 @@ GEMINI_MODELS = [
     "gemma-2-9b-it",
 ]
 
-GEMINI_API_URL          = f"{_GEMINI_BASE}/gemini-2.0-flash:generateContent"
-GEMINI_API_URL_FALLBACK = f"{_GEMINI_BASE}/gemini-2.0-flash-lite:generateContent"
-
 # ── Task-to-model routing ──────────────────────────────────────────────────────
 TASK_MODELS: dict = {
     "violation_analysis": [

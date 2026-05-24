@@ -1,10 +1,10 @@
 # 🛡️ NEXUS MASTER AUDIT REPORT
 
-**Generated:** 2026-05-24 08:12:54  
+**Generated:** 2026-05-24 10:54:48  
 **Project:** `/home/yusupha/my_tools/nexus_project_copy`  
 **Tier:** 🌐 Tier 2 — ONLINE (Enhanced Mode)  
-**Total modules:** 238  
-**Physical files:** 211  
+**Total modules:** 243  
+**Physical files:** 217  
 **Policy:** Strict modularity — cross-app imports are violations. Signals, tasks, and receivers are allowed communications.
 
 ## ⚙️ CAPABILITY MANIFEST
@@ -27,15 +27,15 @@
 
 | Metric | Value |
 | :--- | :--- |
-| Overall fleet health | 💚 **80.2%** (Grade B) |
-| Apps audited | 7 |
+| Overall fleet health | 💛 **77.5%** (Grade C) |
+| Apps audited | 6 |
 | Cross-app violations | 13 |
 | Violations vs last run | → unchanged (+0) — prev: 13 on 2026-05-24 |
-| Allowed communications | 28 |
-| Security findings | 111 |
-| Ghost files | 5 |
-| Circular dependency cycles | 16 |
-| Avg cyclomatic complexity | 2.43 |
+| Allowed communications | 23 |
+| Security findings | 109 |
+| Ghost files | 6 |
+| Circular dependency cycles | 15 |
+| Avg cyclomatic complexity | 2.42 |
 | Max cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
 
@@ -49,25 +49,23 @@ Circular dependencies prevent clean testing and deployment isolation.
   Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views.results → nexus_tournaments.views`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.announcements`  
-  Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
-  Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.moderation`  
   Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.leagues`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund`  
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.announcements`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.escrow`  
   Apps involved: nexus_economy
 - **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout`  
-  Apps involved: nexus_economy
-- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.escrow`  
   Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.diagnostic_service`  
   Apps involved: nexus_tournaments
 - **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.bracket_service`  
   Apps involved: nexus_tournaments
-- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund → nexus_economy.services.refund_service`  
+- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks.refund → nexus_economy.services.refund_service → nexus_economy.tasks`  
   Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.forfeiture_service`  
   Apps involved: nexus_economy
@@ -81,6 +79,7 @@ Circular dependencies prevent clean testing and deployment isolation.
 These files exist on disk but were not scanned by pydeps. They may be dead code or unreachable entry points.
 
 - `nexus_core.management.commands.dispatch_outbox_events`
+- `nexus_core.management.commands.verify_backend`
 - `nexus_core.serializers.auth`
 - `nexus_core.serializers.token`
 - `nexus_core.serializers.users`
@@ -91,12 +90,11 @@ These files exist on disk but were not scanned by pydeps. They may be dead code 
 | App | Score | Grade | Trend | Physical | Audited | Boundary Violations | Security | Ghosts |
 | :--- | ---: | :---: | :---: | ---: | ---: | ---: | ---: | ---: |
 | **NEXUS_CONTENT** | 💚 92% | A | → | 18 | 21 | 0 | 3 | 0 |
-| **NEXUS_CORE** | 💛 64% | D | → | 41 | 44 | 1 | 58 | 4 |
+| **NEXUS_CORE** | 💛 62% | D | → | 42 | 44 | 1 | 58 | 5 |
 | **NEXUS_ECONOMY** | 💚 93% | A | → | 48 | 56 | 0 | 18 | 0 |
-| **NEXUS_GAMING** | 💚 94% | A | → | 7 | 7 | 0 | 2 | 0 |
 | **NEXUS_GATEWAY** | 💚 95% | A | → | 9 | 12 | 3 | 7 | 0 |
 | **NEXUS_SOCIAL** | ❤️ 57% | F | → | 40 | 41 | 6 | 12 | 0 |
-| **NEXUS_TOURNAMENTS** | 💛 67% | D | → | 48 | 57 | 3 | 11 | 1 |
+| **NEXUS_TOURNAMENTS** | 💛 67% | D | → | 60 | 69 | 3 | 11 | 1 |
 
 ## 🚨 VIOLATIONS
 
@@ -106,21 +104,21 @@ Direct imports between first-party apps violate strict modularity. Replace with 
 
 | Source Module | Target Module | Recommendation |
 | :--- | :--- | :--- |
-| `nexus_social.services.event_consumers` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
-| `nexus_social.services.event_consumers` | `nexus_core.utils.events` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_social.services.event_consumers` | `nexus_core` | Replace with Django signal, Celery task, or REST API call. |
-| `nexus_social.views.events` | `nexus_core.utils.events` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_social.services.event_consumers` | `nexus_core.utils.events` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_social.services.event_consumers` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_social.views.events` | `nexus_core` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_social.views.events` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
-| `nexus_gateway.consumers` | `nexus_tournaments.services.match_service` | Replace with Django signal, Celery task, or REST API call. |
-| `nexus_gateway.consumers` | `nexus_tournaments` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_social.views.events` | `nexus_core.utils.events` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_gateway.consumers` | `nexus_tournaments.services` | Replace with Django signal, Celery task, or REST API call. |
-| `nexus_tournaments.services.verification_service` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_gateway.consumers` | `nexus_tournaments` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_gateway.consumers` | `nexus_tournaments.services.match_service` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_tournaments.services.verification_service` | `nexus_core.utils.feature_flags` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_tournaments.services.verification_service` | `nexus_core` | Replace with Django signal, Celery task, or REST API call. |
+| `nexus_tournaments.services.verification_service` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_core.views.games` | `nexus_content` | Replace with Django signal, Celery task, or REST API call. |
 
-### Other Violations (111)
+### Other Violations (109)
 
 | Type | Source | Severity |
 | :--- | :--- | :--- |
@@ -203,8 +201,6 @@ Direct imports between first-party apps violate strict modularity. Replace with 
 | Hardcoded Password | `test_wallet_views.py` | LOW |
 | Hardcoded Password | `test_wallet_views.py` | LOW |
 | Hardcoded Password | `test_wallet_views.py` | LOW |
-| Hardcoded Password | `settings.py` | LOW |
-| Hardcoded Password | `settings.py` | LOW |
 | Bare Except | `consumers.py` | LOW |
 | Bare Except | `consumers.py` | LOW |
 | Hardcoded Password | `test_consumers.py` | LOW |
@@ -242,159 +238,154 @@ These cross-app interactions use decoupled communication patterns and are permit
 
 | Type | Source App | Target App | Details |
 | :--- | :--- | :--- | :--- |
-| Django Bootstrap (Exempt) | nexus_social | nexus_core | `nexus_social.apps → nexus_core.utils` |
-| Django Bootstrap (Exempt) | nexus_social | nexus_core | `nexus_social.apps → nexus_core.utils.events` |
 | Django Bootstrap (Exempt) | nexus_social | nexus_core | `nexus_social.apps → nexus_core` |
-| Django Bootstrap (Exempt) | nexus_gaming | nexus_gateway | `nexus_gaming.asgi → nexus_gateway` |
-| Django Bootstrap (Exempt) | nexus_gaming | nexus_social | `nexus_gaming.asgi → nexus_social` |
-| Django Bootstrap (Exempt) | nexus_gaming | nexus_social | `nexus_gaming.asgi → nexus_social.routing` |
-| Django Bootstrap (Exempt) | nexus_gaming | nexus_gateway | `nexus_gaming.asgi → nexus_gateway.routing` |
-| Django Bootstrap (Exempt) | nexus_gaming | nexus_gateway | `nexus_gaming.asgi → nexus_gateway.middleware` |
-| Django Bootstrap (Exempt) | nexus_gateway | nexus_core | `nexus_gateway.apps → nexus_core.signals` |
-| Django Bootstrap (Exempt) | nexus_gateway | nexus_tournaments | `nexus_gateway.apps → nexus_tournaments.signals` |
-| Django Bootstrap (Exempt) | nexus_gateway | nexus_core | `nexus_gateway.apps → nexus_core` |
-| Django Bootstrap (Exempt) | nexus_gateway | nexus_economy | `nexus_gateway.apps → nexus_economy` |
+| Django Bootstrap (Exempt) | nexus_social | nexus_core | `nexus_social.apps → nexus_core.utils.events` |
+| Django Bootstrap (Exempt) | nexus_social | nexus_core | `nexus_social.apps → nexus_core.utils` |
 | Django Bootstrap (Exempt) | nexus_gateway | nexus_economy | `nexus_gateway.apps → nexus_economy.signals` |
+| Django Bootstrap (Exempt) | nexus_gateway | nexus_core | `nexus_gateway.apps → nexus_core` |
 | Django Bootstrap (Exempt) | nexus_gateway | nexus_tournaments | `nexus_gateway.apps → nexus_tournaments` |
-| Test Cross-App Import | nexus_gateway | nexus_gaming | `nexus_gateway.tests.test_consumers → nexus_gaming` |
-| Test Cross-App Import | nexus_gateway | nexus_gaming | `nexus_gateway.tests.test_consumers → nexus_gaming.asgi` |
-| Django Signal | nexus_content | nexus_core | `nexus_content.receivers → nexus_core.signals` |
+| Django Bootstrap (Exempt) | nexus_gateway | nexus_economy | `nexus_gateway.apps → nexus_economy` |
+| Django Bootstrap (Exempt) | nexus_gateway | nexus_tournaments | `nexus_gateway.apps → nexus_tournaments.signals` |
+| Django Bootstrap (Exempt) | nexus_gateway | nexus_core | `nexus_gateway.apps → nexus_core.signals` |
 | Django Signal | nexus_content | nexus_core | `nexus_content.receivers → nexus_core` |
-| Django Signal | nexus_tournaments | nexus_economy | `nexus_tournaments.receivers → nexus_economy` |
+| Django Signal | nexus_content | nexus_core | `nexus_content.receivers → nexus_core.signals` |
 | Django Signal | nexus_tournaments | nexus_economy | `nexus_tournaments.receivers → nexus_economy.signals` |
+| Django Signal | nexus_tournaments | nexus_economy | `nexus_tournaments.receivers → nexus_economy` |
 | Celery Task | nexus_tournaments | nexus_core | `nexus_tournaments.tasks → nexus_core.utils.feature_flags` |
 | Celery Task | nexus_tournaments | nexus_core | `nexus_tournaments.tasks → nexus_core` |
 | Celery Task | nexus_tournaments | nexus_core | `nexus_tournaments.tasks → nexus_core.utils` |
+| Test Cross-App Import | nexus_tournaments | nexus_core | `nexus_tournaments.tests.test_services → nexus_core` |
+| Test Cross-App Import | nexus_tournaments | nexus_core | `nexus_tournaments.tests.test_services → nexus_core.models` |
 | Celery Task | nexus_core | nexus_content | `nexus_core.views.games → nexus_content.tasks` |
-| Django Signal | nexus_economy | nexus_tournaments | `nexus_economy.receivers → nexus_tournaments.signals` |
 | Django Signal | nexus_economy | nexus_tournaments | `nexus_economy.receivers → nexus_tournaments` |
+| Django Signal | nexus_economy | nexus_tournaments | `nexus_economy.receivers → nexus_tournaments.signals` |
 | Test Cross-App Import | nexus_economy | nexus_tournaments | `nexus_economy.tests.test_forfeiture → nexus_tournaments` |
 | Django Signal | nexus_economy | nexus_tournaments | `nexus_economy.tests.test_forfeiture → nexus_tournaments.signals` |
 
 ## 📦 DEPENDENCY HEALTH (Tier 2 — Online Scan)
 
 Scanned 120 packages for CVEs (OSV database) and version freshness (PyPI).  
-Total CVEs found: **387** | Outdated packages: **42**
+Total CVEs found: **697** | Outdated packages: **42**
 
 ### Package Summary
 
 | Package | Installed | Latest | Status | CVEs |
 | :--- | :--- | :--- | :--- | :--- |
 | `﻿amqp` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
+| `annotated-types` | 0.7.0 | 0.7.0 | ✅ Current | 0 |
 | `async-timeout` | 5.0.1 | 5.0.1 | ✅ Current | 0 |
 | `annotated-doc` | 0.0.4 | 0.0.4 | ✅ Current | 0 |
 | `Automat` | 25.4.16 | 25.4.16 | ✅ Current | 0 |
-| `annotated-types` | 0.7.0 | 0.7.0 | ✅ Current | 0 |
-| `attrs` | 26.1.0 | 26.1.0 | ✅ Current | 0 |
 | `anyio` | 4.13.0 | 4.13.0 | ✅ Current | 0 |
+| `attrs` | 26.1.0 | 26.1.0 | ✅ Current | 0 |
 | `asgiref` | 3.11.1 | 3.11.1 | ✅ Current | 0 |
 | `autobahn` | 24.4.2 | 25.12.2 | ⚠️ Outdated | 2 |
 | `Authlib` | 1.6.9 | 1.7.2 | ⚠️ Outdated | 13 |
+| `backports-datetime-fromisoformat` | 2.0.3 | 2.0.3 | ✅ Current | 0 |
 | `billiard` | 4.2.4 | 4.2.4 | ✅ Current | 0 |
 | `bcrypt` | 5.0.0 | 5.0.0 | ✅ Current | 0 |
 | `cfgv` | 3.5.0 | 3.5.0 | ✅ Current | 0 |
-| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
 | `bleach` | 6.3.0 | 6.3.0 | ✅ Current | 10 |
-| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `celery` | 5.6.3 | 5.6.3 | ✅ Current | 4 |
-| `channels` | 4.3.2 | 4.3.2 | ✅ Current | 2 |
+| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
+| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `cffi` | 2.0.0 | 2.0.0 | ✅ Current | 0 |
 | `channels_redis` | 4.3.0 | 4.3.0 | ✅ Current | 0 |
+| `channels` | 4.3.2 | 4.3.2 | ✅ Current | 2 |
 | `click-didyoumean` | 0.3.1 | 0.3.1 | ✅ Current | 0 |
 | `constantly` | 23.10.4 | 23.10.4 | ✅ Current | 0 |
-| `click-plugins` | 1.1.1.2 | 1.1.1.2 | ✅ Current | 0 |
 | `click` | 8.3.1 | 8.4.1 | ⚠️ Outdated | 0 |
+| `click-plugins` | 1.1.1.2 | 1.1.1.2 | ✅ Current | 0 |
 | `click-repl` | 0.3.0 | 0.3.0 | ✅ Current | 0 |
 | `cron-descriptor` | 1.4.5 | 2.0.8 | ⚠️ Outdated | 0 |
-| `backports-datetime-fromisoformat` | 2.0.3 | 2.0.3 | ✅ Current | 0 |
 | `daphne` | 4.2.1 | 4.2.1 | ✅ Current | 0 |
 | `distlib` | 0.4.0 | 0.4.0 | ✅ Current | 0 |
 | `charset-normalizer` | 3.4.7 | 3.4.7 | ✅ Current | 0 |
 | `django-celery-beat` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
-| `django-ratelimit` | 4.1.0 | 4.1.0 | ✅ Current | 0 |
 | `django-timezone-field` | 7.2.1 | 7.2.1 | ✅ Current | 0 |
+| `django-ratelimit` | 4.1.0 | 4.1.0 | ✅ Current | 0 |
 | `djangorestframework` | 3.17.1 | 3.17.1 | ✅ Current | 3 |
+| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
 | `exceptiongroup` | 1.3.1 | 1.3.1 | ✅ Current | 0 |
 | `dparse` | 0.6.4 | 0.6.4 | ✅ Current | 2 |
-| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
-| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 1 |
-| `cryptography` | 46.0.6 | 48.0.0 | ⚠️ Outdated | 30 |
 | `hyperlink` | 21.0.0 | 21.0.0 | ✅ Current | 0 |
+| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 1 |
 | `filelock` | 3.25.2 | 3.29.0 | ⚠️ Outdated | 2 |
-| `identify` | 2.6.18 | 2.6.19 | ⚠️ Outdated | 0 |
-| `iniconfig` | 2.3.0 | 2.3.0 | ✅ Current | 0 |
+| `google-cloud-vision` | 3.7.4 | 3.14.0 | ⚠️ Outdated | 0 |
+| `cryptography` | 46.0.6 | 48.0.0 | ⚠️ Outdated | 30 |
 | `Incremental` | 24.11.0 | 24.11.0 | ✅ Current | 0 |
 | `imagehash` | 4.3.1 | 4.3.2 | ⚠️ Outdated | 0 |
 | `idna` | 3.11 | 3.16 | ⚠️ Outdated | 3 |
+| `identify` | 2.6.18 | 2.6.19 | ⚠️ Outdated | 0 |
+| `iniconfig` | 2.3.0 | 2.3.0 | ✅ Current | 0 |
+| `jsonschema-specifications` | 2025.9.1 | 2025.9.1 | ✅ Current | 0 |
 | `joblib` | 1.5.3 | 1.5.3 | ✅ Current | 3 |
 | `jsonschema` | 4.19.0 | 4.26.0 | ⚠️ Outdated | 0 |
 | `Jinja2` | 3.1.6 | 3.1.6 | ✅ Current | 16 |
-| `jsonschema-specifications` | 2025.9.1 | 2025.9.1 | ✅ Current | 0 |
-| `kombu` | 5.6.2 | 5.6.2 | ✅ Current | 0 |
 | `markdown-it-py` | 4.0.0 | 4.2.0 | ⚠️ Outdated | 4 |
-| `Django` | 5.2.12 | 6.0.5 | ⚠️ Outdated | 0 |
-| `MarkupSafe` | 3.0.3 | 3.0.3 | ✅ Current | 0 |
+| `kombu` | 5.6.2 | 5.6.2 | ✅ Current | 0 |
+| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
 | `marshmallow` | 4.3.0 | 4.3.0 | ✅ Current | 3 |
 | `mypy_extensions` | 1.1.0 | 1.1.0 | ✅ Current | 0 |
-| `google-cloud-vision` | 3.7.4 | 3.14.0 | ⚠️ Outdated | 0 |
-| `msgpack` | 1.1.2 | 1.1.2 | ✅ Current | 0 |
+| `MarkupSafe` | 3.0.3 | 3.0.3 | ✅ Current | 0 |
+| `Django` | 5.2.12 | 6.0.5 | ⚠️ Outdated | 300 |
 | `nodeenv` | 1.10.0 | 1.10.0 | ✅ Current | 0 |
 | `packaging` | 26.0 | 26.2 | ⚠️ Outdated | 0 |
 | `pathspec` | 1.0.4 | 1.1.1 | ⚠️ Outdated | 0 |
+| `msgpack` | 1.1.2 | 1.1.2 | ✅ Current | 0 |
+| `nltk` | 3.9.4 | 3.9.4 | ✅ Current | 21 |
 | `platformdirs` | 4.9.4 | 4.9.6 | ⚠️ Outdated | 0 |
 | `pluggy` | 1.6.0 | 1.6.0 | ✅ Current | 0 |
-| `nltk` | 3.9.4 | 3.9.4 | ✅ Current | 21 |
-| `pre_commit` | 4.5.1 | 4.6.0 | ⚠️ Outdated | 0 |
 | `prometheus_client` | 0.25.0 | 0.25.0 | ✅ Current | 0 |
+| `pre_commit` | 4.5.1 | 4.6.0 | ⚠️ Outdated | 0 |
 | `prompt_toolkit` | 3.0.52 | 3.0.52 | ✅ Current | 0 |
 | `pyasn1_modules` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
 | `pycparser` | 3.0 | 3.0 | ✅ Current | 0 |
-| `psycopg2-binary` | 2.9.11 | 2.9.12 | ⚠️ Outdated | 0 |
-| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
 | `pyasn1` | 0.6.3 | 0.6.3 | ✅ Current | 2 |
+| `psycopg2-binary` | 2.9.11 | 2.9.12 | ⚠️ Outdated | 0 |
 | `pydantic` | 2.12.5 | 2.13.4 | ⚠️ Outdated | 3 |
-| `Pygments` | 2.20.0 | 2.20.0 | ✅ Current | 9 |
-| `pyotp` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
 | `PyJWT` | 2.12.1 | 2.13.0 | ⚠️ Outdated | 8 |
+| `pyotp` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
+| `Pygments` | 2.20.0 | 2.20.0 | ✅ Current | 9 |
 | `pyOpenSSL` | 26.0.0 | 26.2.0 | ⚠️ Outdated | 8 |
-| `python-crontab` | 3.3.0 | 3.3.0 | ✅ Current | 0 |
-| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
-| `Pillow` | 10.4.0 | 12.2.0 | ⚠️ Outdated | 118 |
 | `pytest` | 9.0.3 | 9.0.3 | ✅ Current | 1 |
+| `python-crontab` | 3.3.0 | 3.3.0 | ✅ Current | 0 |
+| `Pillow` | 10.4.0 | 12.2.0 | ⚠️ Outdated | 118 |
 | `python-dateutil` | 2.9.0.post0 | 2.9.0.post0 | ✅ Current | 0 |
-| `pydantic_core` | 2.41.5 | 2.47.0 | ⚠️ Outdated | 0 |
 | `python-discovery` | 1.2.2 | 1.3.1 | ⚠️ Outdated | 0 |
 | `pytokens` | 0.4.1 | 0.4.1 | ✅ Current | 0 |
+| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
 | `referencing` | 0.37.0 | 0.37.0 | ✅ Current | 0 |
 | `redis` | 7.4.0 | 7.4.0 | ✅ Current | 4 |
+| `PyYAML` | 6.0.3 | 6.0.3 | ✅ Current | 8 |
 | `requests` | 2.33.1 | 2.34.2 | ⚠️ Outdated | 13 |
-| `rich` | 14.3.3 | 15.0.0 | ⚠️ Outdated | 0 |
 | `safety-schemas` | 0.0.16 | 0.0.18 | ⚠️ Outdated | 0 |
+| `rich` | 14.3.3 | 15.0.0 | ⚠️ Outdated | 0 |
+| `safety` | 3.7.0 | 3.7.0 | ✅ Current | 2 |
+| `pydantic_core` | 2.41.5 | 2.47.0 | ⚠️ Outdated | 0 |
+| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
 | `service-identity` | 24.2.0 | 24.2.0 | ✅ Current | 0 |
 | `regex` | 2026.4.4 | 2026.5.9 | ⚠️ Outdated | 0 |
-| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
 | `sentry-sdk` | 2.58.0 | 2.60.0 | ⚠️ Outdated | 2 |
-| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
+| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
 | `six` | 1.17.0 | 1.17.0 | ✅ Current | 0 |
-| `PyYAML` | 6.0.3 | 6.0.3 | ✅ Current | 0 |
-| `structlog` | 25.5.0 | 25.5.0 | ✅ Current | 0 |
 | `sqlparse` | 0.5.5 | 0.5.5 | ✅ Current | 6 |
+| `structlog` | 25.5.0 | 25.5.0 | ✅ Current | 0 |
 | `tenacity` | 9.1.4 | 9.1.4 | ✅ Current | 0 |
-| `tomli` | 2.4.1 | 2.4.1 | ✅ Current | 0 |
 | `tomlkit` | 0.14.0 | 0.15.0 | ⚠️ Outdated | 0 |
+| `typer` | 0.24.1 | 0.25.1 | ⚠️ Outdated | 0 |
+| `tomli` | 2.4.1 | 2.4.1 | ✅ Current | 0 |
 | `txaio` | 25.9.2 | 25.12.2 | ⚠️ Outdated | 0 |
+| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
 | `tqdm` | 4.67.3 | 4.67.3 | ✅ Current | 3 |
+| `typing_extensions` | 4.15.0 | 4.15.0 | ✅ Current | 0 |
 | `ruff` | 0.15.9 | 0.15.14 | ⚠️ Outdated | 0 |
 | `rpds-py` | 0.30.0 | 0.30.0 | ✅ Current | 0 |
-| `safety` | 3.7.0 | 3.7.0 | ✅ Current | 0 |
-| `typer` | 0.24.1 | 0.25.1 | ⚠️ Outdated | 0 |
-| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
-| `Twisted` | 25.5.0 | 26.4.0 | ⚠️ Outdated | 28 |
-| `typing_extensions` | 4.15.0 | 4.15.0 | ✅ Current | 0 |
 | `tzdata` | 2025.3 | 2026.2 | ⚠️ Outdated | 0 |
+| `Twisted` | 25.5.0 | 26.4.0 | ⚠️ Outdated | 28 |
 | `tzlocal` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
-| `wcwidth` | 0.6.0 | 0.7.0 | ⚠️ Outdated | 0 |
 | `vine` | 5.1.0 | 5.1.0 | ✅ Current | 0 |
+| `wcwidth` | 0.6.0 | 0.7.0 | ⚠️ Outdated | 0 |
 | `websocket-client` | 1.9.0 | 1.9.0 | ✅ Current | 0 |
 | `virtualenv` | 21.2.0 | 21.3.3 | ⚠️ Outdated | 5 |
 | `urllib3` | 2.6.3 | 2.7.0 | ⚠️ Outdated | 32 |
@@ -403,7 +394,7 @@ Total CVEs found: **387** | Outdated packages: **42**
 
 ## 🔒 SECURITY FINDINGS
 
-Bandit scan found 111 issue(s). Test-file findings are excluded from health scoring.
+Bandit scan found 109 issue(s). Test-file findings are excluded from health scoring.
 
 | Severity | File | Line | Issue |
 | :---: | :--- | ---: | :--- |
@@ -486,8 +477,6 @@ Bandit scan found 111 issue(s). Test-file findings are excluded from health scor
 | **LOW** | `test_wallet_views.py` | 173 | B105: Possible hardcoded password: 'token-abc' |
 | **LOW** | `test_wallet_views.py` | 180 | B105: Possible hardcoded password: 'token-abc' |
 | **LOW** | `test_wallet_views.py` | 192 | B105: Possible hardcoded password: 'tok' |
-| **LOW** | `settings.py` | 104 | B105: Possible hardcoded password: 'nexus_pass' |
-| **LOW** | `settings.py` | 183 | B105: Possible hardcoded password: 'nexus_core.serializers.token.NexusTokenObtainPairSerializer' |
 | **LOW** | `consumers.py` | 391 | B110: Try, Except, Pass detected. |
 | **LOW** | `consumers.py` | 402 | B110: Try, Except, Pass detected. |
 | **LOW** | `test_consumers.py` | 52 | B106: Possible hardcoded password: 'pass' |
@@ -523,10 +512,10 @@ Bandit scan found 111 issue(s). Test-file findings are excluded from health scor
 
 | Metric | Value |
 | :--- | ---: |
-| Average cyclomatic complexity | 2.43 |
+| Average cyclomatic complexity | 2.42 |
 | Maximum cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
-| Functions analysed | 1655 |
+| Functions analysed | 1650 |
 
 ### High Complexity Functions (>10)
 
@@ -547,10 +536,10 @@ Bandit scan found 111 issue(s). Test-file findings are excluded from health scor
 | `_render_json` | `verify_backend.py` | 14 | 0 |
 | `_try_activate` | `match_service.py` | 14 | 0 |
 | `_check_08_websockets` | `verify_backend.py` | 13 | 0 |
-| `MarkReadView` | `receipts.py` | 13 | 0 |
 | `generate_single_elimination` | `bracket_service.py` | 13 | 0 |
 | `_run_ai_verification` | `verification_service.py` | 13 | 0 |
 | `auto_snatcher_backfill` | `tasks.py` | 13 | 0 |
+| `MarkReadView` | `receipts.py` | 13 | 0 |
 | `LoginView` | `auth.py` | 12 | 0 |
 | `handle` | `verify_backend.py` | 12 | 0 |
 | `_check_10_security` | `verify_backend.py` | 12 | 0 |
@@ -570,410 +559,445 @@ Bandit scan found 111 issue(s). Test-file findings are excluded from health scor
 
 ## 💡 RECOMMENDATIONS
 
-### [HIGH] Refactor: move events to correct app
+### [CRITICAL] Refactor nexus_content boundary
 
-```json
-{
-  "title": "Relocate event utilities from core to social app",
-  "why_harmful": "This direct import creates a tight coupling where `nexus_social` is dependent on the internal implementation details of `nexus_
+1 cross-app violation(s) point at nexus_content. Apps involved: nexus_core.
 
-**Action:** Move nexus_core.utils.events to nexus_core or appropriate shared module.
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`
+**Affected modules:** `nexus_core.views.games`, `nexus_content`
 
-### [HIGH] Refactor: move utils to correct app
+### [CRITICAL] Refactor nexus_core boundary
 
-```json
-{
-  "title": "Relocate generic utilities from `nexus_core` to `nexus_common`",
-  "why_harmful": "Direct import of `nexus_core.utils` creates a tight compile-time coupling between `
+3 cross-app violation(s) point at nexus_core. Apps involved: nexus_social, nexus_tournaments.
 
-**Action:** Move nexus_core.utils to nexus_core or appropriate shared module.
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`, `nexus_core`
 
-### [HIGH] Refactor: move match_service to correct app
+### [CRITICAL] Refactor utils boundary
 
-```json
-{
-  "title": "Refactor nexus_gateway to consume nexus_tournaments API",
-  "why_harmful": "This direct import tightly couples `nexus_gateway` to the internal implementation details of `nexus_tournaments.
+3 cross-app violation(s) point at nexus_core.utils. Apps involved: nexus_social, nexus_tournaments.
 
-**Action:** Move nexus_tournaments.services.match_service to nexus_core or appropriate shared module.
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Affected modules:** `nexus_gateway.consumers`
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`, `nexus_core.utils`
 
-### [HIGH] Refactor: move nexus_core to correct app
+### [CRITICAL] Refactor events boundary
 
-```json
-{
-  "title": "Relocate shared utility from nexus_core to nexus_utils",
-  "why_harmful": "This direct import creates tight coupling between `nexus_core` and both `nexus_social` and `nexus_tour
+2 cross-app violation(s) point at nexus_core.utils.events. Apps involved: nexus_social.
 
-**Action:** Move nexus_core to nexus_core or appropriate shared module.
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_core.utils.events`
 
-### [HIGH] Redirect nexus_tournaments imports from nexus_gateway
+### [CRITICAL] Refactor feature_flags boundary
 
+1 cross-app violation(s) point at nexus_core.utils.feature_flags. Apps involved: nexus_tournaments.
 
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Action:** 
+**Affected modules:** `nexus_tournaments.services.verification_service`, `nexus_core.utils.feature_flags`
 
-**Affected modules:** `nexus_gateway.consumers`
+### [CRITICAL] Refactor nexus_tournaments boundary
 
-### [HIGH] NEXUS_CORE — Health Analysis
+1 cross-app violation(s) point at nexus_tournaments. Apps involved: nexus_gateway.
 
-**NEXUS_CORE Health Narrative:**
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-Nexus_
+**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments`
 
-**Action:** Fix 1 boundary violation(s) first (+3 pts), then 58 security finding(s) (+174 pts). Projected score: 100%.
+### [CRITICAL] Refactor services boundary
 
-**Affected modules:** `nexus_core`, `nexus_core.utils`, `nexus_core.utils.events`, `nexus_core.signals`, `nexus_core.utils.feature_flags`
+1 cross-app violation(s) point at nexus_tournaments.services. Apps involved: nexus_gateway.
 
-### [HIGH] NEXUS_SOCIAL — Health Analysis
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Health Narrative:**
-The 57.0
+**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments.services`
 
-**Action:** Fix 6 boundary violation(s) first (+30 pts), then 12 security finding(s) (+36 pts). Projected score: 100%.
+### [CRITICAL] Refactor match_service boundary
 
-**Affected modules:** `nexus_social`, `nexus_social.admin`, `nexus_social.apps`, `nexus_social.consumers`, `nexus_social.logging`
+1 cross-app violation(s) point at nexus_tournaments.services.match_service. Apps involved: nexus_gateway.
 
-### [HIGH] NEXUS_TOURNAMENTS — Health Analysis
+**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-The 66.66% score is primarily driven by 3 boundary violations, costing 15 points, and 11 security vulnerabilities, costing 33 points. The highest priority fix is addressing the security vulnerabilities (gain 33 points), followed by resolving the boundary violations (gain 15 points). After these fixes, nexus_tournaments' score will be 81.66%. Leaving these unfixed poses a significant risk of data breaches and unauthorized access due to exploitable security flaws and architectural inconsistencies.
+**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments.services.match_service`
 
----
+### [MEDIUM] Fix Bare Except
 
-**ACTIONABLE GUIDANCE FOR NEXUS_TOURNAMENTS**
+12 bare except finding(s) were detected by Bandit.
 
-**1. Address Security Vulnerabilities (11 issues, -33 pts)**
+**Action:** Replace broad exception handling with specific exception types. Narrow each catch block to the real failure mode and preserve the stack trace where needed.
 
-*   **Problem:** Numerous security vulnerabilities identified. Specifics are not detailed here but are assumed to be common issues like SQL injection, XSS, insecure direct object references, etc., within `nexus_tournaments`.
-*   **Action:** Conduct a thorough security audit of all `nexus_tournaments` code, focusing on input validation, output encoding, authentication, and authorization checks.
-    *   **Specific Code Changes:**
-        *   **`nexus_tournaments/views.py`:** Review all view functions for proper input sanitization (e.g., using `django.utils.safestring.mark_safe` judiciously, validating user-provided data against expected types and formats). Implement robust permission checks using `django.contrib.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/middleware.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/admin_panel.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_gateway/consumers.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/apps.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/auto_flag.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/push_notifications.py`
 
-**Action:** Fix 3 boundary violation(s) first (+15 pts), then 11 security finding(s) (+33 pts). Projected score: 100%.
+### [MEDIUM] Fix Hardcoded Password
 
-**Affected modules:** `nexus_tournaments`, `nexus_tournaments.services`, `nexus_tournaments.services.match_service`, `nexus_tournaments.signals`, `nexus_tournaments.admin`
+97 hardcoded password finding(s) were detected by Bandit.
 
-### [HIGH] Extract Shared Utility: nexus_core.utils
+**Action:** Move the password into an environment variable or secret manager. Replace hardcoded credentials with settings-backed secrets and rotate the exposed value.
 
-`nexus_core.utils` is imported by 2 app(s) (nexus_tournaments, nexus_social) as a cross-app violation. One refactor eliminates all 2 violations.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tests/test_views.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_admin_panel.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_auth.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_new_endpoints.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_sessions_mfa_deletion.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_signals.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_users.py`
 
-**Action:** Here's the extraction plan for `nexus_core.utils`:
+### [MEDIUM] Refactor LoginView
 
-1.  **New Module Path:** `nexus_shared.utils`
+LoginView in auth.py has cyclomatic complexity 12.
 
-2.  **Changes in `nexus_core.utils`:**
-    *   Identify functions/classes in `nexus_core.utils` that are *not* strictly related to core authentication, user models, tokens, middleware, or serializers.
-    *   Move these identified functions/classes to `nexus_shared.utils`.
-    *   Update `nexus_core.utils` to import from `nexus_shared.utils` for any moved functionality it now depends on.
-    *   **Example:** If `nexus_core.utils` contains a generic `send_email` function, move it to `nexus_shared.utils`. `nexus_core.utils` would then import `send_email` from `nexus_shared.utils`.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-3.  **Updating Importing Apps:**
-    *   **`nexus_tournaments`:**
-        *   Locate all imports of `from nexus_core.utils import ...`.
-        *   Replace them with `from nexus_shared.utils import ...`.
-        *   **File Example:** `nexus_tournaments/services.py` might change from `from nexus_core.utils import format_datetime` to `from nexus_shared.utils import format_datetime`.
-    *   **`nexus_social`:**
-        *   Locate all imports of `from nexus_core.utils import ...`.
-        *   Replace them with `from nexus_shared.utils import ...`.
-        *   **File Example:** `nexus_social/models.py` might change from `from nexus_core.utils import generate_unique_id` to `from nexus_shared.utils import generate_unique_id`.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`
 
-4.  **Migration Order:**
-    *
+### [MEDIUM] Refactor post
 
-**Affected modules:** `nexus_core.utils`, `nexus_tournaments`, `nexus_social`
+post in auth.py has cyclomatic complexity 11.
 
-### [HIGH] Extract Shared Utility: nexus_core
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-`nexus_core` is imported by 2 app(s) (nexus_tournaments, nexus_social) as a cross-app violation. One refactor eliminates all 2 violations.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`
 
-**Action:** **Shared Utility Extraction Plan**
+### [MEDIUM] Refactor generate_single_elimination
 
-**Problem:** A utility module currently in
+generate_single_elimination in bracket_service.py has cyclomatic complexity 13.
 
-**Affected modules:** `nexus_core`, `nexus_tournaments`, `nexus_social`
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-### [HIGH] Upgrade autobahn: 24.4.2 → 25.12.2
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/bracket_service.py`
 
+### [MEDIUM] Refactor EscrowService
 
+EscrowService in escrow_service.py has cyclomatic complexity 12.
 
-**Action:** pip install autobahn==25.12.2
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Breaking changes: None known. Autobahn's core API for WebSocket clients and servers is generally stable. Focus on ensuring existing WebSocket connections and message handling logic remain functional.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py`
 
-Verify: python manage.py test nexus_gateway
+### [MEDIUM] Refactor lock
 
-**Affected modules:** `autobahn`
+lock in escrow_service.py has cyclomatic complexity 11.
 
-### [HIGH] Upgrade Authlib: 1.6.9 → 1.7.2
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py`
 
+### [MEDIUM] Refactor ingest_event
 
-**Action:** pip install "Authlib>=1.7.2,<1.8.0"
+ingest_event in events.py has cyclomatic complexity 12.
 
-Breaking changes: None known. Authlib 1.7.x is a minor release with backward-compatible changes. Focus on testing OAuth flows and token validation, which are core to nexus_core.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Verify: python manage.py test nexus_core nexus_gateway
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/events.py`
 
-**Affected modules:** `Authlib`
+### [HIGH] Refactor HandshakeRecheckService
 
-### [HIGH] Upgrade certifi: 2026.2.25 → 2026.5.20
+HandshakeRecheckService in handshake_recheck_service.py has cyclomatic complexity 22.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py`
 
-**Action:** pip install certifi==2026.5.20
+### [HIGH] Refactor recheck
 
-Breaking changes: None known. Certifi is a dependency for SSL certificate validation and typically does not introduce breaking changes in its minor version updates that would affect Django or Celery usage.
+recheck in handshake_recheck_service.py has cyclomatic complexity 21.
 
-Verify: python manage.py test nexus_core.tests.test_ssl_validation
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `certifi`
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py`
 
-### [HIGH] Upgrade black: 26.3.1 → 26.5.1
+### [MEDIUM] Refactor create_tournament
 
+create_tournament in league_service.py has cyclomatic complexity 20.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Action:** pip install black==26.5.1
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/league_service.py`
 
-Breaking changes: None known. Black is a code formatter and does not typically introduce breaking changes to application logic or Django/Celery functionality.
+### [MEDIUM] Refactor _try_activate
 
-Verify: black --check .
+_try_activate in match_service.py has cyclomatic complexity 14.
 
-**Affected modules:** `black`
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-### [HIGH] Upgrade cryptography: 46.0.6 → 48.0.0
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py`
 
+### [HIGH] Refactor handle_timeout
 
+handle_timeout in match_service.py has cyclomatic complexity 21.
 
-**Action:** pip install cryptography==48.0.0
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Breaking changes: None known. The cryptography library is a low-level dependency. Direct impact on Django or Celery usage is highly unlikely unless specific, advanced cryptographic primitives are being used in a way that has been deprecated or altered in the new version. Standard usage should be unaffected.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py`
 
-Verify: python manage.py test
+### [MEDIUM] Refactor join_tournament
 
-**Affected modules:** `cryptography`
+join_tournament in participation_service.py has cyclomatic complexity 19.
 
-### [MEDIUM] Upgrade click: 8.3.1 → 8.4.1
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/participation_service.py`
 
+### [MEDIUM] Refactor PayoutService
 
-**Action:** pip install click==8.4.1
+PayoutService in payout_service.py has cyclomatic complexity 11.
 
-Breaking changes: None known. Click is a dependency for CLI tools and management commands. Version 8.4.1 is a minor release and typically maintains backward compatibility for core functionality. No direct impact on Django ORM, views, or Celery tasks is anticipated.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/payout_service.py`
 
-**Affected modules:** `click`
+### [MEDIUM] Refactor patch
 
-### [MEDIUM] Upgrade cron-descriptor: 1.4.5 → 2.0.8
+patch in preferences.py has cyclomatic complexity 11.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/preferences.py`
 
-**Action:** pip install "cron-descriptor>=2.0.8,<2.1.0"
+### [MEDIUM] Refactor MarkReadView
 
-Breaking changes: None known. The changelog for 2.0.0 indicates a focus on internal refactoring and bug fixes, with no explicit mention of API changes that would impact typical usage within Django or Celery.
+MarkReadView in receipts.py has cyclomatic complexity 13.
 
-Verify: python manage.py shell -c "from cron_descriptor import get_description; assert get_description('* * * * *') == 'Every minute'"
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `cron-descriptor`
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py`
 
-### [HIGH] Upgrade filelock: 3.25.2 → 3.29.0
+### [MEDIUM] Refactor post
 
+post in receipts.py has cyclomatic complexity 12.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Action:** pip install filelock==3.29.0
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py`
 
-Breaking changes: None known. filelock is a low-level utility library, and changes between these minor versions are highly unlikely to introduce breaking changes for typical Django/Celery usage.
+### [MEDIUM] Refactor auto_snatcher_backfill
 
-Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
+auto_snatcher_backfill in tasks.py has cyclomatic complexity 13.
 
-**Affected modules:** `filelock`
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-### [MEDIUM] Upgrade identify: 2.6.18 → 2.6.19
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py`
 
+### [MEDIUM] Refactor fourteen_day_sweep
 
+fourteen_day_sweep in tasks.py has cyclomatic complexity 15.
 
-**Action:** pip install identify==2.6.19
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Breaking changes: None known
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py`
 
-Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
+### [MEDIUM] Refactor _run_ai_verification
 
-**Affected modules:** `identify`
+_run_ai_verification in verification_service.py has cyclomatic complexity 13.
 
-### [HIGH] Upgrade idna: 3.11 → 3.16
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/verification_service.py`
 
+### [HIGH] Refactor _check_01_env
 
-**Action:** pip install idna==3.16
+_check_01_env in verify_backend.py has cyclomatic complexity 23.
 
-Breaking changes: None known. The idna library primarily handles Internationalized Domain Names in Applications. Changes between these minor versions are unlikely to introduce breaking changes for typical Django or Celery usage, which rely on it indirectly for network operations.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Verify: python manage.py test nexus_core
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-**Affected modules:** `idna`
+### [MEDIUM] Refactor _check_02_models
 
-### [MEDIUM] Upgrade imagehash: 4.3.1 → 4.3.2
+_check_02_models in verify_backend.py has cyclomatic complexity 19.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-**Action:** pip install imagehash==4.3.2
+### [MEDIUM] Refactor _check_06_imports
 
-```json
-{
-  "upgrade_command": "pip
+_check_06_imports in verify_backend.py has cyclomatic complexity 11.
 
-**Affected modules:** `imagehash`
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-### [MEDIUM] Upgrade jsonschema: 4.19.0 → 4.26.0
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
+### [MEDIUM] Refactor _check_08_websockets
 
+_check_08_websockets in verify_backend.py has cyclomatic complexity 13.
 
-**Action:** pip install jsonschema==4.26.0
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Breaking changes: None known. The jsonschema library is primarily used for data validation. No direct API changes are expected to impact typical Django or Celery integrations between these versions.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
+### [MEDIUM] Refactor _check_10_security
 
-**Affected modules:** `jsonschema`
+_check_10_security in verify_backend.py has cyclomatic complexity 12.
 
-### [HIGH] Upgrade markdown-it-py: 4.0.0 → 4.2.0
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
+### [HIGH] Refactor _check_11_financial
 
-**Action:** pip install 'markdown-it-py==4.2.0'
+_check_11_financial in verify_backend.py has cyclomatic complexity 26.
 
-Breaking changes: None known. The changelog for markdown-it-py between 4.0.0 and 4.2.0 indicates only bug fixes and minor improvements, with no API-breaking changes relevant to typical Django integrations.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Verify: python manage.py test nexus_content
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-**Affected modules:** `markdown-it-py`
+### [MEDIUM] Refactor _check_12_invariants
 
-### [MEDIUM] Upgrade Django: 5.2.12 → 6.0.5
+_check_12_invariants in verify_backend.py has cyclomatic complexity 19.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-**Action:** pip install "Django>=6.0.5,<6.1"
+### [MEDIUM] Refactor _render_json
 
-Breaking changes: None known for typical Django/Celery usage. Django 6.0 introduced minor changes, but most common patterns remain compatible. Review release notes for specific deprecations if custom middleware or complex ORM usage is heavily employed.
+_render_json in verify_backend.py has cyclomatic complexity 14.
 
-Verify: python manage.py test --settings=nexus.settings.test
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `Django`
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-### [MEDIUM] Upgrade google-cloud-vision: 3.7.4 → 3.14.0
+### [MEDIUM] Refactor _render_text
 
+_render_text in verify_backend.py has cyclomatic complexity 16.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Action:** pip install google-cloud-vision==3.14.0
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-Breaking changes: None known. The core API for image annotation and feature detection is generally stable across minor versions. Thorough testing of any existing image processing logic is recommended, but direct breaking changes impacting Django/Celery integration are unlikely.
+### [MEDIUM] Refactor handle
 
-Verify: python manage.py test nexus_content
+handle in verify_backend.py has cyclomatic complexity 12.
 
-**Affected modules:** `google-cloud-vision`
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-### [MEDIUM] Upgrade packaging: 26.0 → 26.2
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
+### [MEDIUM] Refactor WalletDepositView
 
+WalletDepositView in wallet.py has cyclomatic complexity 11.
 
-**Action:** pip install packaging==26.2
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Breaking changes: None known. The packaging library primarily deals with metadata and version handling, and minor version bumps like this typically do not introduce breaking changes for Django or Celery applications that consume it indirectly.
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
 
-Verify: python manage.py check
+### [MEDIUM] Refactor WalletWithdrawView
 
-**Affected modules:** `packaging`
+WalletWithdrawView in wallet.py has cyclomatic complexity 12.
 
-### [MEDIUM] Upgrade pathspec: 1.0.4 → 1.1.1
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
 
+### [MEDIUM] Refactor post
 
-**Action:** pip install pathspec==1.1.1
+post in wallet.py has cyclomatic complexity 11.
 
-Breaking changes: None known. The pathspec library is a utility for matching file paths against patterns and is unlikely to have direct breaking changes impacting Django or Celery application logic unless explicitly used in a way that relies on internal implementation details that have changed.
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-Verify: python manage.py test
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
 
-**Affected modules:** `pathspec`
+### [MEDIUM] Refactor modempay_webhook_handler
 
-### [MEDIUM] Upgrade platformdirs: 4.9.4 → 4.9.6
+modempay_webhook_handler in webhooks.py has cyclomatic complexity 15.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/webhooks.py`
 
-**Action:** pip install platformdirs==4.9.6
+### [MEDIUM] Refactor WithdrawalService
 
-Breaking changes: None known
+WithdrawalService in withdrawal_service.py has cyclomatic complexity 12.
 
-Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `platformdirs`
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py`
 
-### [MEDIUM] Upgrade pre_commit: 4.5.1 → 4.6.0
+### [MEDIUM] Refactor process
 
+process in withdrawal_service.py has cyclomatic complexity 11.
 
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Action:** pip install pre_commit==4.6.0
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py`
 
-```json
-{
-  "upgrade_command": "pip install pre_
+### [LOW] Review ghost files in nexus_core
 
-**Affected modules:** `pre_commit`
+5 ghost file(s) were discovered for nexus_core.
 
-### [HIGH] Upgrade pydantic: 2.12.5 → 2.13.4
+**Action:** Remove dead files that are no longer imported, or register the missing modules properly if they are still required.
 
+**Affected modules:** `nexus_core.serializers.token`, `nexus_core.serializers.users`, `nexus_core.serializers.auth`, `nexus_core.management.commands.verify_backend`, `nexus_core.management.commands.dispatch_outbox_events`
 
+### [LOW] Review ghost files in nexus_tournaments
 
-**Action:** pip install pydantic==2.13.4
+1 ghost file(s) were discovered for nexus_tournaments.
 
-```json
-{
-  "upgrade_command": "pip
+**Action:** Remove dead files that are no longer imported, or register the missing modules properly if they are still required.
 
-**Affected modules:** `pydantic`
+**Affected modules:** `nexus_tournaments.management.commands.dispatch_outbox_events`
 
-### [MEDIUM] Upgrade psycopg2-binary: 2.9.11 → 2.9.12
+### [HIGH] Resolve intra-app cycle
 
+nexus_core.utils -> nexus_core.utils.decorators
 
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Action:** pip install psycopg2-binary==2.9.12
+**Affected modules:** `nexus_core.utils`, `nexus_core.utils.decorators`
 
-```json
-{
-  "upgrade_command": "pip install psycopg2
+### [HIGH] Resolve intra-app cycle
 
-**Affected modules:** `psycopg2-binary`
+nexus_tournaments.services.match_service -> nexus_tournaments.tasks
 
-### [HIGH] Upgrade PyJWT: 2.12.1 → 2.13.0
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
+**Affected modules:** `nexus_tournaments.services.match_service`, `nexus_tournaments.tasks`
 
+### [HIGH] Resolve intra-app cycle
 
-**Action:** pip install PyJWT==2.13.0
+nexus_tournaments.views.results -> nexus_tournaments.views
 
-```json
-{
-  "upgrade_command": "pip
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `PyJWT`
+**Affected modules:** `nexus_tournaments.views.results`, `nexus_tournaments.views`
 
-### [HIGH] Upgrade pyOpenSSL: 26.0.0 → 26.2.0
+### [HIGH] Resolve intra-app cycle
 
+nexus_tournaments.views -> nexus_tournaments.views.moderation
 
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Action:** pip install pyOpenSSL==26.2.0
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.moderation`
 
-```json
-{
-  "upgrade_command": "pip install py
+### [HIGH] Resolve intra-app cycle
 
-**Affected modules:** `pyOpenSSL`
+nexus_tournaments.views -> nexus_tournaments.views.leagues
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.leagues`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_tournaments.views -> nexus_tournaments.views.announcements
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.announcements`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_tournaments.views -> nexus_tournaments.views.matches
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.matches`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_economy.tasks -> nexus_economy.tasks.escrow
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_economy.tasks`, `nexus_economy.tasks.escrow`
 
 ## 📋 FULL MODULE MANIFEST
 
@@ -993,7 +1017,7 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_content.serializers` | 1 | 1 | 3 |
 | `nexus_content.serializers.content` | 1 | 3 | 4 |
 | `nexus_content.services` | 1 | 0 | 1 |
-| `nexus_content.tasks` | 1 | 17 | 4 |
+| `nexus_content.tasks` | 1 | 19 | 4 |
 | `nexus_content.tests` | 1 | 0 | 1 |
 | `nexus_content.tests.test_tasks` | 1 | 17 | 1 |
 | `nexus_content.tests.test_views` | 1 | 13 | 1 |
@@ -1007,12 +1031,12 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 
 | Module | Depth | Imports | Imported By |
 | :--- | ---: | ---: | ---: |
-| `nexus_core` | 1 | 0 | 26 |
+| `nexus_core` | 1 | 0 | 27 |
 | `nexus_core.admin` | 1 | 3 | 1 |
 | `nexus_core.apps` | 1 | 4 | 1 |
 | `nexus_core.generate_tree` | 1 | 4 | 1 |
 | `nexus_core.middleware` | 1 | 5 | 1 |
-| `nexus_core.models` | 1 | 8 | 7 |
+| `nexus_core.models` | 1 | 8 | 8 |
 | `nexus_core.models.auth` | 1 | 5 | 2 |
 | `nexus_core.models.game` | 1 | 4 | 2 |
 | `nexus_core.models.hub` | 1 | 7 | 2 |
@@ -1041,7 +1065,7 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_core.utils` | 1 | 5 | 12 |
 | `nexus_core.utils.decorators` | 1 | 4 | 3 |
 | `nexus_core.utils.encryption` | 1 | 4 | 2 |
-| `nexus_core.utils.events` | 1 | 6 | 4 |
+| `nexus_core.utils.events` | 1 | 7 | 4 |
 | `nexus_core.utils.feature_flags` | 1 | 1 | 5 |
 | `nexus_core.utils.logging_config` | 1 | 3 | 1 |
 | `nexus_core.utils.tier_permissions` | 1 | 1 | 2 |
@@ -1113,18 +1137,6 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_economy.views.wallet` | 1 | 16 | 4 |
 | `nexus_economy.views.webhooks` | 1 | 20 | 2 |
 
-### NEXUS_GAMING (7 modules)
-
-| Module | Depth | Imports | Imported By |
-| :--- | ---: | ---: | ---: |
-| `nexus_gaming` | 1 | 1 | 2 |
-| `nexus_gaming.asgi` | 1 | 9 | 2 |
-| `nexus_gaming.celery` | 1 | 1 | 2 |
-| `nexus_gaming.generate_tree` | 1 | 4 | 1 |
-| `nexus_gaming.settings` | 1 | 4 | 1 |
-| `nexus_gaming.urls` | 1 | 4 | 1 |
-| `nexus_gaming.wsgi` | 1 | 4 | 1 |
-
 ### NEXUS_GATEWAY (12 modules)
 
 | Module | Depth | Imports | Imported By |
@@ -1146,17 +1158,17 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 
 | Module | Depth | Imports | Imported By |
 | :--- | ---: | ---: | ---: |
-| `nexus_social` | 1 | 0 | 23 |
+| `nexus_social` | 1 | 0 | 24 |
 | `nexus_social.admin` | 1 | 3 | 1 |
 | `nexus_social.apps` | 1 | 5 | 1 |
-| `nexus_social.consumers` | 1 | 7 | 2 |
+| `nexus_social.consumers` | 1 | 11 | 2 |
 | `nexus_social.logging` | 1 | 5 | 3 |
 | `nexus_social.management` | 1 | 0 | 1 |
 | `nexus_social.management.commands` | 1 | 0 | 1 |
 | `nexus_social.management.commands.cleanup_announcements` | 1 | 10 | 1 |
 | `nexus_social.management.commands.replay_social_events` | 1 | 13 | 1 |
 | `nexus_social.metrics` | 1 | 1 | 3 |
-| `nexus_social.models` | 1 | 9 | 16 |
+| `nexus_social.models` | 1 | 9 | 17 |
 | `nexus_social.models.chat` | 1 | 5 | 3 |
 | `nexus_social.models.cursors` | 1 | 4 | 2 |
 | `nexus_social.models.infrastructure` | 1 | 4 | 2 |
@@ -1175,40 +1187,43 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_social.services.push_notifications` | 1 | 11 | 2 |
 | `nexus_social.services.sequencer` | 1 | 9 | 3 |
 | `nexus_social.services.websocket_emitter` | 1 | 6 | 4 |
-| `nexus_social.tasks` | 1 | 0 | 1 |
+| `nexus_social.tasks` | 1 | 8 | 1 |
 | `nexus_social.tests` | 1 | 0 | 1 |
 | `nexus_social.urls` | 1 | 0 | 1 |
 | `nexus_social.urls.social` | 1 | 4 | 1 |
 | `nexus_social.urls.users` | 1 | 4 | 1 |
 | `nexus_social.views` | 1 | 8 | 4 |
 | `nexus_social.views.announcements` | 1 | 7 | 2 |
-| `nexus_social.views.chat` | 1 | 17 | 2 |
+| `nexus_social.views.chat` | 1 | 18 | 2 |
 | `nexus_social.views.events` | 1 | 22 | 2 |
 | `nexus_social.views.health` | 1 | 8 | 2 |
 | `nexus_social.views.preferences` | 1 | 3 | 2 |
 | `nexus_social.views.receipts` | 1 | 17 | 2 |
 
-### NEXUS_TOURNAMENTS (57 modules)
+### NEXUS_TOURNAMENTS (69 modules)
 
 | Module | Depth | Imports | Imported By |
 | :--- | ---: | ---: | ---: |
-| `nexus_tournaments` | 1 | 0 | 39 |
+| `nexus_tournaments` | 1 | 0 | 45 |
 | `nexus_tournaments.admin` | 1 | 5 | 1 |
 | `nexus_tournaments.apps` | 1 | 4 | 1 |
 | `nexus_tournaments.generate_tree` | 1 | 4 | 1 |
-| `nexus_tournaments.models` | 1 | 15 | 16 |
+| `nexus_tournaments.models` | 1 | 18 | 16 |
 | `nexus_tournaments.models.announcement` | 1 | 4 | 2 |
+| `nexus_tournaments.models.bracket_seed` | 1 | 4 | 2 |
 | `nexus_tournaments.models.dispute` | 1 | 4 | 2 |
 | `nexus_tournaments.models.health` | 1 | 4 | 2 |
 | `nexus_tournaments.models.invite` | 1 | 6 | 2 |
 | `nexus_tournaments.models.leaderboard` | 1 | 4 | 2 |
 | `nexus_tournaments.models.league` | 1 | 8 | 2 |
+| `nexus_tournaments.models.league_standing` | 1 | 7 | 2 |
 | `nexus_tournaments.models.match` | 1 | 5 | 3 |
 | `nexus_tournaments.models.moderation` | 1 | 4 | 2 |
 | `nexus_tournaments.models.outbox` | 1 | 3 | 2 |
 | `nexus_tournaments.models.progression` | 1 | 4 | 2 |
 | `nexus_tournaments.models.rules` | 1 | 4 | 2 |
 | `nexus_tournaments.models.submission` | 1 | 4 | 2 |
+| `nexus_tournaments.models.tournament_template` | 1 | 5 | 2 |
 | `nexus_tournaments.models.verification_record` | 1 | 4 | 2 |
 | `nexus_tournaments.receivers` | 1 | 13 | 2 |
 | `nexus_tournaments.serializers` | 1 | 8 | 8 |
@@ -1226,7 +1241,7 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_tournaments.services.league_service` | 1 | 13 | 5 |
 | `nexus_tournaments.services.match_service` | 1 | 14 | 11 |
 | `nexus_tournaments.services.participation_service` | 1 | 13 | 4 |
-| `nexus_tournaments.services.verification_service` | 1 | 13 | 6 |
+| `nexus_tournaments.services.verification_service` | 1 | 18 | 6 |
 | `nexus_tournaments.signals` | 1 | 2 | 11 |
 | `nexus_tournaments.tasks` | 1 | 19 | 6 |
 | `nexus_tournaments.tests` | 1 | 0 | 1 |
@@ -1237,18 +1252,27 @@ Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gatewa
 | `nexus_tournaments.tests.test_invariants` | 1 | 17 | 1 |
 | `nexus_tournaments.tests.test_models` | 1 | 13 | 1 |
 | `nexus_tournaments.tests.test_ruleset_restrictions` | 1 | 12 | 1 |
-| `nexus_tournaments.tests.test_services` | 1 | 19 | 1 |
+| `nexus_tournaments.tests.test_services` | 1 | 22 | 1 |
 | `nexus_tournaments.tests.test_tasks` | 1 | 14 | 1 |
 | `nexus_tournaments.urls` | 1 | 3 | 2 |
 | `nexus_tournaments.urls.leagues` | 1 | 9 | 2 |
+| `nexus_tournaments.urls.matches` | 1 | 6 | 1 |
 | `nexus_tournaments.urls.moderation` | 1 | 5 | 1 |
-| `nexus_tournaments.views` | 1 | 7 | 9 |
+| `nexus_tournaments.verification` | 1 | 0 | 7 |
+| `nexus_tournaments.verification.load_balancer` | 1 | 11 | 2 |
+| `nexus_tournaments.verification.phash` | 1 | 15 | 2 |
+| `nexus_tournaments.verification.providers` | 1 | 0 | 4 |
+| `nexus_tournaments.verification.providers.base` | 1 | 4 | 3 |
+| `nexus_tournaments.verification.providers.google_cloud` | 1 | 11 | 2 |
+| `nexus_tournaments.verification.providers.registry` | 1 | 4 | 2 |
+| `nexus_tournaments.verification.result` | 1 | 2 | 5 |
+| `nexus_tournaments.views` | 1 | 7 | 10 |
 | `nexus_tournaments.views.announcements` | 1 | 9 | 3 |
 | `nexus_tournaments.views.base` | 1 | 2 | 6 |
 | `nexus_tournaments.views.leagues` | 1 | 14 | 3 |
-| `nexus_tournaments.views.matches` | 1 | 10 | 3 |
+| `nexus_tournaments.views.matches` | 1 | 10 | 4 |
 | `nexus_tournaments.views.moderation` | 1 | 14 | 4 |
-| `nexus_tournaments.views.results` | 1 | 10 | 3 |
+| `nexus_tournaments.views.results` | 1 | 10 | 4 |
 
 ---
-*Report generated by Nexus Audit Command Center — 2026-05-24 08:12:54*
+*Report generated by Nexus Audit Command Center — 2026-05-24 10:54:48*

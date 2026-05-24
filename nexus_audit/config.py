@@ -116,9 +116,9 @@ NEXUS_ROOT = os.path.expanduser('~/nexus-gaming')
 # Modular root: the package directory where all new outputs go
 # Path(__file__).resolve().parent points to ~/my_tools/nexus_audit/nexus_audit/
 MODULAR_ROOT = Path(__file__).resolve().parent
-DNA_PATH = os.path.join(MODULAR_ROOT, 'master_nexus_dna.json')
-INVENTORY_PATH = os.path.join(MODULAR_ROOT, 'factories', 'physical_inventory.txt')
-VISUALS_DIR = os.path.join(MODULAR_ROOT, 'visuals')
+DNA_PATH = os.path.join(MODULAR_ROOT.parent, 'master_nexus_dna.json')
+INVENTORY_PATH = os.path.join(MODULAR_ROOT.parent, 'factories', 'physical_inventory.txt')
+VISUALS_DIR = os.path.join(MODULAR_ROOT.parent, 'visuals')
 HISTORY_DIR = os.path.join(VISUALS_DIR, 'audit_history')
 
 # Legacy vault path (read-only input only)
