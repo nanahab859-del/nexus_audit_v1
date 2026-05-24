@@ -816,9 +816,13 @@ function generateDependencyTable() {
         const oudBadge  = p.outdated ? `<span class="dep-badge dep-warn">Outdated → $${p.latest}</span>` : `<span class="dep-badge dep-ok">Current</span>`;
         const cveBadge  = p.cve_count ? `<span class="dep-badge dep-vuln">$${p.cve_count} CVE$${p.cve_count>1?'s':''}</span>` : `<span class="dep-badge dep-ok">No CVEs</span>`;
         const instBadge = p.installed === 'unknown' ? `<span class="dep-badge dep-na">Not installed</span>` : `<span style="font-size:.8rem;color:#94a3b8;">$${p.installed}</span>`;
-        h += `<div class="dep-card">
-            <div><div class="dep-name">$${p.name}</div><div class="dep-meta">$${p.installed === 'unknown' ? 'not in env' : `installed: $${p.installed}`}</div></div>
-            <div class="dep-badges">$${instBadge}$${oudBadge}$${cveBadge}</div>
+        const cmdBlock = p.upgrade_cmd ? `<div style="margin-top: 10px; background: #0f172a; padding: 6px 10px; border-radius: 4px; font-family: monospace; color: #10b981; font-size: 0.75rem; border: 1px solid rgba(16,185,129,0.3); cursor: pointer;" onclick="navigator.clipboard.writeText('$${p.upgrade_cmd}').then(()=>alert('Command copied!'))" title="Click to copy">🚀 $${p.upgrade_cmd}</div>` : '';
+        h += `<div class="dep-card" style="display:block;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div><div class="dep-name">$${p.name}</div><div class="dep-meta">$${p.installed === 'unknown' ? 'not in env' : `installed: $${p.installed}`}</div></div>
+                <div class="dep-badges">$${instBadge}$${oudBadge}$${cveBadge}</div>
+            </div>
+            $${cmdBlock}
         </div>`;
     });
 

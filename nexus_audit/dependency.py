@@ -188,6 +188,7 @@ def run_tier2_dependency_scan(project_path: str) -> Dict:
                 'outdated':   res['outdated'],
                 'cve_count':  res['cve_count'],
                 'cves':       cves,
+                'upgrade_cmd': f"pip install --upgrade {pkg_name}=={res['latest']}" if res['outdated'] else None
             }
             result['packages'].append(pkg_entry)
 

@@ -1,6 +1,6 @@
 # 🛡️ NEXUS MASTER AUDIT REPORT
 
-**Generated:** 2026-05-24 11:54:05  
+**Generated:** 2026-05-24 17:44:38  
 **Project:** `/home/yusupha/my_tools/nexus_project_copy`  
 **Tier:** 🌐 Tier 2 — ONLINE (Enhanced Mode)  
 **Total modules:** 243  
@@ -27,15 +27,15 @@
 
 | Metric | Value |
 | :--- | :--- |
-| Overall fleet health | 💛 **77.5%** (Grade C) |
+| Overall fleet health | 💛 **77.6%** (Grade C) |
 | Apps audited | 6 |
 | Cross-app violations | 13 |
 | Violations vs last run | → unchanged (+0) — prev: 13 on 2026-05-24 |
 | Allowed communications | 23 |
 | Security findings | 109 |
 | Ghost files | 6 |
-| Circular dependency cycles | 15 |
-| Avg cyclomatic complexity | 2.42 |
+| Circular dependency cycles | 16 |
+| Avg cyclomatic complexity | 2.43 |
 | Max cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
 
@@ -47,29 +47,31 @@ Circular dependencies prevent clean testing and deployment isolation.
   Apps involved: nexus_core
 - **[HIGH / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views.leagues → nexus_tournaments.views`  
-  Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.moderation`  
-  Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
-  Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.results`  
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views.results → nexus_tournaments.views`  
   Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.announcements`  
   Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.leagues`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.moderation`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout`  
+  Apps involved: nexus_economy
 - **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.escrow`  
   Apps involved: nexus_economy
-- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout`  
+- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund`  
   Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.bracket_service`  
   Apps involved: nexus_tournaments
 - **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.diagnostic_service`  
   Apps involved: nexus_tournaments
-- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks.refund → nexus_economy.services.refund_service → nexus_economy.tasks`  
-  Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.payout_service`  
   Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.forfeiture_service`  
+  Apps involved: nexus_economy
+- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund → nexus_economy.services.refund_service`  
   Apps involved: nexus_economy
 - **[INFO / INTRA-APP]** `nexus_tournaments.models → nexus_tournaments.models.league`  
   Apps involved: nexus_tournaments
@@ -272,123 +274,123 @@ Total CVEs found: **397** | Outdated packages: **42**
 | Package | Installed | Latest | Status | CVEs |
 | :--- | :--- | :--- | :--- | :--- |
 | `﻿amqp` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
+| `annotated-doc` | 0.0.4 | 0.0.4 | ✅ Current | 0 |
 | `Automat` | 25.4.16 | 25.4.16 | ✅ Current | 0 |
 | `annotated-types` | 0.7.0 | 0.7.0 | ✅ Current | 0 |
-| `asgiref` | 3.11.1 | 3.11.1 | ✅ Current | 0 |
-| `anyio` | 4.13.0 | 4.13.0 | ✅ Current | 0 |
 | `async-timeout` | 5.0.1 | 5.0.1 | ✅ Current | 0 |
 | `attrs` | 26.1.0 | 26.1.0 | ✅ Current | 0 |
-| `autobahn` | 24.4.2 | 25.12.2 | ⚠️ Outdated | 2 |
+| `asgiref` | 3.11.1 | 3.11.1 | ✅ Current | 0 |
+| `anyio` | 4.13.0 | 4.13.0 | ✅ Current | 0 |
 | `Authlib` | 1.6.9 | 1.7.2 | ⚠️ Outdated | 13 |
+| `autobahn` | 24.4.2 | 25.12.2 | ⚠️ Outdated | 2 |
 | `backports-datetime-fromisoformat` | 2.0.3 | 2.0.3 | ✅ Current | 0 |
 | `billiard` | 4.2.4 | 4.2.4 | ✅ Current | 0 |
-| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
 | `bcrypt` | 5.0.0 | 5.0.0 | ✅ Current | 0 |
+| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
 | `bleach` | 6.3.0 | 6.3.0 | ✅ Current | 10 |
 | `celery` | 5.6.3 | 5.6.3 | ✅ Current | 4 |
 | `cfgv` | 3.5.0 | 3.5.0 | ✅ Current | 0 |
-| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `channels` | 4.3.2 | 4.3.2 | ✅ Current | 2 |
+| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `channels_redis` | 4.3.0 | 4.3.0 | ✅ Current | 0 |
 | `cffi` | 2.0.0 | 2.0.0 | ✅ Current | 0 |
 | `click-didyoumean` | 0.3.1 | 0.3.1 | ✅ Current | 0 |
 | `click` | 8.3.1 | 8.4.1 | ⚠️ Outdated | 0 |
+| `click-repl` | 0.3.0 | 0.3.0 | ✅ Current | 0 |
 | `click-plugins` | 1.1.1.2 | 1.1.1.2 | ✅ Current | 0 |
 | `constantly` | 23.10.4 | 23.10.4 | ✅ Current | 0 |
 | `charset-normalizer` | 3.4.7 | 3.4.7 | ✅ Current | 0 |
-| `click-repl` | 0.3.0 | 0.3.0 | ✅ Current | 0 |
 | `cron-descriptor` | 1.4.5 | 2.0.8 | ⚠️ Outdated | 0 |
 | `daphne` | 4.2.1 | 4.2.1 | ✅ Current | 0 |
 | `distlib` | 0.4.0 | 0.4.0 | ✅ Current | 0 |
 | `django-celery-beat` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
 | `django-ratelimit` | 4.1.0 | 4.1.0 | ✅ Current | 0 |
 | `django-timezone-field` | 7.2.1 | 7.2.1 | ✅ Current | 0 |
-| `annotated-doc` | 0.0.4 | 0.0.4 | ✅ Current | 0 |
-| `dparse` | 0.6.4 | 0.6.4 | ✅ Current | 2 |
-| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
-| `exceptiongroup` | 1.3.1 | 1.3.1 | ✅ Current | 0 |
 | `djangorestframework` | 3.17.1 | 3.17.1 | ✅ Current | 3 |
+| `dparse` | 0.6.4 | 0.6.4 | ✅ Current | 2 |
+| `exceptiongroup` | 1.3.1 | 1.3.1 | ✅ Current | 0 |
 | `cryptography` | 46.0.6 | 48.0.0 | ⚠️ Outdated | 30 |
-| `google-cloud-vision` | 3.7.4 | 3.14.0 | ⚠️ Outdated | 0 |
+| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
 | `filelock` | 3.25.2 | 3.29.0 | ⚠️ Outdated | 2 |
-| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 1 |
 | `hyperlink` | 21.0.0 | 21.0.0 | ✅ Current | 0 |
-| `iniconfig` | 2.3.0 | 2.3.0 | ✅ Current | 0 |
-| `identify` | 2.6.18 | 2.6.19 | ⚠️ Outdated | 0 |
-| `idna` | 3.11 | 3.16 | ⚠️ Outdated | 3 |
+| `google-cloud-vision` | 3.7.4 | 3.14.0 | ⚠️ Outdated | 0 |
+| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 1 |
 | `imagehash` | 4.3.1 | 4.3.2 | ⚠️ Outdated | 0 |
+| `idna` | 3.11 | 3.16 | ⚠️ Outdated | 3 |
+| `identify` | 2.6.18 | 2.6.19 | ⚠️ Outdated | 0 |
 | `Incremental` | 24.11.0 | 24.11.0 | ✅ Current | 0 |
-| `joblib` | 1.5.3 | 1.5.3 | ✅ Current | 3 |
-| `Jinja2` | 3.1.6 | 3.1.6 | ✅ Current | 16 |
-| `jsonschema` | 4.19.0 | 4.26.0 | ⚠️ Outdated | 0 |
-| `kombu` | 5.6.2 | 5.6.2 | ✅ Current | 0 |
+| `iniconfig` | 2.3.0 | 2.3.0 | ✅ Current | 0 |
 | `jsonschema-specifications` | 2025.9.1 | 2025.9.1 | ✅ Current | 0 |
+| `jsonschema` | 4.19.0 | 4.26.0 | ⚠️ Outdated | 0 |
+| `Jinja2` | 3.1.6 | 3.1.6 | ✅ Current | 16 |
+| `joblib` | 1.5.3 | 1.5.3 | ✅ Current | 3 |
+| `kombu` | 5.6.2 | 5.6.2 | ✅ Current | 0 |
 | `markdown-it-py` | 4.0.0 | 4.2.0 | ⚠️ Outdated | 4 |
+| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
+| `MarkupSafe` | 3.0.3 | 3.0.3 | ✅ Current | 0 |
+| `marshmallow` | 4.3.0 | 4.3.0 | ✅ Current | 3 |
 | `Django` | 5.2.12 | 6.0.5 | ⚠️ Outdated | 0 |
 | `mypy_extensions` | 1.1.0 | 1.1.0 | ✅ Current | 0 |
-| `marshmallow` | 4.3.0 | 4.3.0 | ✅ Current | 3 |
-| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
+| `msgpack` | 1.1.2 | 1.1.2 | ✅ Current | 0 |
 | `nodeenv` | 1.10.0 | 1.10.0 | ✅ Current | 0 |
 | `pathspec` | 1.0.4 | 1.1.1 | ⚠️ Outdated | 0 |
-| `MarkupSafe` | 3.0.3 | 3.0.3 | ✅ Current | 0 |
-| `msgpack` | 1.1.2 | 1.1.2 | ✅ Current | 0 |
-| `packaging` | 26.0 | 26.2 | ⚠️ Outdated | 0 |
 | `nltk` | 3.9.4 | 3.9.4 | ✅ Current | 21 |
-| `platformdirs` | 4.9.4 | 4.9.6 | ⚠️ Outdated | 0 |
+| `packaging` | 26.0 | 26.2 | ⚠️ Outdated | 0 |
 | `pluggy` | 1.6.0 | 1.6.0 | ✅ Current | 0 |
-| `pre_commit` | 4.5.1 | 4.6.0 | ⚠️ Outdated | 0 |
+| `platformdirs` | 4.9.4 | 4.9.6 | ⚠️ Outdated | 0 |
 | `prometheus_client` | 0.25.0 | 0.25.0 | ✅ Current | 0 |
+| `pre_commit` | 4.5.1 | 4.6.0 | ⚠️ Outdated | 0 |
 | `prompt_toolkit` | 3.0.52 | 3.0.52 | ✅ Current | 0 |
 | `pycparser` | 3.0 | 3.0 | ✅ Current | 0 |
 | `psycopg2-binary` | 2.9.11 | 2.9.12 | ⚠️ Outdated | 0 |
-| `pyasn1` | 0.6.3 | 0.6.3 | ✅ Current | 2 |
 | `pyasn1_modules` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
-| `Pygments` | 2.20.0 | 2.20.0 | ✅ Current | 9 |
-| `pydantic` | 2.12.5 | 2.13.4 | ⚠️ Outdated | 3 |
+| `pyasn1` | 0.6.3 | 0.6.3 | ✅ Current | 2 |
 | `PyJWT` | 2.12.1 | 2.13.0 | ⚠️ Outdated | 8 |
 | `pyotp` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
+| `Pygments` | 2.20.0 | 2.20.0 | ✅ Current | 9 |
 | `pyOpenSSL` | 26.0.0 | 26.2.0 | ⚠️ Outdated | 8 |
-| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
+| `pydantic` | 2.12.5 | 2.13.4 | ⚠️ Outdated | 3 |
 | `python-crontab` | 3.3.0 | 3.3.0 | ✅ Current | 0 |
-| `pytest` | 9.0.3 | 9.0.3 | ✅ Current | 1 |
-| `Pillow` | 10.4.0 | 12.2.0 | ⚠️ Outdated | 118 |
 | `python-dateutil` | 2.9.0.post0 | 2.9.0.post0 | ✅ Current | 0 |
+| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
+| `pytest` | 9.0.3 | 9.0.3 | ✅ Current | 1 |
 | `python-discovery` | 1.2.2 | 1.3.1 | ⚠️ Outdated | 0 |
 | `pytokens` | 0.4.1 | 0.4.1 | ✅ Current | 0 |
-| `pydantic_core` | 2.41.5 | 2.47.0 | ⚠️ Outdated | 0 |
-| `referencing` | 0.37.0 | 0.37.0 | ✅ Current | 0 |
 | `redis` | 7.4.0 | 7.4.0 | ✅ Current | 4 |
+| `Pillow` | 10.4.0 | 12.2.0 | ⚠️ Outdated | 118 |
+| `referencing` | 0.37.0 | 0.37.0 | ✅ Current | 0 |
 | `PyYAML` | 6.0.3 | 6.0.3 | ✅ Current | 8 |
 | `requests` | 2.33.1 | 2.34.2 | ⚠️ Outdated | 13 |
 | `rich` | 14.3.3 | 15.0.0 | ⚠️ Outdated | 0 |
+| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
 | `safety-schemas` | 0.0.16 | 0.0.18 | ⚠️ Outdated | 0 |
-| `service-identity` | 24.2.0 | 24.2.0 | ✅ Current | 0 |
-| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
 | `safety` | 3.7.0 | 3.7.0 | ✅ Current | 2 |
+| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
+| `service-identity` | 24.2.0 | 24.2.0 | ✅ Current | 0 |
+| `rpds-py` | 0.30.0 | 0.30.0 | ✅ Current | 0 |
 | `sentry-sdk` | 2.58.0 | 2.60.0 | ⚠️ Outdated | 2 |
 | `six` | 1.17.0 | 1.17.0 | ✅ Current | 0 |
-| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
-| `rpds-py` | 0.30.0 | 0.30.0 | ✅ Current | 0 |
+| `regex` | 2026.4.4 | 2026.5.9 | ⚠️ Outdated | 0 |
 | `sqlparse` | 0.5.5 | 0.5.5 | ✅ Current | 6 |
 | `structlog` | 25.5.0 | 25.5.0 | ✅ Current | 0 |
+| `tomlkit` | 0.14.0 | 0.15.0 | ⚠️ Outdated | 0 |
 | `tenacity` | 9.1.4 | 9.1.4 | ✅ Current | 0 |
 | `tomli` | 2.4.1 | 2.4.1 | ✅ Current | 0 |
-| `tomlkit` | 0.14.0 | 0.15.0 | ⚠️ Outdated | 0 |
-| `ruff` | 0.15.9 | 0.15.14 | ⚠️ Outdated | 0 |
-| `txaio` | 25.9.2 | 25.12.2 | ⚠️ Outdated | 0 |
-| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
-| `typer` | 0.24.1 | 0.25.1 | ⚠️ Outdated | 0 |
 | `tqdm` | 4.67.3 | 4.67.3 | ✅ Current | 3 |
-| `Twisted` | 25.5.0 | 26.4.0 | ⚠️ Outdated | 28 |
+| `pydantic_core` | 2.41.5 | 2.47.0 | ⚠️ Outdated | 0 |
+| `txaio` | 25.9.2 | 25.12.2 | ⚠️ Outdated | 0 |
+| `typer` | 0.24.1 | 0.25.1 | ⚠️ Outdated | 0 |
+| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
 | `tzdata` | 2025.3 | 2026.2 | ⚠️ Outdated | 0 |
 | `typing_extensions` | 4.15.0 | 4.15.0 | ✅ Current | 0 |
+| `ruff` | 0.15.9 | 0.15.14 | ⚠️ Outdated | 0 |
 | `tzlocal` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
 | `vine` | 5.1.0 | 5.1.0 | ✅ Current | 0 |
-| `regex` | 2026.4.4 | 2026.5.9 | ⚠️ Outdated | 0 |
+| `Twisted` | 25.5.0 | 26.4.0 | ⚠️ Outdated | 28 |
 | `wcwidth` | 0.6.0 | 0.7.0 | ⚠️ Outdated | 0 |
 | `websocket-client` | 1.9.0 | 1.9.0 | ✅ Current | 0 |
-| `urllib3` | 2.6.3 | 2.7.0 | ⚠️ Outdated | 32 |
 | `virtualenv` | 21.2.0 | 21.3.3 | ⚠️ Outdated | 5 |
+| `urllib3` | 2.6.3 | 2.7.0 | ⚠️ Outdated | 32 |
 | `zope.interface` | 8.2 | 8.4 | ⚠️ Outdated | 0 |
 | `numpy` | 1.26.4 | 2.4.6 | ⚠️ Outdated | 16 |
 
@@ -512,10 +514,10 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 
 | Metric | Value |
 | :--- | ---: |
-| Average cyclomatic complexity | 2.42 |
+| Average cyclomatic complexity | 2.43 |
 | Maximum cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
-| Functions analysed | 1650 |
+| Functions analysed | 1668 |
 
 ### High Complexity Functions (>10)
 
@@ -533,6 +535,7 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 | `_render_text` | `verify_backend.py` | 16 | 0 |
 | `modempay_webhook_handler` | `webhooks.py` | 15 | 0 |
 | `fourteen_day_sweep` | `tasks.py` | 15 | 0 |
+| `handle` | `ignition.py` | 14 | 0 |
 | `_render_json` | `verify_backend.py` | 14 | 0 |
 | `_try_activate` | `match_service.py` | 14 | 0 |
 | `_check_08_websockets` | `verify_backend.py` | 13 | 0 |
@@ -702,6 +705,14 @@ recheck in handshake_recheck_service.py has cyclomatic complexity 21.
 **Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
 **Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py`
+
+### [MEDIUM] Refactor handle
+
+handle in ignition.py has cyclomatic complexity 14.
+
+**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+
+**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/ignition.py`
 
 ### [MEDIUM] Refactor create_tournament
 
@@ -953,35 +964,11 @@ nexus_tournaments.services.match_service -> nexus_tournaments.tasks
 
 ### [HIGH] Resolve intra-app cycle
 
-nexus_tournaments.views.leagues -> nexus_tournaments.views
+nexus_tournaments.views.results -> nexus_tournaments.views
 
 **Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `nexus_tournaments.views.leagues`, `nexus_tournaments.views`
-
-### [HIGH] Resolve intra-app cycle
-
-nexus_tournaments.views -> nexus_tournaments.views.moderation
-
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
-
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.moderation`
-
-### [HIGH] Resolve intra-app cycle
-
-nexus_tournaments.views -> nexus_tournaments.views.matches
-
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
-
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.matches`
-
-### [HIGH] Resolve intra-app cycle
-
-nexus_tournaments.views -> nexus_tournaments.views.results
-
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
-
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.results`
+**Affected modules:** `nexus_tournaments.views.results`, `nexus_tournaments.views`
 
 ### [HIGH] Resolve intra-app cycle
 
@@ -993,11 +980,35 @@ nexus_tournaments.views -> nexus_tournaments.views.announcements
 
 ### [HIGH] Resolve intra-app cycle
 
-nexus_economy.tasks -> nexus_economy.tasks.escrow
+nexus_tournaments.views -> nexus_tournaments.views.matches
 
 **Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `nexus_economy.tasks`, `nexus_economy.tasks.escrow`
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.matches`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_tournaments.views -> nexus_tournaments.views.leagues
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.leagues`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_tournaments.views -> nexus_tournaments.views.moderation
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.moderation`
+
+### [HIGH] Resolve intra-app cycle
+
+nexus_economy.tasks -> nexus_economy.tasks.payout
+
+**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+
+**Affected modules:** `nexus_economy.tasks`, `nexus_economy.tasks.payout`
 
 ## 📋 FULL MODULE MANIFEST
 
@@ -1275,4 +1286,4 @@ nexus_economy.tasks -> nexus_economy.tasks.escrow
 | `nexus_tournaments.views.results` | 1 | 10 | 4 |
 
 ---
-*Report generated by Nexus Audit Command Center — 2026-05-24 11:54:05*
+*Report generated by Nexus Audit Command Center — 2026-05-24 17:44:38*

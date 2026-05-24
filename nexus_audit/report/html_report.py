@@ -470,6 +470,20 @@ function statusColor(status) {
     return status === 'PASS' ? '#16a34a' : status === 'FAIL' ? '#dc2626' : '#d97706';
 }
 
+function getCheckExplanation(checkId) {
+    const explanations = {
+        'hardcoded_secret_key': 'The SECRET_KEY must never be hardcoded in your source files. If the repository is compromised, attackers can forge session cookies, reset passwords, and exploit your application. <br><br><b>Fix:</b> Use an environment variable like <code>os.environ.get("SECRET_KEY")</code> or a tool like python-decouple.',
+        'debug_true': 'Running Django with DEBUG=True in production is extremely dangerous. It exposes detailed error pages containing sensitive stack traces, local variables, and environment settings. <br><br><b>Fix:</b> Set <code>DEBUG = os.environ.get("DEBUG", "False") == "True"</code>.',
+        'missing_allowed_hosts': 'When DEBUG is False, Django requires ALLOWED_HOSTS to be set. This prevents HTTP Host header attacks. <br><br><b>Fix:</b> Add your production domains to the list: <code>ALLOWED_HOSTS = ["yourdomain.com"]</code>.',
+        'secure_browser_xss_filter': 'The SECURE_BROWSER_XSS_FILTER setting enables the X-XSS-Protection header in modern browsers, providing a defense-in-depth layer against cross-site scripting (XSS). <br><br><b>Fix:</b> Set <code>SECURE_BROWSER_XSS_FILTER = True</code>.',
+        'secure_content_type_nosniff': 'Without this setting, browsers may ignore the Content-Type header and "sniff" the content, which can lead to XSS. <br><br><b>Fix:</b> Set <code>SECURE_CONTENT_TYPE_NOSNIFF = True</code>.',
+        'x_frame_options_deny': 'This protects against Clickjacking attacks by preventing your site from being framed inside another site. <br><br><b>Fix:</b> Set <code>X_FRAME_OPTIONS = "DENY"</code> (or "SAMEORIGIN").',
+        'csrf_cookie_secure': 'Ensures the CSRF cookie is only sent over HTTPS connections. <br><br><b>Fix:</b> Set <code>CSRF_COOKIE_SECURE = True</code> in production settings.',
+        'session_cookie_secure': 'Ensures the Session cookie is only sent over HTTPS connections. <br><br><b>Fix:</b> Set <code>SESSION_COOKIE_SECURE = True</code> in production settings.',
+    };
+    return explanations[checkId] || 'Review your Django settings file and consult the official Django deployment checklist for security best practices related to this configuration.';
+}
+
 function renderConfigHealthDashboard() {
     const cfg = configHealth || {};
     const checks = cfg.checks || [];
@@ -515,18 +529,25 @@ function renderConfigHealthDashboard() {
             <span style="font-size: 1.2rem;">✨</span> All configuration checks passed successfully. The project kernel is perfectly healthy.
         </div>`;
     } else {
-        issues.forEach(c => {
+        issues.forEach((c, i) => {
             const sc = statusColor(c.status);
             const si = statusIcon(c.status);
             const sevC = severityColor(c.severity || 'LOW');
-            html += `<div style="background: rgba(15,23,42,0.8); border: 1px solid #334155; border-left: 3px solid ${sc}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;">
-                    <span style="color: ${sc}; font-size: 1rem; margin-top: 2px;">${si}</span>
-                    <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${c.message || ''}</span>
+            const explanation = getCheckExplanation(c.check);
+            html += `<div style="background: rgba(15,23,42,0.8); border: 1px solid #334155; border-left: 3px solid ${sc}; border-radius: 8px; display: flex; flex-direction: column;">
+                <div onclick="const el = document.getElementById('chk-exp-${i}'); el.style.display = el.style.display === 'none' ? 'block' : 'none'" style="padding: 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;">
+                        <span style="color: ${sc}; font-size: 1rem; margin-top: 2px;">${si}</span>
+                        <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4; font-weight: 600;">${c.message || ''}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                        <span style="color: #64748b; font-size: 0.7rem; font-family: monospace;">${c.check || 'check'} <span style="color: #38bdf8; margin-left: 6px; font-family: sans-serif;">(Click for explanation)</span></span>
+                        <span style="padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; background: ${sevC}22; color: ${sevC}; text-transform: uppercase; letter-spacing: 0.5px;">${c.severity || 'LOW'}</span>
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
-                    <span style="color: #64748b; font-size: 0.7rem; font-family: monospace;">${c.check || 'check'}</span>
-                    <span style="padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; background: ${sevC}22; color: ${sevC}; text-transform: uppercase; letter-spacing: 0.5px;">${c.severity || 'LOW'}</span>
+                <div id="chk-exp-${i}" style="display: none; padding: 0 12px 12px 12px; font-size: 0.8rem; color: #94a3b8; line-height: 1.5; border-top: 1px dashed #334155;">
+                    <strong style="color: #cbd5e1;">Recommendation:</strong><br>
+                    <span style="display:inline-block; margin-top: 4px;">${explanation}</span>
                 </div>
             </div>`;
         });
