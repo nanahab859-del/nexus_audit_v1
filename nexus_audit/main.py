@@ -43,6 +43,7 @@ from .features.coupling_map import build_coupling_matrix
 from .features.timeline import load_score_history
 
 from .ai.recommendations import run_ai_recommendations, generate_recommendations
+from .config_health import run_config_health_scan
 
 
 def calculate_app_score(app_name: str, metrics_data: Dict[str, Any]) -> float:
@@ -231,6 +232,15 @@ def main():
     # ── Ghost files ───────────────────────────────────────────────────────
     ghost_files = [f for f in first_party_physical if is_ghost_file(f, dna_modules)]
     print(f"👻 Found {len(ghost_files)} ghost files\n")
+
+    # ── Config Health Scan ────────────────────────────────────────────────
+    print("⚙️  Scanning config folder health...")
+    config_health = run_config_health_scan(PROJECT_PATH, FIRST_PARTY_APPS)
+    cfg_summary = config_health.get('summary', {})
+    cfg_name = config_health.get('config_folder_name', 'config')
+    print(f"   ✔ Config scan complete — {cfg_name}/ scored {cfg_summary.get('score', 0)}% "
+          f"({cfg_summary.get('passed', 0)} passed, {cfg_summary.get('warnings', 0)} warnings, "
+          f"{cfg_summary.get('failures', 0)} failures)\n")
 
     # ── Violations & allowed communications ────────────────────────────────
     violations = []
@@ -423,6 +433,7 @@ def main():
         'dependency_scan':           dep_scan,
         'coupling_matrix':           build_coupling_matrix(violations, allowed_comms, FIRST_PARTY_APPS),
         'git_context':               get_git_context(str(NEXUS_ROOT)),
+        'config_health':             config_health,
     }
 
     # ── AI recommendations (or Tier-1 template fallback) ─────────────────

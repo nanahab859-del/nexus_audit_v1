@@ -444,6 +444,167 @@ function showCouplingDrilldown(cell) {
         )
         return template_content
 
+    def _inject_config_health_tab(self, template_content: str) -> str:
+        """Inject the Config Health tab button, content div, and JS renderer."""
+        # 1. Inject JS data variable after coupling_matrix
+        template_content = template_content.replace(
+            'const couplingMatrix   = ${coupling_matrix_json};\n'
+            'const gitContext       = ${git_context_json};\n\n',
+            'const couplingMatrix   = ${coupling_matrix_json};\n'
+            'const gitContext       = ${git_context_json};\n'
+            'const configHealth     = ${config_health_json};\n\n'
+        )
+
+        # 2. Inject JS render function alongside coupling helpers
+        config_health_js = r"""
+function severityColor(sev) {
+    return sev === 'CRITICAL' ? '#dc2626'
+         : sev === 'HIGH'     ? '#ea580c'
+         : sev === 'MEDIUM'   ? '#ca8a04'
+         : '#16a34a';
+}
+function statusIcon(status) {
+    return status === 'PASS' ? '✔' : status === 'FAIL' ? '❌' : '⚠️';
+}
+function statusColor(status) {
+    return status === 'PASS' ? '#16a34a' : status === 'FAIL' ? '#dc2626' : '#d97706';
+}
+function generateConfigHealthTab() {
+    const cfg = configHealth || {};
+    const checks = cfg.checks || [];
+    const summary = cfg.summary || {};
+    const score = summary.score ?? 0;
+    const folderName = cfg.config_folder_name || 'config';
+
+    if (!checks.length) {
+        return '<p style="padding:16px;color:#94a3b8;">No config health data available.</p>';
+    }
+
+    const scoreColor = score >= 90 ? '#10b981' : score >= 70 ? '#f59e0b' : '#ef4444';
+    const bar = Math.round(score / 10);
+
+    let html = `
+    <div style="margin-bottom:20px;padding:20px;background:rgba(15,23,42,.6);border:1px solid #334155;border-radius:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+                <div style="font-size:1.05rem;font-weight:700;color:#f1f5f9;">⚙️ ${folderName}/</div>
+                <div style="font-size:.82rem;color:#94a3b8;margin-top:4px;">Django Project Config Folder &mdash; Not an app, but audited separately</div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:2rem;font-weight:800;color:${scoreColor};">${score}%</div>
+                <div style="font-size:.75rem;color:#64748b;">Config Health Score</div>
+            </div>
+        </div>
+        <div style="margin-top:12px;background:#1e293b;border-radius:8px;height:10px;overflow:hidden;">
+            <div style="width:${score}%;height:100%;background:${scoreColor};border-radius:8px;transition:width .4s;"></div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:.82rem;">
+            <span style="color:#10b981;">✔ ${summary.passed || 0} passed</span>
+            <span style="color:#f59e0b;">⚠️ ${summary.warnings || 0} warnings</span>
+            <span style="color:#ef4444;">❌ ${summary.failures || 0} failures</span>
+            <span style="color:#94a3b8;">${summary.total || 0} total checks</span>
+        </div>
+    </div>`;
+
+    // Group checks by file
+    const groups = {};
+    checks.forEach(c => {
+        const key = c.check || '';
+        let group = 'General';
+        if (key.includes('secret') || key.includes('debug') || key.includes('allowed_host') ||
+            key.includes('middleware') || key.includes('encryption') || key.includes('session') ||
+            key.includes('csrf') || key.includes('secure_ssl') || key.includes('installed_app')) {
+            group = 'settings.py';
+        } else if (key.includes('asgi')) {
+            group = 'asgi.py';
+        } else if (key.includes('wsgi')) {
+            group = 'wsgi.py';
+        } else if (key.includes('urls') || key.includes('url')) {
+            group = 'urls.py';
+        } else if (key.includes('celery')) {
+            group = 'celery.py';
+        } else if (key.includes('config_dir') || key.includes('unexpected')) {
+            group = 'General';
+        }
+        if (!groups[group]) groups[group] = [];
+        groups[group].push(c);
+    });
+
+    const fileOrder = ['General', 'settings.py', 'urls.py', 'asgi.py', 'wsgi.py', 'celery.py'];
+    fileOrder.forEach(groupName => {
+        const items = groups[groupName];
+        if (!items || !items.length) return;
+
+        const hasIssues = items.some(c => c.status !== 'PASS');
+        const groupIcon = groupName === 'settings.py' ? '🔐'
+            : groupName === 'urls.py'     ? '🔗'
+            : groupName === 'asgi.py'     ? '📡'
+            : groupName === 'wsgi.py'     ? '📡'
+            : groupName === 'celery.py'   ? '⏰'
+            : '📂';
+
+        html += `<div style="margin-bottom:14px;border:1px solid ${hasIssues ? '#475569' : '#1e3a2f'};border-radius:12px;overflow:hidden;">
+            <div style="padding:10px 16px;background:rgba(15,23,42,.5);font-weight:700;color:#e2e8f0;font-size:.88rem;">
+                ${groupIcon} ${groupName}
+            </div>`;
+
+        items.forEach(c => {
+            if (c.status === 'PASS') return; // Only show non-passing checks in detail
+            const sc = statusColor(c.status);
+            const si = statusIcon(c.status);
+            const sevC = severityColor(c.severity || 'LOW');
+            html += `<div style="padding:10px 16px;border-top:1px solid #1e293b;display:flex;gap:12px;align-items:flex-start;">
+                <span style="color:${sc};font-size:1rem;flex-shrink:0;margin-top:1px;">${si}</span>
+                <div style="flex:1;min-width:0;">
+                    <span style="color:#e2e8f0;font-size:.86rem;">${c.message || ''}</span>
+                </div>
+                <span style="flex-shrink:0;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700;background:rgba(0,0,0,.3);color:${sevC};border:1px solid ${sevC};">${c.severity || ''}</span>
+            </div>`;
+        });
+
+        const passedCount = items.filter(c => c.status === 'PASS').length;
+        if (passedCount > 0) {
+            html += `<div style="padding:8px 16px;border-top:1px solid #1e293b;color:#475569;font-size:.78rem;">✔ ${passedCount} check${passedCount === 1 ? '' : 's'} passed for ${groupName}</div>`;
+        }
+
+        html += '</div>';
+    });
+
+    return html;
+}
+""";
+        template_content = template_content.replace(
+            'function getFixQueueState() {\n',
+            config_health_js + '\nfunction getFixQueueState() {\n'
+        )
+
+        # 3. Inject tab button (after Coupling Map)
+        template_content = template_content.replace(
+            '            <button class="tab" onclick="showTab(\'coupling-map\')">🔥 Coupling Map</button>\n'
+            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n',
+            '            <button class="tab" onclick="showTab(\'coupling-map\')">🔥 Coupling Map</button>\n'
+            '            <button class="tab" onclick="showTab(\'config-health\')">⚙️ Config Health</button>\n'
+            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n'
+        )
+
+        # 4. Inject content div (after coupling-map div)
+        template_content = template_content.replace(
+            '        <div id="coupling-map"    class="tab-content"></div>\n'
+            '        <div id="recommendations" class="tab-content">\n',
+            '        <div id="coupling-map"    class="tab-content"></div>\n'
+            '        <div id="config-health"   class="tab-content"></div>\n'
+            '        <div id="recommendations" class="tab-content">\n'
+        )
+
+        # 5. Inject render call (after coupling-map render call)
+        template_content = template_content.replace(
+            "document.getElementById('coupling-map').innerHTML    = generateCouplingMapTab();\n",
+            "document.getElementById('coupling-map').innerHTML    = generateCouplingMapTab();\n"
+            "document.getElementById('config-health').innerHTML   = generateConfigHealthTab();\n"
+        )
+
+        return template_content
+
     def generate_html_dashboard(self) -> str:
         ts = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         trends_js = r"""
@@ -554,6 +715,7 @@ function drawTrendsChart() {
             template_content = f.read()
         template_content = self._inject_phase4_effort_support(template_content)
         template_content = self._inject_phase4_coupling_support(template_content)
+        template_content = self._inject_config_health_tab(template_content)
 
         substitutions = {
             'apps_json': self._safe_json(self.data['applications']),
@@ -574,6 +736,7 @@ function drawTrendsChart() {
             'fix_queue_json': self._safe_json(self.data.get('fix_queue', {})),
             'coupling_matrix_json': self._safe_json(self.data.get('coupling_matrix', {})),
             'git_context_json': self._safe_json(self.data.get('git_context', {})),
+            'config_health_json': self._safe_json(self.data.get('config_health', {})),
             'vis_js_content': get_vis_js(),
             'trends_js': trends_js,
             'ts': ts,
