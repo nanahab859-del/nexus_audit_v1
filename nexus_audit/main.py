@@ -20,7 +20,8 @@ from pathlib import Path
 
 from .config import (
     _load_dotenv, VAULT_PATH, DNA_PATH, INVENTORY_PATH, VISUALS_DIR, HISTORY_DIR,
-    PROJECT_PATH, NEXUS_ROOT, FIRST_PARTY_APPS, SCORING_EXCLUDE_TESTS, _detect_internet
+    PROJECT_PATH, NEXUS_ROOT, FIRST_PARTY_APPS, SCORING_EXCLUDE_TESTS, _detect_internet,
+    MODULAR_ROOT
 )
 from .key_pool import key_pool
 from .models import Violation, AllowedCommunication
@@ -337,21 +338,33 @@ def main():
             app_stats[app]['physical_files'] = len(app_physical)
             # Report raw per-app boundary violations in output (matches table/card counts)
             app_stats[app]['boundary_violations'] = boundary_raw_counts.get(app, 0)
+            
+            # Fix 2: Calculate per-app average complexity (not global)
+            # Extract functions from this app's high_complexity_functions list
+            app_hc_funcs = [f for f in complexity_metrics.get('high_complexity_functions', [])
+                           if app in f.get('full_path', '')]
+            app_avg_complexity = 0
+            if app_hc_funcs:
+                app_avg_complexity = sum(f.get('complexity', 0) for f in app_hc_funcs) / len(app_hc_funcs)
+            else:
+                # If no high complexity functions, use global average as fallback
+                app_avg_complexity = complexity_metrics.get('average_complexity', 0)
+            
             app_stats[app]['score'] = calculate_app_score(app, {
-                # Use deduplicated app-pair boundary count for scoring penalty
+                # Fix 1: Use ALL per-app Cross-App Import violations, not a truncated subset
+                # (removed [:boundary_pair_counts.get(app, 0)] slice)
                 'violations': [v for v in violations
                                if v.source and v.source.startswith(app)
-                              and v.type == 'Cross-App Import'][:boundary_pair_counts.get(app, 0)]
+                              and v.type == 'Cross-App Import']
                               + [v for v in violations
                                  if v.source and v.source.startswith(app)
                                  and v.type != 'Cross-App Import'],
                 'security_findings': [s for s in security_violations
                                       if s.file_path and app in s.file_path],
-                'avg_complexity': complexity_metrics['average_complexity'],
+                'avg_complexity': app_avg_complexity,
                 'dead_code': [d for d in dead_code if app in d.get('full_path', d.get('file', ''))],
                 'ghost_files': len([g for g in ghost_files if g.startswith(app)])
             })
-
     # ── Trend: compare with previous run if it exists ─────────────────────
     trend: Dict[str, Any] = {}
     prev_json_path = os.path.join(VISUALS_DIR, 'audit_data_complete.json')
@@ -505,6 +518,21 @@ def main():
         f.write(generate_comprehensive_markdown(audit_data))
     print(f"   ✔ Markdown   → {md_path}")
 
+    # ── Sync visuals to root visuals directory (Task 5) ──────────────────
+    root_visuals = os.path.join(os.path.dirname(MODULAR_ROOT), 'visuals')
+    if os.path.exists(VISUALS_DIR) and root_visuals != VISUALS_DIR:
+        import shutil
+        os.makedirs(root_visuals, exist_ok=True)
+        for item in os.listdir(VISUALS_DIR):
+            s = os.path.join(VISUALS_DIR, item)
+            d = os.path.join(root_visuals, item)
+            if os.path.isfile(s):
+                shutil.copy2(s, d)
+            elif os.path.isdir(s) and item != 'audit_history': # Avoid recursive history sync if possible
+                if os.path.exists(d): shutil.rmtree(d)
+                shutil.copytree(s, d)
+        print(f"   ✔ Synced to root   → {root_visuals}")
+
     # ── Console summary ───────────────────────────────────────────────────
     cross_count = len([v for v in violations if v.type == 'Cross-App Import'])
     avg_score   = sum(s['score'] for s in app_stats.values() if s['score']) // max(len(app_stats), 1)
@@ -560,6 +588,15 @@ def main():
     if args.serve:
         from .features.server import serve
 
+        print()
+        print("════════════════════════════════════════════════════════════")
+        print("✅ AUDIT COMPLETE")
+        print("🌐 Starting dashboard server at http://localhost:8421")
+        print("   Open: http://localhost:8421")
+        print("   Fix Queue: active (changes saved to fix_queue.json)")
+        print("   Stop: Ctrl+C")
+        print("════════════════════════════════════════════════════════════")
+        print()
         serve(html_path, json_path, str(fix_queue_path), open_browser=True, watch=args.watch)
 
     print()

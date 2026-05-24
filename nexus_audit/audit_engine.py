@@ -262,8 +262,11 @@ def calculate_app_score(app_name: str, metrics_data: Dict[str, Any]) -> float:
     ghost_files = metrics_data.get('ghost_files', 0)
     base_score -= min(10, ghost_files * 2)
     
+    # Core apps (nexus_core, nexus_gateway) are architectural hubs — they legitimately
+    # import more and serve more apps, so a +10 bonus offsets the hub-penalty from violations.
+    # This acknowledges that high connectivity in core infrastructure is expected and necessary.
     if is_core_app:
-        base_score += 10
+       base_score += 10
     
     return max(0, min(100, base_score))
 

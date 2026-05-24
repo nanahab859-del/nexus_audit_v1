@@ -155,7 +155,4 @@ fi
 # PHASE 4: ENHANCED AUDIT
 # ─────────────────────────────────────────────────────────────────────────────
 echo "🛡️  PHASE 4: RUNNING ENHANCED AUDIT..."
-python3 "$AUDIT_DIR/pulse.py"
-
-echo "✅ SUCCESS: Enhanced audit complete!"
-echo "📁 Reports available in: $AUDIT_DIR/visuals/"
+python3 "$AUDIT_DIR/pulse.py" "$@"

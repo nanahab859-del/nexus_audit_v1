@@ -98,6 +98,14 @@ nexus_tournaments.serializers.announcements
 nexus_tournaments.serializers.leagues
 nexus_tournaments.serializers.base
 nexus_tournaments.management.commands.dispatch_outbox_events
+nexus_tournaments.verification.__init__
+nexus_tournaments.verification.load_balancer
+nexus_tournaments.verification.phash
+nexus_tournaments.verification.providers.__init__
+nexus_tournaments.verification.providers.google_cloud
+nexus_tournaments.verification.providers.base
+nexus_tournaments.verification.providers.registry
+nexus_tournaments.verification.result
 nexus_tournaments.admin
 nexus_gateway.routing
 nexus_gateway.views.__init__

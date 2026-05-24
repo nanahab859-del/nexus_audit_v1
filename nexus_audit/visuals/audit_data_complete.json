@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "timestamp": "2026-05-18T22:15:52.519950",
+    "timestamp": "2026-05-24T02:04:10.814108",
     "project_path": "/home/yusupha/my_tools/nexus_project_copy",
     "total_modules": 238,
     "total_physical_files": 211,
     "total_violations": 13,
-    "total_raw_imports": 123,
-    "total_cycles": 15,
+    "total_raw_imports": 124,
+    "total_cycles": 16,
     "ghost_files": [
       "nexus_tournaments.management.commands.dispatch_outbox_events",
       "nexus_core.serializers.token",
@@ -16,18 +16,18 @@
     ],
     "trend": {
       "nexus_core": {
-        "previous_score": 75.0,
+        "previous_score": 63.66666666666667,
         "delta": 0.0,
         "direction": "\u2192"
       },
       "nexus_social": {
-        "previous_score": 86.0,
+        "previous_score": 57.0,
         "delta": 0.0,
         "direction": "\u2192"
       },
       "nexus_economy": {
-        "previous_score": 100,
-        "delta": 0,
+        "previous_score": 92.9090909090909,
+        "delta": 0.0,
         "direction": "\u2192"
       },
       "nexus_gaming": {
@@ -36,22 +36,22 @@
         "direction": "\u2192"
       },
       "nexus_gateway": {
-        "previous_score": 100,
-        "delta": 0,
+        "previous_score": 95.0,
+        "delta": 0.0,
         "direction": "\u2192"
       },
       "nexus_tournaments": {
-        "previous_score": 93.0,
+        "previous_score": 66.66666666666666,
         "delta": 0.0,
         "direction": "\u2192"
       },
       "nexus_content": {
-        "previous_score": 100,
-        "delta": 0,
+        "previous_score": 92.0,
+        "delta": 0.0,
         "direction": "\u2192"
       },
       "_meta": {
-        "previous_timestamp": "2026-05-18T22:00:12",
+        "previous_timestamp": "2026-05-23T09:34:54",
         "cross_violations_prev": 13,
         "cross_violations_curr": 13,
         "cross_violations_delta": 0
@@ -75,21 +75,21 @@
     "ai_backend": "Google Gemini + templates",
     "ai_fallback_reason": "no_ai_output",
     "fix_queue": {
-      "tracked_recommendations": 54,
-      "tracked_entries": 105,
+      "tracked_recommendations": 55,
+      "tracked_entries": 206,
       "reappeared_done": [],
       "reappeared_done_count": 0,
       "status_counts": {
         "done": 0,
         "in_progress": 0,
-        "open": 54,
+        "open": 55,
         "snoozed": 0
       }
     }
   },
   "applications": {
     "nexus_core": {
-      "score": 75.0,
+      "score": 63.66666666666667,
       "violations": 1,
       "security_issues": 58,
       "modules": [
@@ -142,7 +142,7 @@
       "boundary_violations": 1
     },
     "nexus_social": {
-      "score": 86.0,
+      "score": 57.0,
       "violations": 1,
       "security_issues": 12,
       "modules": [
@@ -192,7 +192,7 @@
       "boundary_violations": 6
     },
     "nexus_economy": {
-      "score": 100,
+      "score": 92.9090909090909,
       "violations": 0,
       "security_issues": 18,
       "modules": [
@@ -273,7 +273,7 @@
       "boundary_violations": 0
     },
     "nexus_gateway": {
-      "score": 100,
+      "score": 95.0,
       "violations": 1,
       "security_issues": 7,
       "modules": [
@@ -294,9 +294,9 @@
       "boundary_violations": 3
     },
     "nexus_tournaments": {
-      "score": 93.0,
+      "score": 66.66666666666666,
       "violations": 1,
-      "security_issues": 10,
+      "security_issues": 11,
       "modules": [
         "nexus_tournaments",
         "nexus_tournaments.services",
@@ -360,7 +360,7 @@
       "boundary_violations": 3
     },
     "nexus_content": {
-      "score": 100,
+      "score": 92.0,
       "violations": 0,
       "security_issues": 3,
       "modules": [
@@ -4923,8 +4923,8 @@
       "source": "nexus_tournaments.services.verification_service",
       "target": "nexus_core.utils",
       "file_path": "",
-      "line": 27,
-      "line_number": 27,
+      "line": 29,
+      "line_number": 29,
       "description": "Cross-App Import: nexus_tournaments.services.verification_service \u2192 nexus_core.utils",
       "code_snippet": "",
       "recommendation": "Replace with Django signal, Celery task, or REST API call."
@@ -4935,8 +4935,8 @@
       "source": "nexus_tournaments.services.verification_service",
       "target": "nexus_core.utils.feature_flags",
       "file_path": "",
-      "line": 27,
-      "line_number": 27,
+      "line": 29,
+      "line_number": 29,
       "description": "Cross-App Import: nexus_tournaments.services.verification_service \u2192 nexus_core.utils.feature_flags",
       "code_snippet": "",
       "recommendation": "Replace with Django signal, Celery task, or REST API call."
@@ -4947,8 +4947,8 @@
       "source": "nexus_tournaments.services.verification_service",
       "target": "nexus_core",
       "file_path": "",
-      "line": 27,
-      "line_number": 27,
+      "line": 29,
+      "line_number": 29,
       "description": "Cross-App Import: nexus_tournaments.services.verification_service \u2192 nexus_core",
       "code_snippet": "",
       "recommendation": "Replace with Django signal, Celery task, or REST API call."
@@ -6284,6 +6284,18 @@
       "description": "B106: Possible hardcoded password: 'pass'",
       "code_snippet": "260             email=f\"ai_task_mod_{id(self)}@t.com\",\n261             password=\"pass\",\n262             role=\"MODERATOR\",\n263             is_active=True,\n264         )\n265         t = _make_tournament",
       "recommendation": "Review security issue and fix according to Bandit guidelines."
+    },
+    {
+      "type": "Bare Except",
+      "severity": "LOW",
+      "source": "phash.py",
+      "target": null,
+      "file_path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/phash.py",
+      "line": 98,
+      "line_number": 0,
+      "description": "B112: Try, Except, Continue detected.",
+      "code_snippet": "97                     )\n98             except Exception:\n99                 continue\n100 \n",
+      "recommendation": "Review security issue and fix according to Bandit guidelines."
     }
   ],
   "security_findings": [
@@ -7606,6 +7618,18 @@
       "description": "B106: Possible hardcoded password: 'pass'",
       "code_snippet": "260             email=f\"ai_task_mod_{id(self)}@t.com\",\n261             password=\"pass\",\n262             role=\"MODERATOR\",\n263             is_active=True,\n264         )\n265         t = _make_tournament",
       "recommendation": "Review security issue and fix according to Bandit guidelines."
+    },
+    {
+      "type": "Bare Except",
+      "severity": "LOW",
+      "source": "phash.py",
+      "target": null,
+      "file_path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/phash.py",
+      "line": 98,
+      "line_number": 0,
+      "description": "B112: Try, Except, Continue detected.",
+      "code_snippet": "97                     )\n98             except Exception:\n99                 continue\n100 \n",
+      "recommendation": "Review security issue and fix according to Bandit guidelines."
     }
   ],
   "allowed_communications": [
@@ -7807,19 +7831,6 @@
     },
     {
       "nodes": [
-        "nexus_tournaments.views.results",
-        "nexus_tournaments.views"
-      ],
-      "length": 2,
-      "severity": "high",
-      "cross_app": false,
-      "apps": [
-        "nexus_tournaments"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
         "nexus_tournaments.views",
         "nexus_tournaments.views.leagues"
       ],
@@ -7847,7 +7858,7 @@
     {
       "nodes": [
         "nexus_tournaments.views",
-        "nexus_tournaments.views.matches"
+        "nexus_tournaments.views.results"
       ],
       "length": 2,
       "severity": "high",
@@ -7861,6 +7872,19 @@
       "nodes": [
         "nexus_tournaments.views",
         "nexus_tournaments.views.announcements"
+      ],
+      "length": 2,
+      "severity": "high",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.matches"
       ],
       "length": 2,
       "severity": "high",
@@ -7898,15 +7922,14 @@
     },
     {
       "nodes": [
-        "nexus_tournaments.services.match_service",
-        "nexus_tournaments.tasks",
-        "nexus_tournaments.services.diagnostic_service"
+        "nexus_economy.tasks",
+        "nexus_economy.tasks.refund"
       ],
-      "length": 3,
-      "severity": "medium",
+      "length": 2,
+      "severity": "high",
       "cross_app": false,
       "apps": [
-        "nexus_tournaments"
+        "nexus_economy"
       ],
       "django_pattern": false
     },
@@ -7921,6 +7944,34 @@
       "cross_app": false,
       "apps": [
         "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_tournaments.services.match_service",
+        "nexus_tournaments.tasks",
+        "nexus_tournaments.services.diagnostic_service"
+      ],
+      "length": 3,
+      "severity": "medium",
+      "cross_app": false,
+      "apps": [
+        "nexus_tournaments"
+      ],
+      "django_pattern": false
+    },
+    {
+      "nodes": [
+        "nexus_economy.tasks",
+        "nexus_economy.tasks.payout",
+        "nexus_economy.services.payout_service"
+      ],
+      "length": 3,
+      "severity": "medium",
+      "cross_app": false,
+      "apps": [
+        "nexus_economy"
       ],
       "django_pattern": false
     },
@@ -7941,22 +7992,8 @@
     {
       "nodes": [
         "nexus_economy.tasks",
-        "nexus_economy.tasks.payout",
-        "nexus_economy.services.payout_service"
-      ],
-      "length": 3,
-      "severity": "medium",
-      "cross_app": false,
-      "apps": [
-        "nexus_economy"
-      ],
-      "django_pattern": false
-    },
-    {
-      "nodes": [
         "nexus_economy.tasks.refund",
-        "nexus_economy.services.refund_service",
-        "nexus_economy.tasks"
+        "nexus_economy.services.refund_service"
       ],
       "length": 3,
       "severity": "medium",
@@ -7981,11 +8018,11 @@
     }
   ],
   "metrics": {
-    "average_complexity": 2.4153846153846152,
+    "average_complexity": 2.4283987915407854,
     "max_complexity": 26,
-    "total_complexity": 3925,
-    "files_analyzed": 1625,
-    "functions_analyzed": 1625,
+    "total_complexity": 4019,
+    "files_analyzed": 1655,
+    "functions_analyzed": 1655,
     "high_complexity_functions": [
       {
         "file": "auth.py",
@@ -8244,6 +8281,14 @@
         "lines": 0
       },
       {
+        "file": "verification_service.py",
+        "full_path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/verification_service.py",
+        "function": "_run_ai_verification",
+        "complexity": 13,
+        "line": 339,
+        "lines": 0
+      },
+      {
         "file": "tasks.py",
         "full_path": "/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py",
         "function": "fourteen_day_sweep",
@@ -8409,7 +8454,7 @@
     {
       "title": "Fix Bare Except",
       "priority": "MEDIUM",
-      "description": "11 bare except finding(s) were detected by Bandit.",
+      "description": "12 bare except finding(s) were detected by Bandit.",
       "action": "Replace broad exception handling with specific exception types. Narrow each catch block to the real failure mode and preserve the stack trace where needed.",
       "affected_modules": [
         "/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py",
@@ -8425,7 +8470,7 @@
       "ai_generated": false,
       "confidence": 8,
       "effort": "S",
-      "rec_id": "rec-81d2d7d49a6a",
+      "rec_id": "rec-dc9e2942edfb",
       "fix_status": "open",
       "fix_notes": ""
     },
@@ -8737,6 +8782,22 @@
       "confidence": 7,
       "effort": "M",
       "rec_id": "rec-cba5960aa100",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Refactor _run_ai_verification",
+      "priority": "MEDIUM",
+      "description": "_run_ai_verification in verification_service.py has cyclomatic complexity 13.",
+      "action": "Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.",
+      "affected_modules": [
+        "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/verification_service.py"
+      ],
+      "rec_type": "performance",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-dc6fa0df7668",
       "fix_status": "open",
       "fix_notes": ""
     },
@@ -9068,23 +9129,6 @@
     {
       "title": "Resolve intra-app cycle",
       "priority": "HIGH",
-      "description": "nexus_tournaments.views.results -> nexus_tournaments.views",
-      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
-      "affected_modules": [
-        "nexus_tournaments.views.results",
-        "nexus_tournaments.views"
-      ],
-      "rec_type": "architecture",
-      "ai_generated": false,
-      "confidence": 7,
-      "effort": "M",
-      "rec_id": "rec-0836b2bbf6d6",
-      "fix_status": "open",
-      "fix_notes": ""
-    },
-    {
-      "title": "Resolve intra-app cycle",
-      "priority": "HIGH",
       "description": "nexus_tournaments.views -> nexus_tournaments.views.leagues",
       "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
@@ -9119,17 +9163,17 @@
     {
       "title": "Resolve intra-app cycle",
       "priority": "HIGH",
-      "description": "nexus_tournaments.views -> nexus_tournaments.views.matches",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.results",
       "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
       "affected_modules": [
         "nexus_tournaments.views",
-        "nexus_tournaments.views.matches"
+        "nexus_tournaments.views.results"
       ],
       "rec_type": "architecture",
       "ai_generated": false,
       "confidence": 7,
       "effort": "M",
-      "rec_id": "rec-7e4903faf4eb",
+      "rec_id": "rec-28122bd19840",
       "fix_status": "open",
       "fix_notes": ""
     },
@@ -9147,6 +9191,23 @@
       "confidence": 7,
       "effort": "M",
       "rec_id": "rec-37b84ba9e297",
+      "fix_status": "open",
+      "fix_notes": ""
+    },
+    {
+      "title": "Resolve intra-app cycle",
+      "priority": "HIGH",
+      "description": "nexus_tournaments.views -> nexus_tournaments.views.matches",
+      "action": "Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.",
+      "affected_modules": [
+        "nexus_tournaments.views",
+        "nexus_tournaments.views.matches"
+      ],
+      "rec_type": "architecture",
+      "ai_generated": false,
+      "confidence": 7,
+      "effort": "M",
+      "rec_id": "rec-7e4903faf4eb",
       "fix_status": "open",
       "fix_notes": ""
     },
@@ -9171,17 +9232,9 @@
   "dependency_scan": {
     "packages": [
       {
-        "name": "attrs",
-        "installed": "26.1.0",
-        "latest": "26.1.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "annotated-doc",
-        "installed": "0.0.4",
-        "latest": "0.0.4",
+        "name": "\ufeffamqp",
+        "installed": "5.3.1",
+        "latest": "5.3.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9195,25 +9248,17 @@
         "cves": []
       },
       {
+        "name": "annotated-doc",
+        "installed": "0.0.4",
+        "latest": "0.0.4",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "Automat",
         "installed": "25.4.16",
         "latest": "25.4.16",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "amqp",
-        "installed": "5.3.1",
-        "latest": "5.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "annotated-types",
-        "installed": "0.7.0",
-        "latest": "0.7.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9227,6 +9272,22 @@
         "cves": []
       },
       {
+        "name": "attrs",
+        "installed": "26.1.0",
+        "latest": "26.1.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "annotated-types",
+        "installed": "0.7.0",
+        "latest": "0.7.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "asgiref",
         "installed": "3.11.1",
         "latest": "3.11.1",
@@ -9235,11 +9296,32 @@
         "cves": []
       },
       {
+        "name": "autobahn",
+        "installed": "24.4.2",
+        "latest": "25.12.2",
+        "outdated": true,
+        "cve_count": 2,
+        "cves": [
+          {
+            "id": "GHSA-gwp7-vqr5-h33h",
+            "summary": "Open Redirect in autobahn",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35678"
+          },
+          {
+            "id": "PYSEC-2020-25",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/crossbario/autobahn-python/compare/v20.12.2...v20.12.3"
+          }
+        ]
+      },
+      {
         "name": "Authlib",
         "installed": "1.6.9",
         "latest": "1.7.2",
         "outdated": true,
-        "cve_count": 12,
+        "cve_count": 13,
         "cves": [
           {
             "id": "GHSA-5357-c2jx-v7qh",
@@ -9312,29 +9394,22 @@
             "summary": "",
             "severity": "",
             "url": "https://github.com/lepture/authlib/issues/654"
+          },
+          {
+            "id": "PYSEC-2026-25",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+            "url": "https://github.com/authlib/authlib/security/advisories/GHSA-jj8c-mmj3-mmgv"
           }
         ]
       },
       {
-        "name": "autobahn",
-        "installed": "24.4.2",
-        "latest": "25.12.2",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-gwp7-vqr5-h33h",
-            "summary": "Open Redirect in autobahn",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35678"
-          },
-          {
-            "id": "PYSEC-2020-25",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/crossbario/autobahn-python/compare/v20.12.2...v20.12.3"
-          }
-        ]
+        "name": "backports-datetime-fromisoformat",
+        "installed": "2.0.3",
+        "latest": "2.0.3",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "billiard",
@@ -9345,9 +9420,9 @@
         "cves": []
       },
       {
-        "name": "backports-datetime-fromisoformat",
-        "installed": "2.0.3",
-        "latest": "2.0.3",
+        "name": "cfgv",
+        "installed": "3.5.0",
+        "latest": "3.5.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9361,42 +9436,9 @@
         "cves": []
       },
       {
-        "name": "celery",
-        "installed": "5.6.3",
-        "latest": "5.6.3",
-        "outdated": false,
-        "cve_count": 4,
-        "cves": [
-          {
-            "id": "GHSA-q4xr-rc97-m4xx",
-            "summary": "OS Command Injection in celery",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
-          },
-          {
-            "id": "GHSA-rpc6-h455-3rx5",
-            "summary": "Celery local privilege escalation vulnerability",
-            "severity": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
-          },
-          {
-            "id": "PYSEC-2011-17",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
-          },
-          {
-            "id": "PYSEC-2021-858",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
-          }
-        ]
-      },
-      {
         "name": "certifi",
         "installed": "2026.2.25",
-        "latest": "2026.4.22",
+        "latest": "2026.5.20",
         "outdated": true,
         "cve_count": 6,
         "cves": [
@@ -9508,6 +9550,39 @@
         ]
       },
       {
+        "name": "celery",
+        "installed": "5.6.3",
+        "latest": "5.6.3",
+        "outdated": false,
+        "cve_count": 4,
+        "cves": [
+          {
+            "id": "GHSA-q4xr-rc97-m4xx",
+            "summary": "OS Command Injection in celery",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23727"
+          },
+          {
+            "id": "GHSA-rpc6-h455-3rx5",
+            "summary": "Celery local privilege escalation vulnerability",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2011-4356"
+          },
+          {
+            "id": "PYSEC-2011-17",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/ask/celery/blob/master/docs/sec/CELERYSA-0001.txt"
+          },
+          {
+            "id": "PYSEC-2021-858",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/celery/celery/blob/master/Changelog.rst%23522"
+          }
+        ]
+      },
+      {
         "name": "black",
         "installed": "26.3.1",
         "latest": "26.5.1",
@@ -9535,9 +9610,9 @@
         ]
       },
       {
-        "name": "cfgv",
-        "installed": "3.5.0",
-        "latest": "3.5.0",
+        "name": "channels_redis",
+        "installed": "4.3.0",
+        "latest": "4.3.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9564,25 +9639,9 @@
         ]
       },
       {
-        "name": "channels_redis",
-        "installed": "4.3.0",
-        "latest": "4.3.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "click-didyoumean",
         "installed": "0.3.1",
         "latest": "0.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "cffi",
-        "installed": "2.0.0",
-        "latest": "2.0.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -9606,7 +9665,7 @@
       {
         "name": "click",
         "installed": "8.3.1",
-        "latest": "8.4.0",
+        "latest": "8.4.1",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -9624,6 +9683,30 @@
         "installed": "1.4.5",
         "latest": "2.0.8",
         "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "cffi",
+        "installed": "2.0.0",
+        "latest": "2.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "daphne",
+        "installed": "4.2.1",
+        "latest": "4.2.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "charset-normalizer",
+        "installed": "3.4.7",
+        "latest": "3.4.7",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -9652,20 +9735,27 @@
         "cves": []
       },
       {
-        "name": "daphne",
-        "installed": "4.2.1",
-        "latest": "4.2.1",
+        "name": "django-celery-beat",
+        "installed": "2.9.0",
+        "latest": "2.9.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "charset-normalizer",
-        "installed": "3.4.7",
-        "latest": "3.4.7",
+        "name": "djangorestframework_simplejwt",
+        "installed": "5.5.1",
+        "latest": "5.5.1",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
+        "cve_count": 1,
+        "cves": [
+          {
+            "id": "GHSA-5vcc-86wm-547q",
+            "summary": "Improper Privilege Management in djangorestframework-simplejwt",
+            "severity": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22513"
+          }
+        ]
       },
       {
         "name": "djangorestframework",
@@ -9695,19 +9785,12 @@
         ]
       },
       {
-        "name": "djangorestframework_simplejwt",
-        "installed": "5.5.1",
-        "latest": "5.5.1",
+        "name": "exceptiongroup",
+        "installed": "1.3.1",
+        "latest": "1.3.1",
         "outdated": false,
-        "cve_count": 1,
-        "cves": [
-          {
-            "id": "GHSA-5vcc-86wm-547q",
-            "summary": "Improper Privilege Management in djangorestframework-simplejwt",
-            "severity": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22513"
-          }
-        ]
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "dparse",
@@ -9731,6 +9814,14 @@
         ]
       },
       {
+        "name": "hyperlink",
+        "installed": "21.0.0",
+        "latest": "21.0.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "h11",
         "installed": "0.16.0",
         "latest": "0.16.0",
@@ -9744,14 +9835,6 @@
             "url": "https://github.com/python-hyper/h11/security/advisories/GHSA-vqfr-h8mv-ghfj"
           }
         ]
-      },
-      {
-        "name": "django-celery-beat",
-        "installed": "2.9.0",
-        "latest": "2.9.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "filelock",
@@ -9775,62 +9858,9 @@
         ]
       },
       {
-        "name": "hyperlink",
-        "installed": "21.0.0",
-        "latest": "21.0.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "identify",
-        "installed": "2.6.18",
-        "latest": "2.6.19",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "idna",
-        "installed": "3.11",
-        "latest": "3.15",
-        "outdated": true,
-        "cve_count": 2,
-        "cves": [
-          {
-            "id": "GHSA-jjg7-2v4v-x38h",
-            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
-          },
-          {
-            "id": "PYSEC-2024-60",
-            "summary": "",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
-          }
-        ]
-      },
-      {
-        "name": "Incremental",
-        "installed": "24.11.0",
-        "latest": "24.11.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "exceptiongroup",
-        "installed": "1.3.1",
-        "latest": "1.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "Django",
-        "installed": "5.2.12",
-        "latest": "6.0.5",
+        "name": "google-cloud-vision",
+        "installed": "3.7.4",
+        "latest": "3.14.0",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -9840,7 +9870,7 @@
         "installed": "46.0.6",
         "latest": "48.0.0",
         "outdated": true,
-        "cve_count": 28,
+        "cve_count": 30,
         "cves": [
           {
             "id": "GHSA-39hc-v87j-747x",
@@ -10009,8 +10039,71 @@
             "summary": "",
             "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
             "url": "https://github.com/pyca/cryptography/security/advisories/GHSA-6vqw-3v5j-54x4"
+          },
+          {
+            "id": "PYSEC-2026-35",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://github.com/pyca/cryptography/security/advisories/GHSA-m959-cc7f-wv43"
+          },
+          {
+            "id": "PYSEC-2026-36",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "http://www.openwall.com/lists/oss-security/2026/04/08/12"
           }
         ]
+      },
+      {
+        "name": "imagehash",
+        "installed": "4.3.1",
+        "latest": "4.3.2",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "identify",
+        "installed": "2.6.18",
+        "latest": "2.6.19",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "idna",
+        "installed": "3.11",
+        "latest": "3.16",
+        "outdated": true,
+        "cve_count": 3,
+        "cves": [
+          {
+            "id": "GHSA-65pc-fj4g-8rjx",
+            "summary": "Internationalized Domain Names in Applications (IDNA): Specially crafted inputs to idna.encode() can bypass CVE-2024-3651 fix",
+            "severity": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+            "url": "https://github.com/kjd/idna/security/advisories/GHSA-65pc-fj4g-8rjx"
+          },
+          {
+            "id": "GHSA-jjg7-2v4v-x38h",
+            "summary": "Internationalized Domain Names in Applications (IDNA) vulnerable to denial of service from specially crafted inputs to idna.encode",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/kjd/idna/security/advisories/GHSA-jjg7-2v4v-x38h"
+          },
+          {
+            "id": "PYSEC-2024-60",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://huntr.com/bounties/93d78d07-d791-4b39-a845-cbfabc44aadb"
+          }
+        ]
+      },
+      {
+        "name": "Incremental",
+        "installed": "24.11.0",
+        "latest": "24.11.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
       },
       {
         "name": "iniconfig",
@@ -10021,11 +10114,19 @@
         "cves": []
       },
       {
+        "name": "jsonschema",
+        "installed": "4.19.0",
+        "latest": "4.26.0",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "joblib",
         "installed": "1.5.3",
         "latest": "1.5.3",
         "outdated": false,
-        "cve_count": 2,
+        "cve_count": 3,
         "cves": [
           {
             "id": "GHSA-6hrg-qmvc-2xh8",
@@ -10038,23 +10139,70 @@
             "summary": "",
             "severity": "",
             "url": "https://github.com/joblib/joblib/commit/b90f10efeb670a2cc877fb88ebb3f2019189e059"
+          },
+          {
+            "id": "PYSEC-2024-277",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://github.com/joblib/joblib/issues/1582"
           }
         ]
       },
       {
-        "name": "jsonschema",
-        "installed": "4.19.0",
-        "latest": "4.26.0",
-        "outdated": true,
+        "name": "jsonschema-specifications",
+        "installed": "2025.9.1",
+        "latest": "2025.9.1",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "kombu",
+        "installed": "5.6.2",
+        "latest": "5.6.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "markdown-it-py",
+        "installed": "4.0.0",
+        "latest": "4.2.0",
+        "outdated": true,
+        "cve_count": 4,
+        "cves": [
+          {
+            "id": "GHSA-jrwr-5x3p-hvc3",
+            "summary": "markdown-it-py Denial of Service vulnerability in the command line interface",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26302"
+          },
+          {
+            "id": "GHSA-vrjv-mxr7-vjf8",
+            "summary": "markdown-it-py Denial of Service vulnerability",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26303"
+          },
+          {
+            "id": "PYSEC-2023-23",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/executablebooks/markdown-it-py/commit/53ca3e9c2b9e9b295f6abf7f4ad2730a9b70f68c"
+          },
+          {
+            "id": "PYSEC-2023-24",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/executablebooks/markdown-it-py/commit/ae03c6107dfa18e648f6fdd1280f5b89092d5d49"
+          }
+        ]
       },
       {
         "name": "Jinja2",
         "installed": "3.1.6",
         "latest": "3.1.6",
         "outdated": false,
-        "cve_count": 15,
+        "cve_count": 16,
         "cves": [
           {
             "id": "GHSA-462w-v97r-4m45",
@@ -10145,55 +10293,20 @@
             "summary": "",
             "severity": "",
             "url": "https://github.com/pallets/jinja/blob/ab81fd9c277900c85da0c322a2ff9d68a235b2e6/src/jinja2/utils.py%23L20"
+          },
+          {
+            "id": "PYSEC-2025-74",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N",
+            "url": "https://docs.djangoproject.com/en/4.2/ref/templates/api/#alters-data-description"
           }
         ]
       },
       {
-        "name": "jsonschema-specifications",
-        "installed": "2025.9.1",
-        "latest": "2025.9.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "markdown-it-py",
-        "installed": "4.0.0",
-        "latest": "4.2.0",
+        "name": "Django",
+        "installed": "5.2.12",
+        "latest": "6.0.5",
         "outdated": true,
-        "cve_count": 4,
-        "cves": [
-          {
-            "id": "GHSA-jrwr-5x3p-hvc3",
-            "summary": "markdown-it-py Denial of Service vulnerability in the command line interface",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26302"
-          },
-          {
-            "id": "GHSA-vrjv-mxr7-vjf8",
-            "summary": "markdown-it-py Denial of Service vulnerability",
-            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26303"
-          },
-          {
-            "id": "PYSEC-2023-23",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/executablebooks/markdown-it-py/commit/53ca3e9c2b9e9b295f6abf7f4ad2730a9b70f68c"
-          },
-          {
-            "id": "PYSEC-2023-24",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/executablebooks/markdown-it-py/commit/ae03c6107dfa18e648f6fdd1280f5b89092d5d49"
-          }
-        ]
-      },
-      {
-        "name": "kombu",
-        "installed": "5.6.2",
-        "latest": "5.6.2",
-        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
@@ -10209,14 +10322,6 @@
         "name": "MarkupSafe",
         "installed": "3.0.3",
         "latest": "3.0.3",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "mypy_extensions",
-        "installed": "1.1.0",
-        "latest": "1.1.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10249,6 +10354,14 @@
         ]
       },
       {
+        "name": "mypy_extensions",
+        "installed": "1.1.0",
+        "latest": "1.1.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "nodeenv",
         "installed": "1.10.0",
         "latest": "1.10.0",
@@ -10265,11 +10378,43 @@
         "cves": []
       },
       {
+        "name": "pathspec",
+        "installed": "1.0.4",
+        "latest": "1.1.1",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "msgpack",
+        "installed": "1.1.2",
+        "latest": "1.1.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "platformdirs",
+        "installed": "4.9.4",
+        "latest": "4.9.6",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "pluggy",
+        "installed": "1.6.0",
+        "latest": "1.6.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "nltk",
         "installed": "3.9.4",
         "latest": "3.9.4",
         "outdated": false,
-        "cve_count": 17,
+        "cve_count": 21,
         "cves": [
           {
             "id": "GHSA-2ww3-fxvq-293j",
@@ -10372,32 +10517,32 @@
             "summary": "",
             "severity": "",
             "url": "https://github.com/nltk/nltk/issues/2522"
+          },
+          {
+            "id": "PYSEC-2026-96",
+            "summary": "",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "url": "https://huntr.com/bounties/49ecbc02-054e-4470-b2e0-b267936cc4e4"
+          },
+          {
+            "id": "PYSEC-2026-97",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://huntr.com/bounties/007b84f8-418e-4300-99d0-bf504c2f97eb"
+          },
+          {
+            "id": "PYSEC-2026-98",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "url": "https://huntr.com/bounties/fc69914f-36a9-4c18-8503-10013b39f966"
+          },
+          {
+            "id": "PYSEC-2026-99",
+            "summary": "",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+            "url": "https://huntr.com/bounties/08b109bb-ac24-403f-9422-1c246ce60202"
           }
         ]
-      },
-      {
-        "name": "pathspec",
-        "installed": "1.0.4",
-        "latest": "1.1.1",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "pluggy",
-        "installed": "1.6.0",
-        "latest": "1.6.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "msgpack",
-        "installed": "1.1.2",
-        "latest": "1.1.2",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "pre_commit",
@@ -10412,14 +10557,6 @@
         "installed": "0.25.0",
         "latest": "0.25.0",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "platformdirs",
-        "installed": "4.9.4",
-        "latest": "4.9.6",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -10469,12 +10606,61 @@
         "cves": []
       },
       {
-        "name": "psycopg2-binary",
-        "installed": "2.9.11",
-        "latest": "2.9.12",
+        "name": "PyJWT",
+        "installed": "2.12.1",
+        "latest": "2.13.0",
         "outdated": true,
-        "cve_count": 0,
-        "cves": []
+        "cve_count": 8,
+        "cves": [
+          {
+            "id": "GHSA-752w-5fwx-jx9f",
+            "summary": "PyJWT accepts unknown `crit` header extensions",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
+          },
+          {
+            "id": "GHSA-75c5-xw7c-p5pm",
+            "summary": "PyJWT Issuer field partial matches allowed",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
+          },
+          {
+            "id": "GHSA-ffqj-6fqr-9h24",
+            "summary": "Key confusion through non-blocklisted public key formats",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
+          },
+          {
+            "id": "GHSA-r9jw-mwhq-wp62",
+            "summary": "PyJWT vulnerable to key confusion attacks",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
+          },
+          {
+            "id": "PYSEC-2017-24",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/pull/277"
+          },
+          {
+            "id": "PYSEC-2022-202",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
+          },
+          {
+            "id": "PYSEC-2025-183",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H",
+            "url": "https://github.com/jpadilla"
+          },
+          {
+            "id": "PYSEC-2026-120",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://lists.debian.org/debian-lts-announce/2026/05/msg00008.html"
+          }
+        ]
       },
       {
         "name": "Pygments",
@@ -10540,55 +10726,18 @@
         ]
       },
       {
-        "name": "PyJWT",
-        "installed": "2.12.1",
-        "latest": "2.12.1",
-        "outdated": false,
-        "cve_count": 6,
-        "cves": [
-          {
-            "id": "GHSA-752w-5fwx-jx9f",
-            "summary": "PyJWT accepts unknown `crit` header extensions",
-            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-752w-5fwx-jx9f"
-          },
-          {
-            "id": "GHSA-75c5-xw7c-p5pm",
-            "summary": "PyJWT Issuer field partial matches allowed",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:L/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-75c5-xw7c-p5pm"
-          },
-          {
-            "id": "GHSA-ffqj-6fqr-9h24",
-            "summary": "Key confusion through non-blocklisted public key formats",
-            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          },
-          {
-            "id": "GHSA-r9jw-mwhq-wp62",
-            "summary": "PyJWT vulnerable to key confusion attacks",
-            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-11424"
-          },
-          {
-            "id": "PYSEC-2017-24",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/pull/277"
-          },
-          {
-            "id": "PYSEC-2022-202",
-            "summary": "",
-            "severity": "",
-            "url": "https://github.com/jpadilla/pyjwt/security/advisories/GHSA-ffqj-6fqr-9h24"
-          }
-        ]
-      },
-      {
         "name": "pyotp",
         "installed": "2.9.0",
         "latest": "2.9.0",
         "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "psycopg2-binary",
+        "installed": "2.9.11",
+        "latest": "2.9.12",
+        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -10650,6 +10799,14 @@
         ]
       },
       {
+        "name": "pytest-django",
+        "installed": "4.12.0",
+        "latest": "4.12.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "pytest",
         "installed": "9.0.3",
         "latest": "9.0.3",
@@ -10661,6 +10818,723 @@
             "summary": "pytest has vulnerable tmpdir handling",
             "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L",
             "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-71176"
+          }
+        ]
+      },
+      {
+        "name": "Pillow",
+        "installed": "10.4.0",
+        "latest": "12.2.0",
+        "outdated": true,
+        "cve_count": 118,
+        "cves": [
+          {
+            "id": "GHSA-3c5c-7235-994j",
+            "summary": "Pillow buffer overflow in ImagingPcdDecode",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-2533"
+          },
+          {
+            "id": "GHSA-3f63-hfp8-52jq",
+            "summary": "Arbitrary Code Execution in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-50447"
+          },
+          {
+            "id": "GHSA-3wvg-mj6g-m9cv",
+            "summary": "Pillow Uncontrolled Resource Consumption",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-27922"
+          },
+          {
+            "id": "GHSA-3xv8-3j54-hgrp",
+            "summary": "Out-of-bounds read in Pillow",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10378"
+          },
+          {
+            "id": "GHSA-43fq-w8qq-v88h",
+            "summary": "Out-of-bounds read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-11538"
+          },
+          {
+            "id": "GHSA-44wm-f244-xhp3",
+            "summary": "Pillow buffer overflow vulnerability",
+            "severity": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-28219"
+          },
+          {
+            "id": "GHSA-4fx9-vc88-q2xc",
+            "summary": "Infinite loop in Pillow",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/commit/baae9ec4b67c68e3adaf1208cf54e8de5e38a6fd"
+          },
+          {
+            "id": "GHSA-57h3-9rgr-c24m",
+            "summary": "Out of bounds write in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25289"
+          },
+          {
+            "id": "GHSA-5gm3-px64-rw72",
+            "summary": "Uncontrolled Resource Consumption in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-19911"
+          },
+          {
+            "id": "GHSA-5xmw-vc9v-4wf2",
+            "summary": "Pillow has a heap buffer overflow with nested list coordinates",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-5xmw-vc9v-4wf2"
+          },
+          {
+            "id": "GHSA-7534-mm45-c74v",
+            "summary": "Buffer Overflow in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-34552"
+          },
+          {
+            "id": "GHSA-77gc-v2xv-rvvh",
+            "summary": "Out-of-bounds Read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25287"
+          },
+          {
+            "id": "GHSA-7r7m-5h27-29hp",
+            "summary": "Potential infinite loop in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28676"
+          },
+          {
+            "id": "GHSA-8843-m7mw-mxqm",
+            "summary": "Buffer overflow in Pillow",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10379"
+          },
+          {
+            "id": "GHSA-8ghj-p4vj-mr35",
+            "summary": "Pillow Denial of Service vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-44271"
+          },
+          {
+            "id": "GHSA-8m9x-pxwq-j236",
+            "summary": "Pillow command injection",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-3007"
+          },
+          {
+            "id": "GHSA-8vj2-vxx3-667w",
+            "summary": "Arbitrary expression injection in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22817"
+          },
+          {
+            "id": "GHSA-8xjq-8fcg-g5hw",
+            "summary": "Out-of-bounds Write in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25290"
+          },
+          {
+            "id": "GHSA-8xjv-v9xq-m5h9",
+            "summary": "Pillow Buffer overflow in ImagingFliDecode",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-0775"
+          },
+          {
+            "id": "GHSA-95q3-8gr9-gm8w",
+            "summary": "Pillow Denial of Service by Uncontrolled Resource Consumption",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-27923"
+          },
+          {
+            "id": "GHSA-98vv-pw6r-q6q4",
+            "summary": "Uncontrolled Resource Consumption in pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23437"
+          },
+          {
+            "id": "GHSA-9hx2-hgq2-2g4f",
+            "summary": "Regular Expression Denial of Service (ReDoS) in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25292"
+          },
+          {
+            "id": "GHSA-9j59-75qj-795w",
+            "summary": "Path traversal in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24303"
+          },
+          {
+            "id": "GHSA-cfh3-3jmp-rvhc",
+            "summary": "Pillow affected by out-of-bounds write when loading PSD images",
+            "severity": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-cfh3-3jmp-rvhc"
+          },
+          {
+            "id": "GHSA-cfmr-38g9-f2h7",
+            "summary": "Pillow denial of service via Crafted Block Size",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-3589"
+          },
+          {
+            "id": "GHSA-cqhg-xjhh-p8hf",
+            "summary": "Out-of-bounds reads in Pillow",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10177"
+          },
+          {
+            "id": "GHSA-f4w8-cv6p-x6r5",
+            "summary": "Pillow Denial of Service by Uncontrolled Resource Consumption",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-27921"
+          },
+          {
+            "id": "GHSA-f5g8-5qq7-938w",
+            "summary": "Pillow Out-of-bounds Read",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35653"
+          },
+          {
+            "id": "GHSA-g6rj-rv7j-xwp4",
+            "summary": "Pillow denial of service",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28675"
+          },
+          {
+            "id": "GHSA-h5rf-vgqx-wjv2",
+            "summary": "Pillow denial of service via PNG bomb",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-9601"
+          },
+          {
+            "id": "GHSA-hf64-x4gq-p99h",
+            "summary": "Pillow Out-of-bounds Read",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35655"
+          },
+          {
+            "id": "GHSA-hggx-3h72-49ww",
+            "summary": "Pillow Buffer overflow in ImagingLibTiffDecode",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-0740"
+          },
+          {
+            "id": "GHSA-hj69-c76v-86wr",
+            "summary": "Out-of-bounds Read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-5313"
+          },
+          {
+            "id": "GHSA-hjfx-8p6c-g7gx",
+            "summary": "Insufficient Verification of Data Authenticity in Pillow",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28678"
+          },
+          {
+            "id": "GHSA-hr8g-f6r6-mr22",
+            "summary": "Buffer over-flow in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-30595"
+          },
+          {
+            "id": "GHSA-hvr8-466p-75rh",
+            "summary": "Pillow Integer overflow in ImagingResampleHorizontal",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-4009"
+          },
+          {
+            "id": "GHSA-j6f7-g425-4gmx",
+            "summary": "Pillow is vulnerable to Denial of Service (DOS) in the Jpeg2KImagePlugin",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-3598"
+          },
+          {
+            "id": "GHSA-j7hp-h8jx-5ppr",
+            "summary": "libwebp: OOB write in BuildHuffmanTable",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-4863"
+          },
+          {
+            "id": "GHSA-j7mj-748x-7p78",
+            "summary": "DOS attack in Pillow when processing specially crafted image files",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-16865"
+          },
+          {
+            "id": "GHSA-jgpv-4h4c-xhw3",
+            "summary": "Uncontrolled Resource Consumption in pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/calix2/pyVulApp/security/advisories/GHSA-jgpv-4h4c-xhw3"
+          },
+          {
+            "id": "GHSA-m2vv-5vj5-2hm7",
+            "summary": "Pillow vulnerable to Data Amplification attack.",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-45198"
+          },
+          {
+            "id": "GHSA-mvg9-xffr-p774",
+            "summary": "Out of bounds read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25291"
+          },
+          {
+            "id": "GHSA-p43w-g3c5-g5mq",
+            "summary": "Out of bounds read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25293"
+          },
+          {
+            "id": "GHSA-p49h-hjvm-jg3h",
+            "summary": "PCX P mode buffer overflow in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-5312"
+          },
+          {
+            "id": "GHSA-pw3c-h7wp-cvhx",
+            "summary": "Improper Initialization in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22815"
+          },
+          {
+            "id": "GHSA-pwv6-vv43-88gr",
+            "summary": "Pillow has an OOB Write with Invalid PSD Tile Extents (Integer Overflow)",
+            "severity": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-cfh3-3jmp-rvhc"
+          },
+          {
+            "id": "GHSA-q4mp-jvh2-76fj",
+            "summary": "Pillow subject to DoS via SAMPLESPERPIXEL tag",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-45199"
+          },
+          {
+            "id": "GHSA-q5hq-fp76-qmrc",
+            "summary": "Uncontrolled Resource Consumption in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-28677"
+          },
+          {
+            "id": "GHSA-r73j-pqj5-w3x7",
+            "summary": "Pillow has a PDF Parsing Trailer Infinite Loop (DoS)",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-r73j-pqj5-w3x7"
+          },
+          {
+            "id": "GHSA-r7rm-8j6h-r933",
+            "summary": "Buffer Copy without Checking Size of Input in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-5311"
+          },
+          {
+            "id": "GHSA-r854-96gq-rfg3",
+            "summary": "Pillow Temporary file name leakage",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-1933"
+          },
+          {
+            "id": "GHSA-rwr3-c2q8-gm56",
+            "summary": "Pillow Integer overflow in Map.c",
+            "severity": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-9189"
+          },
+          {
+            "id": "GHSA-rwv7-3v45-hg29",
+            "summary": "Pillow Out-of-bounds Read vulnerability",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-25288"
+          },
+          {
+            "id": "GHSA-v9pc-9mvp-x87g",
+            "summary": "Pillow Buffer overflow in Jpeg2KEncode.c",
+            "severity": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-3076"
+          },
+          {
+            "id": "GHSA-vcqg-3p29-xw73",
+            "summary": "Integer overflow in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-5310"
+          },
+          {
+            "id": "GHSA-vj42-xq3r-hr3r",
+            "summary": "Out-of-bounds reads in Pillow",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10994"
+          },
+          {
+            "id": "GHSA-vqcj-wrf2-7v73",
+            "summary": "Pillow Out-of-bounds Write",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-35654"
+          },
+          {
+            "id": "GHSA-w4vg-rf63-f3j3",
+            "summary": "Arbitrary code using \"crafted image file\" approach affecting Pillow",
+            "severity": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2016-9190"
+          },
+          {
+            "id": "GHSA-whj4-6x5x-4v2j",
+            "summary": "FITS GZIP decompression bomb in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-whj4-6x5x-4v2j"
+          },
+          {
+            "id": "GHSA-wjx4-4jcj-g98j",
+            "summary": "Pillow has an integer overflow when processing fonts",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-wjx4-4jcj-g98j"
+          },
+          {
+            "id": "GHSA-x895-2wrm-hvp7",
+            "summary": "PIL and Pillow Vulnerable to Symlink Attack on Tmpfiles",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-1932"
+          },
+          {
+            "id": "GHSA-xg8h-j46f-w952",
+            "summary": "Pillow vulnerability can cause write buffer overflow on BCn encoding",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-xg8h-j46f-w952"
+          },
+          {
+            "id": "GHSA-xrcv-f9gm-v42c",
+            "summary": "Out-of-bounds Read in Pillow",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-22816"
+          },
+          {
+            "id": "OSV-2022-1074",
+            "summary": "Invalid-free in _dealloc",
+            "severity": "",
+            "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=52587"
+          },
+          {
+            "id": "OSV-2022-715",
+            "summary": "Segv on unknown address in jpeg_read_scanlines",
+            "severity": "",
+            "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=50217"
+          },
+          {
+            "id": "PYSEC-2014-10",
+            "summary": "",
+            "severity": "",
+            "url": "https://pypi.python.org/pypi/Pillow/2.5.2"
+          },
+          {
+            "id": "PYSEC-2014-22",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.openwall.com/lists/oss-security/2014/02/11/1"
+          },
+          {
+            "id": "PYSEC-2014-23",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.ubuntu.com/usn/USN-2168-1"
+          },
+          {
+            "id": "PYSEC-2014-87",
+            "summary": "",
+            "severity": "",
+            "url": "http://people.canonical.com/~ubuntu-security/cve/2014/CVE-2014-1932.html"
+          },
+          {
+            "id": "PYSEC-2015-15",
+            "summary": "",
+            "severity": "",
+            "url": "https://pypi.python.org/pypi/Pillow/2.5.3"
+          },
+          {
+            "id": "PYSEC-2015-16",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/pull/1060"
+          },
+          {
+            "id": "PYSEC-2016-19",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2016/dsa-3499"
+          },
+          {
+            "id": "PYSEC-2016-5",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2016/dsa-3499"
+          },
+          {
+            "id": "PYSEC-2016-6",
+            "summary": "",
+            "severity": "",
+            "url": "http://www.debian.org/security/2016/dsa-3499"
+          },
+          {
+            "id": "PYSEC-2016-7",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/commit/4e0d9b0b9740d258ade40cce248c93777362ac1e"
+          },
+          {
+            "id": "PYSEC-2016-8",
+            "summary": "",
+            "severity": "",
+            "url": "http://pillow.readthedocs.io/en/3.4.x/releasenotes/3.3.2.html"
+          },
+          {
+            "id": "PYSEC-2016-9",
+            "summary": "",
+            "severity": "",
+            "url": "http://pillow.readthedocs.io/en/3.4.x/releasenotes/3.3.2.html"
+          },
+          {
+            "id": "PYSEC-2017-92",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1321929"
+          },
+          {
+            "id": "PYSEC-2019-110",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/latest/releasenotes/6.2.0.html"
+          },
+          {
+            "id": "PYSEC-2020-172",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/6.2.2.html"
+          },
+          {
+            "id": "PYSEC-2020-76",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/7.1.0.html"
+          },
+          {
+            "id": "PYSEC-2020-77",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/7.1.0.html"
+          },
+          {
+            "id": "PYSEC-2020-78",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/7.1.0.html"
+          },
+          {
+            "id": "PYSEC-2020-79",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/7.1.0.html"
+          },
+          {
+            "id": "PYSEC-2020-80",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/7.1.0.html"
+          },
+          {
+            "id": "PYSEC-2020-81",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/6.2.2.html"
+          },
+          {
+            "id": "PYSEC-2020-82",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/6.2.2.html"
+          },
+          {
+            "id": "PYSEC-2020-83",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/6.2.2.html"
+          },
+          {
+            "id": "PYSEC-2020-84",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/commit/a09acd0decd8a87ccce939d5ff65dab59e7d365b"
+          },
+          {
+            "id": "PYSEC-2021-137",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#cve-2021-25287-cve-2021-25288-fix-oob-read-in-jpeg2kdecode"
+          },
+          {
+            "id": "PYSEC-2021-138",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#cve-2021-25287-cve-2021-25288-fix-oob-read-in-jpeg2kdecode"
+          },
+          {
+            "id": "PYSEC-2021-139",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#cve-2021-28675-fix-dos-in-psdimageplugin"
+          },
+          {
+            "id": "PYSEC-2021-317",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.3.2.html"
+          },
+          {
+            "id": "PYSEC-2021-331",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html"
+          },
+          {
+            "id": "PYSEC-2021-35",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-36",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-37",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-38",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-39",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-40",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-41",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-42",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.1.1.html"
+          },
+          {
+            "id": "PYSEC-2021-69",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html"
+          },
+          {
+            "id": "PYSEC-2021-70",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html"
+          },
+          {
+            "id": "PYSEC-2021-71",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html"
+          },
+          {
+            "id": "PYSEC-2021-92",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/8.2.0.html#cve-2021-28676-fix-fli-dos"
+          },
+          {
+            "id": "PYSEC-2021-93",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/pull/5377"
+          },
+          {
+            "id": "PYSEC-2021-94",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/pull/5377"
+          },
+          {
+            "id": "PYSEC-2022-10",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/9.0.0.html#restrict-builtins-available-to-imagemath-eval"
+          },
+          {
+            "id": "PYSEC-2022-168",
+            "summary": "",
+            "severity": "",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/9.0.1.html#security"
+          },
+          {
+            "id": "PYSEC-2022-42979",
+            "summary": "",
+            "severity": "",
+            "url": "https://bugs.gentoo.org/855683"
+          },
+          {
+            "id": "PYSEC-2022-42980",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/pull/6700"
+          },
+          {
+            "id": "PYSEC-2022-43145",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://pillow.readthedocs.io/en/stable/releasenotes/9.1.1.html"
+          },
+          {
+            "id": "PYSEC-2022-8",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/blob/c5d9223a8b5e9295d15b5a9b1ef1dae44c8499f3/src/path.c#L331"
+          },
+          {
+            "id": "PYSEC-2022-9",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/blob/c5d9223a8b5e9295d15b5a9b1ef1dae44c8499f3/src/path.c#L331"
+          },
+          {
+            "id": "PYSEC-2023-175",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/blob/main/CHANGES.rst#1001-2023-09-15"
+          },
+          {
+            "id": "PYSEC-2023-227",
+            "summary": "",
+            "severity": "",
+            "url": "https://devhub.checkmarx.com/cve-details/CVE-2023-44271/"
+          },
+          {
+            "id": "PYSEC-2025-61",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-xg8h-j46f-w952"
           }
         ]
       },
@@ -10692,9 +11566,9 @@
         ]
       },
       {
-        "name": "pytest-django",
-        "installed": "4.12.0",
-        "latest": "4.12.0",
+        "name": "python-dateutil",
+        "installed": "2.9.0.post0",
+        "latest": "2.9.0.post0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10703,14 +11577,6 @@
         "name": "python-crontab",
         "installed": "3.3.0",
         "latest": "3.3.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "python-dateutil",
-        "installed": "2.9.0.post0",
-        "latest": "2.9.0.post0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10727,6 +11593,14 @@
         "name": "pytokens",
         "installed": "0.4.1",
         "latest": "0.4.1",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "referencing",
+        "installed": "0.37.0",
+        "latest": "0.37.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10763,14 +11637,6 @@
             "url": "https://github.com/redis/redis-py/pull/2641"
           }
         ]
-      },
-      {
-        "name": "referencing",
-        "installed": "0.37.0",
-        "latest": "0.37.0",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "PyYAML",
@@ -10828,14 +11694,6 @@
             "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1860466"
           }
         ]
-      },
-      {
-        "name": "rich",
-        "installed": "14.3.3",
-        "latest": "15.0.0",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "requests",
@@ -10925,9 +11783,33 @@
         ]
       },
       {
+        "name": "rich",
+        "installed": "14.3.3",
+        "latest": "15.0.0",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
         "name": "safety-schemas",
         "installed": "0.0.16",
         "latest": "0.0.18",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "service-identity",
+        "installed": "24.2.0",
+        "latest": "24.2.0",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "pydantic_core",
+        "installed": "2.41.5",
+        "latest": "2.47.0",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -10954,17 +11836,17 @@
         ]
       },
       {
-        "name": "service-identity",
-        "installed": "24.2.0",
-        "latest": "24.2.0",
+        "name": "shellingham",
+        "installed": "1.5.4",
+        "latest": "1.5.4",
         "outdated": false,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "shellingham",
-        "installed": "1.5.4",
-        "latest": "1.5.4",
+        "name": "ruamel.yaml",
+        "installed": "0.19.1",
+        "latest": "0.19.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -10999,17 +11881,17 @@
         "cves": []
       },
       {
-        "name": "pydantic_core",
-        "installed": "2.41.5",
-        "latest": "2.46.4",
-        "outdated": true,
+        "name": "structlog",
+        "installed": "25.5.0",
+        "latest": "25.5.0",
+        "outdated": false,
         "cve_count": 0,
         "cves": []
       },
       {
-        "name": "ruamel.yaml",
-        "installed": "0.19.1",
-        "latest": "0.19.1",
+        "name": "tenacity",
+        "installed": "9.1.4",
+        "latest": "9.1.4",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11060,9 +11942,9 @@
         ]
       },
       {
-        "name": "structlog",
-        "installed": "25.5.0",
-        "latest": "25.5.0",
+        "name": "rpds-py",
+        "installed": "0.30.0",
+        "latest": "0.30.0",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11076,26 +11958,10 @@
         "cves": []
       },
       {
-        "name": "rpds-py",
-        "installed": "0.30.0",
-        "latest": "0.30.0",
+        "name": "tomli",
+        "installed": "2.4.1",
+        "latest": "2.4.1",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "tenacity",
-        "installed": "9.1.4",
-        "latest": "9.1.4",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "ruff",
-        "installed": "0.15.9",
-        "latest": "0.15.13",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -11103,6 +11969,38 @@
         "name": "tomlkit",
         "installed": "0.14.0",
         "latest": "0.15.0",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "ruff",
+        "installed": "0.15.9",
+        "latest": "0.15.14",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "txaio",
+        "installed": "25.9.2",
+        "latest": "25.12.2",
+        "outdated": true,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typing-inspection",
+        "installed": "0.4.2",
+        "latest": "0.4.2",
+        "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "typer",
+        "installed": "0.24.1",
+        "latest": "0.25.1",
         "outdated": true,
         "cve_count": 0,
         "cves": []
@@ -11135,34 +12033,10 @@
         ]
       },
       {
-        "name": "tomli",
-        "installed": "2.4.1",
-        "latest": "2.4.1",
+        "name": "typing_extensions",
+        "installed": "4.15.0",
+        "latest": "4.15.0",
         "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "txaio",
-        "installed": "25.9.2",
-        "latest": "25.12.2",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "typing-inspection",
-        "installed": "0.4.2",
-        "latest": "0.4.2",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
-        "name": "typer",
-        "installed": "0.24.1",
-        "latest": "0.25.1",
-        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -11175,9 +12049,9 @@
         "cves": []
       },
       {
-        "name": "typing_extensions",
-        "installed": "4.15.0",
-        "latest": "4.15.0",
+        "name": "tzlocal",
+        "installed": "5.3.1",
+        "latest": "5.3.1",
         "outdated": false,
         "cve_count": 0,
         "cves": []
@@ -11187,7 +12061,7 @@
         "installed": "25.5.0",
         "latest": "26.4.0",
         "outdated": true,
-        "cve_count": 27,
+        "cve_count": 28,
         "cves": [
           {
             "id": "GHSA-32gv-6cf3-wcmq",
@@ -11350,16 +12224,14 @@
             "summary": "",
             "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
             "url": "https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2"
+          },
+          {
+            "id": "PYSEC-2026-160",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/twisted/twisted/security/advisories/GHSA-grgv-6hw6-v9g4"
           }
         ]
-      },
-      {
-        "name": "tzlocal",
-        "installed": "5.3.1",
-        "latest": "5.3.1",
-        "outdated": false,
-        "cve_count": 0,
-        "cves": []
       },
       {
         "name": "vine",
@@ -11370,18 +12242,18 @@
         "cves": []
       },
       {
-        "name": "wcwidth",
-        "installed": "0.6.0",
-        "latest": "0.7.0",
-        "outdated": true,
-        "cve_count": 0,
-        "cves": []
-      },
-      {
         "name": "websocket-client",
         "installed": "1.9.0",
         "latest": "1.9.0",
         "outdated": false,
+        "cve_count": 0,
+        "cves": []
+      },
+      {
+        "name": "wcwidth",
+        "installed": "0.6.0",
+        "latest": "0.7.0",
+        "outdated": true,
         "cve_count": 0,
         "cves": []
       },
@@ -11429,7 +12301,7 @@
         "installed": "2.6.3",
         "latest": "2.7.0",
         "outdated": true,
-        "cve_count": 30,
+        "cve_count": 32,
         "cves": [
           {
             "id": "GHSA-2xpw-w6gg-jr37",
@@ -11610,6 +12482,18 @@
             "summary": "",
             "severity": "CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
             "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-g4mx-q9vg-27p4"
+          },
+          {
+            "id": "PYSEC-2026-141",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-qccp-gfcp-xxvc"
+          },
+          {
+            "id": "PYSEC-2026-142",
+            "summary": "",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://github.com/urllib3/urllib3/security/advisories/GHSA-mf9v-mfxr-j63j"
           }
         ]
       },
@@ -11620,10 +12504,115 @@
         "outdated": true,
         "cve_count": 0,
         "cves": []
+      },
+      {
+        "name": "numpy",
+        "installed": "1.26.4",
+        "latest": "2.4.6",
+        "outdated": true,
+        "cve_count": 16,
+        "cves": [
+          {
+            "id": "GHSA-2fc2-6r4j-p65h",
+            "summary": "Numpy arbitrary file write via symlink attack",
+            "severity": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-1859"
+          },
+          {
+            "id": "GHSA-5545-2q6w-2gh6",
+            "summary": "NumPy NULL Pointer Dereference",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41495"
+          },
+          {
+            "id": "GHSA-6p56-wp2h-9hxr",
+            "summary": "NumPy Buffer Overflow (Disputed)",
+            "severity": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-33430"
+          },
+          {
+            "id": "GHSA-9fq2-x9r6-wfmf",
+            "summary": "Numpy Deserialization of Untrusted Data",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-6446"
+          },
+          {
+            "id": "GHSA-cw6w-4rcx-xphc",
+            "summary": "Arbitrary file write in NumPy",
+            "severity": "CVSS:3.0/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-1858"
+          },
+          {
+            "id": "GHSA-f7c7-j99h-c22f",
+            "summary": "Buffer Copy without Checking Size of Input in NumPy",
+            "severity": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-41496"
+          },
+          {
+            "id": "GHSA-fpfv-jqm9-f5jm",
+            "summary": "Incorrect Comparison in NumPy",
+            "severity": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-34141"
+          },
+          {
+            "id": "GHSA-frgw-fgh6-9g52",
+            "summary": "Numpy missing input validation",
+            "severity": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-12852"
+          },
+          {
+            "id": "PYSEC-2017-1",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/9560#issuecomment-322395292"
+          },
+          {
+            "id": "PYSEC-2018-33",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/pull/4262"
+          },
+          {
+            "id": "PYSEC-2018-34",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/pull/4262"
+          },
+          {
+            "id": "PYSEC-2019-108",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/12759"
+          },
+          {
+            "id": "PYSEC-2021-854",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/18939"
+          },
+          {
+            "id": "PYSEC-2021-855",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/18993"
+          },
+          {
+            "id": "PYSEC-2021-856",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/19038"
+          },
+          {
+            "id": "PYSEC-2021-857",
+            "summary": "",
+            "severity": "",
+            "url": "https://github.com/numpy/numpy/issues/19000"
+          }
+        ]
       }
     ],
-    "total_cves": 248,
-    "outdated_count": 37,
+    "total_cves": 397,
+    "outdated_count": 42,
     "critical_cves": []
   },
   "coupling_matrix": {
@@ -11839,21 +12828,21 @@
           "module_path": "nexus_tournaments.services.verification_service",
           "violation_type": "Cross-App Import",
           "penalty_points": 5,
-          "line_number": 27,
+          "line_number": 29,
           "severity": "HIGH"
         },
         {
           "module_path": "nexus_tournaments.services.verification_service",
           "violation_type": "Cross-App Import",
           "penalty_points": 5,
-          "line_number": 27,
+          "line_number": 29,
           "severity": "HIGH"
         },
         {
           "module_path": "nexus_tournaments.services.verification_service",
           "violation_type": "Cross-App Import",
           "penalty_points": 5,
-          "line_number": 27,
+          "line_number": 29,
           "severity": "HIGH"
         }
       ],
@@ -11875,20 +12864,74 @@
   "git_context": {
     "github_base": "https://github.com/yusuphajammeh/nexus-gaming",
     "branch": "main",
-    "commit": "0fbde74"
+    "commit": "613b92c"
   },
   "fix_queue": {
+    "rec-0743742ff12b": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-079ed838eff0": {
       "created_at": "2026-05-18T21:30:20.009049Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T21:30:20.009049Z"
     },
+    "rec-07ffe59f9bed": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-0805ae1db1df": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-0836b2bbf6d6": {
+      "created_at": "2026-05-18T22:17:28.783916Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-18T22:17:28.783916Z"
+    },
+    "rec-08c87dfa093d": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-0a92a2ef3bef": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-0c8f56840173": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-0cef3fc27846": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-0d1defb91013": {
       "created_at": "2026-05-18T02:20:57.370851Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T02:20:57.370851Z"
+      "updated_at": "2026-05-22T09:50:04.793576Z"
+    },
+    "rec-0dd201b7078c": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-0e4b4aead673": {
       "created_at": "2026-05-18T21:30:20.009049Z",
@@ -11900,7 +12943,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-0eea9f77a245": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -11908,11 +12951,23 @@
       "status": "open",
       "updated_at": "2026-05-18T01:17:18.267024Z"
     },
+    "rec-0f858bf342fc": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
     "rec-1030ded9c437": {
       "created_at": "2026-05-18T01:17:18.267024Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T01:17:18.267024Z"
+    },
+    "rec-1041bd446867": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-11aca4420a55": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11920,17 +12975,35 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-12da6bd1a957": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-130e5950c0bf": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-133ed401b4a5": {
+      "created_at": "2026-05-22T09:41:41.883215Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T09:41:41.883215Z"
+    },
+    "rec-14e1df695e2b": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-15dfc2445298": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-15fd945fe68c": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11938,17 +13011,35 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-17a2d50f07a6": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
     "rec-18ce06b925da": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-1ccd906adfca": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-1deeefc3790b": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-1edf99caf2cf": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-1fabbb30dcd0": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11960,7 +13051,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-21a0943a8000": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11972,7 +13063,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-24f7e75cc55d": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-270d6cbe9584": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -11984,7 +13081,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-286f9b739882": {
       "created_at": "2026-05-18T02:04:31.112246Z",
@@ -11998,6 +13095,12 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-2a92afa0d6e6": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-2b53fe583678": {
       "created_at": "2026-05-18T06:47:30.898137Z",
       "notes": "",
@@ -12008,7 +13111,31 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T01:46:59.627603Z"
+      "updated_at": "2026-05-22T08:08:36.342404Z"
+    },
+    "rec-2bb12a72349d": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-2bc5dea0c4ae": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-2c27d3046f3e": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-2d8267e21c96": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-2fe77fdd1537": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12016,23 +13143,35 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-305d9308a19f": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
     "rec-30c25d881bbd": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-32d8f23d7add": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-3779c331bb91": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-37b84ba9e297": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-3ae8f24fe890": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12044,13 +13183,13 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-3de183b40438": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-3eced05fd428": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12062,7 +13201,7 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-40361c343063": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12074,19 +13213,37 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-413c523fe966": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-460bc4d8e54f": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-469a89ef4252": {
       "created_at": "2026-05-18T01:57:35.489327Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-4760fb51ddd2": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-47b6c5b90f6e": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-49931e2f502c": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12098,7 +13255,31 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-4bc2a8218434": {
+      "created_at": "2026-05-22T09:41:41.883215Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T09:41:41.883215Z"
+    },
+    "rec-4c0f2ad827dc": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-4c197aab8a4c": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-4d71a9ad7150": {
+      "created_at": "2026-05-22T09:41:41.883215Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T09:41:41.883215Z"
     },
     "rec-50fc7048f2bb": {
       "created_at": "2026-05-18T01:12:38.607133Z",
@@ -12110,31 +13291,67 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-5400dc4b8418": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-55bf20550144": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-56101d3e463f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-569330323798": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-572bf085876a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-57bc8a597fb4": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-5830778d41fc": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-5a58067f507f": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-5c2ae80a4668": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-5e69344dc785": {
+      "created_at": "2026-05-22T09:41:41.883215Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T09:41:41.883215Z"
     },
     "rec-5eebe28243c2": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12146,31 +13363,49 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-62ec423f6ded": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-680991abdc1e": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-68ff8e7f97b9": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-6b1cce4e4c1d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-6c71f76c1f21": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-6d1908e66e17": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-6db98ba51d82": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-701609dca034": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12188,19 +13423,25 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-7321cb9b07ba": {
+      "created_at": "2026-05-20T02:23:51.122983Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-20T02:23:51.122983Z"
     },
     "rec-73c2aa342b16": {
       "created_at": "2026-05-18T01:46:59.627603Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-75130f0805ae": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-7615cbc144b5": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12208,23 +13449,35 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-792fbd297c6c": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-7bffad7a39bc": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-7cea531ee3de": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-7da7f006f6a9": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-7e4903faf4eb": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-80b9dc0b50c7": {
       "created_at": "2026-05-18T21:30:20.009049Z",
@@ -12232,11 +13485,41 @@
       "status": "open",
       "updated_at": "2026-05-18T21:30:20.009049Z"
     },
+    "rec-80c93524e436": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-8173a2364d1e": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-81d2d7d49a6a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-22T08:08:36.342404Z"
+    },
+    "rec-835b9495abbc": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-86d5835f4c62": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-891c238e23ae": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-8968e86e99c9": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12244,11 +13527,35 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-89f5b5c545f7": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-8a00b7c02abf": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-8a61f50a5065": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T07:41:22.941357Z"
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-8b2d7f90b201": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-8bd920067c57": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-8cad61aae0cf": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12266,7 +13573,13 @@
       "created_at": "2026-05-18T01:52:25.446613Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-22T09:50:04.793576Z"
+    },
+    "rec-90af6c233f98": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-91e3d1cd25be": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12274,35 +13587,107 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-9311dbed0fc3": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
     "rec-94ef62e02eb0": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-9a75c8a3e084": {
+      "created_at": "2026-05-19T06:43:15.654312Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T08:08:36.342404Z"
+    },
     "rec-9b0141a799cd": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-9b0fa696b38a": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-9b2fc8344e52": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-9c0a710e3058": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-9cb79aaf448d": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-9d38eca3ddd8": {
+      "created_at": "2026-05-22T08:08:36.342404Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T08:08:36.342404Z"
+    },
+    "rec-9e3ed604e721": {
+      "created_at": "2026-05-22T08:21:32.250005Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T08:21:32.250005Z"
+    },
+    "rec-9f8767ce1e74": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-a109f234a66f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-a1bd502ccbc0": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-a2e0702f5cb8": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-a47eb2239748": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-ac3a32880611": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-ad22d769f151": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-ae1290292536": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12314,7 +13699,19 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-b0560c1af5e0": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-b3539406e291": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-b3ba7869a873": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12322,23 +13719,65 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-b4bd8cdaa9c0": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-b4ea6fffcf4d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-b50d5d8329e8": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-b7aa59596552": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-b92d5511e737": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-bbace18020d4": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-bc5338fe104d": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-bdd77f889d4f": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-bebdcdd6619c": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-bfb86bcb6b0a": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
     },
     "rec-c0dd77ab8aa4": {
       "created_at": "2026-05-18T21:30:20.009049Z",
@@ -12358,6 +13797,12 @@
       "status": "open",
       "updated_at": "2026-05-18T01:17:18.267024Z"
     },
+    "rec-c42ebaabba4e": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-c524c82b7cb2": {
       "created_at": "2026-05-18T21:30:20.009049Z",
       "notes": "",
@@ -12370,17 +13815,47 @@
       "status": "open",
       "updated_at": "2026-05-18T01:12:38.607133Z"
     },
+    "rec-c9981455aa0f": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-c9c97f2093c2": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-ca58810df9df": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
     "rec-ca75899f4f32": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-cba5960aa100": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-cba8539afad2": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-ce792ef20829": {
+      "created_at": "2026-05-20T02:23:51.122983Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-20T02:23:51.122983Z"
     },
     "rec-cfc4165eb775": {
       "created_at": "2026-05-18T21:30:20.009049Z",
@@ -12394,29 +13869,83 @@
       "status": "open",
       "updated_at": "2026-05-18T01:06:08.061136Z"
     },
+    "rec-d5334a57c579": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
+    "rec-d663f4929250": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-d6fde76f7ed8": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-d747886dc9be": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-d889fde825e1": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-d8ab30d8a749": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-d962e861468f": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:02:36.702991Z"
+      "updated_at": "2026-05-20T02:33:38.609177Z"
+    },
+    "rec-d9ca6b272fd8": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-da11b4479a3c": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-dc6fa0df7668": {
+      "created_at": "2026-05-22T09:50:04.793576Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-dc880ee5b189": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-dc9e2942edfb": {
+      "created_at": "2026-05-22T09:50:04.793576Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-e063bcd5acba": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-e1733dc82750": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12428,25 +13957,43 @@
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-eab3f428a44e": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
+    "rec-ece74c2bac7b": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     },
     "rec-ed0927c954fa": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-ed7d0e7525f6": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-ee9edb513abd": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
     },
     "rec-ef5dc6faee38": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-efa49c006432": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12454,17 +14001,47 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-efa609519512": {
+      "created_at": "2026-05-19T00:17:55.801631Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T00:17:55.801631Z"
+    },
+    "rec-f0bf2f0e90aa": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
     "rec-f1b6124396d6": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
+    },
+    "rec-f3c7a871acd3": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-f3e852454585": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
+    "rec-f47d99419ddb": {
+      "created_at": "2026-05-23T09:39:20.785063Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:39:20.785063Z"
     },
     "rec-f6b61d264109": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-f6c9eb53e2d2": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12472,17 +14049,29 @@
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-f7320cf3b32d": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-23T09:13:05.768990Z"
+    },
     "rec-f8905dc49a34": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
+    "rec-f9808593e99b": {
+      "created_at": "2026-05-19T07:18:08.526305Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-19T07:18:08.526305Z"
+    },
     "rec-fb488e9896e0": {
       "created_at": "2026-05-18T01:30:15.595311Z",
       "notes": "",
       "status": "open",
-      "updated_at": "2026-05-18T22:17:28.783916Z"
+      "updated_at": "2026-05-24T02:06:15.492350Z"
     },
     "rec-fbbde4c546f4": {
       "created_at": "2026-05-18T07:41:22.941357Z",
@@ -12496,17 +14085,23 @@
       "status": "open",
       "updated_at": "2026-05-18T21:30:20.009049Z"
     },
+    "rec-fc1e5173178f": {
+      "created_at": "2026-05-22T07:47:48.434236Z",
+      "notes": "",
+      "status": "open",
+      "updated_at": "2026-05-22T07:47:48.434236Z"
+    },
     "rec-fd5e8ea66109": {
       "created_at": "2026-05-18T07:41:22.941357Z",
       "notes": "",
       "status": "open",
       "updated_at": "2026-05-18T07:41:22.941357Z"
     },
-    "rec-0836b2bbf6d6": {
+    "rec-fdb26d937861": {
+      "created_at": "2026-05-23T09:13:05.768990Z",
+      "notes": "",
       "status": "open",
-      "created_at": "2026-05-18T22:17:28.783916Z",
-      "updated_at": "2026-05-18T22:17:28.783916Z",
-      "notes": ""
+      "updated_at": "2026-05-23T09:13:05.768990Z"
     }
   },
   "change_summary": {
@@ -12516,31 +14111,17 @@
     "score_deltas": {
       "nexus_core": 0.0,
       "nexus_social": 0.0,
-      "nexus_economy": 0,
+      "nexus_economy": 0.0,
       "nexus_gaming": 0.0,
-      "nexus_gateway": 0,
+      "nexus_gateway": 0.0,
       "nexus_tournaments": 0.0,
-      "nexus_content": 0
+      "nexus_content": 0.0
     },
-    "previous_timestamp": "2026-05-18T22:00:12.295626"
+    "previous_timestamp": "2026-05-23T09:34:54.344142"
   },
   "timeline": {
     "labels": [
       "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
-      "2026-05-17",
       "2026-05-18",
       "2026-05-18",
       "2026-05-18",
@@ -12555,14 +14136,24 @@
       "2026-05-18",
       "2026-05-18",
       "2026-05-18",
-      "2026-05-18"
+      "2026-05-18",
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-19",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-20",
+      "2026-05-22",
+      "2026-05-22",
+      "2026-05-22",
+      "2026-05-22",
+      "2026-05-22",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-23"
     ],
     "apps": {
       "nexus_content": [
-        91.0,
-        91.0,
-        91.0,
-        91.0,
         100.0,
         100.0,
         100.0,
@@ -12583,18 +14174,18 @@
         100.0,
         100.0,
         100.0,
+        92.0,
+        92.0,
+        92.0,
+        92.0,
         100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        92.0,
+        92.0,
+        92.0,
+        92.0,
+        92.0
       ],
       "nexus_core": [
-        0.0,
-        0.0,
-        0.0,
-        0.0,
         75.0,
         75.0,
         75.0,
@@ -12615,18 +14206,18 @@
         75.0,
         75.0,
         75.0,
-        75.0,
-        75.0,
-        75.0,
-        75.0,
-        75.0,
-        75.0
+        63.7,
+        63.7,
+        63.7,
+        63.7,
+        99.0,
+        63.7,
+        63.7,
+        63.7,
+        63.7,
+        63.7
       ],
       "nexus_economy": [
-        46.0,
-        46.0,
-        46.0,
-        46.0,
         100.0,
         100.0,
         100.0,
@@ -12647,12 +14238,16 @@
         100.0,
         100.0,
         100.0,
+        92.9,
+        92.9,
+        92.9,
+        92.9,
         100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        92.9,
+        92.9,
+        92.9,
+        92.9,
+        92.9
       ],
       "nexus_gaming": [
         94.0,
@@ -12678,19 +14273,15 @@
         94.0,
         94.0,
         94.0,
+        null,
+        null,
         94.0,
-        94.0,
-        94.0,
-        94.0,
+        null,
         94.0,
         94.0,
         94.0
       ],
       "nexus_gateway": [
-        86.0,
-        86.0,
-        86.0,
-        86.0,
         100.0,
         100.0,
         100.0,
@@ -12711,18 +14302,18 @@
         100.0,
         100.0,
         100.0,
+        95.0,
+        95.0,
+        95.0,
+        95.0,
         100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0,
-        100.0
+        95.0,
+        95.0,
+        95.0,
+        95.0,
+        95.0
       ],
       "nexus_social": [
-        59.0,
-        59.0,
-        59.0,
-        59.0,
         86.0,
         86.0,
         86.0,
@@ -12743,18 +14334,18 @@
         86.0,
         86.0,
         86.0,
-        86.0,
-        86.0,
-        86.0,
-        86.0,
-        86.0,
-        86.0
+        57.0,
+        57.0,
+        57.0,
+        57.0,
+        70.0,
+        57.0,
+        57.0,
+        57.0,
+        57.0,
+        57.0
       ],
       "nexus_tournaments": [
-        63.0,
-        63.0,
-        63.0,
-        63.0,
         93.0,
         93.0,
         93.0,
@@ -12775,19 +14366,19 @@
         93.0,
         93.0,
         93.0,
-        93.0,
-        93.0,
-        93.0,
-        93.0,
-        93.0,
-        93.0
+        68.2,
+        68.2,
+        68.2,
+        68.2,
+        83.0,
+        66.7,
+        66.7,
+        66.7,
+        66.7,
+        66.7
       ]
     },
     "fleet_avg": [
-      62.7,
-      62.7,
-      62.7,
-      62.7,
       92.6,
       92.6,
       92.6,
@@ -12808,12 +14399,16 @@
       92.6,
       92.6,
       92.6,
-      92.6,
-      92.6,
-      92.6,
-      92.6,
-      92.6,
-      92.6
+      80.4,
+      80.4,
+      80.4,
+      78.1,
+      92.0,
+      80.2,
+      77.9,
+      80.2,
+      80.2,
+      80.2
     ],
     "_meta": {
       "runs": 30,

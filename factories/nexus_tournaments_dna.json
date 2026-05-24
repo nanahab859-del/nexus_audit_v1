@@ -1,4 +1,35 @@
 {
+    "PIL": {
+        "bacon": 2,
+        "imported_by": [
+            "PIL",
+            "PIL.Image",
+            "nexus_tournaments.verification.phash"
+        ],
+        "imports": [
+            "PIL"
+        ],
+        "name": "PIL",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/PIL/__init__.py"
+    },
+    "PIL.Image": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.verification.phash"
+        ],
+        "imports": [
+            "PIL",
+            "abc",
+            "io",
+            "logging",
+            "math",
+            "os",
+            "re",
+            "typing"
+        ],
+        "name": "PIL.Image",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/PIL/Image.py"
+    },
     "__main__": {
         "bacon": 0,
         "imports": [
@@ -56,6 +87,14 @@
             "nexus_tournaments.urls.leagues",
             "nexus_tournaments.urls.matches",
             "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "nexus_tournaments.verification.providers.registry",
+            "nexus_tournaments.verification.result",
             "nexus_tournaments.views",
             "nexus_tournaments.views.announcements",
             "nexus_tournaments.views.base",
@@ -66,6 +105,31 @@
         ],
         "name": "__main__",
         "path": null
+    },
+    "abc": {
+        "bacon": 2,
+        "imported_by": [
+            "PIL.Image",
+            "dataclasses",
+            "io",
+            "nexus_tournaments.verification.providers.base",
+            "os",
+            "typing"
+        ],
+        "name": "abc",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/abc.py"
+    },
+    "dataclasses": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.verification.result"
+        ],
+        "imports": [
+            "abc",
+            "re"
+        ],
+        "name": "dataclasses",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/dataclasses.py"
     },
     "datetime": {
         "bacon": 2,
@@ -81,6 +145,7 @@
             "nexus_tournaments.tests.test_models",
             "nexus_tournaments.tests.test_services",
             "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.verification.phash",
             "nexus_tournaments.views.leagues"
         ],
         "imports": [
@@ -168,6 +233,8 @@
             "nexus_tournaments.urls.leagues",
             "nexus_tournaments.urls.matches",
             "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
             "nexus_tournaments.views.announcements",
             "nexus_tournaments.views.leagues",
             "nexus_tournaments.views.matches",
@@ -202,6 +269,7 @@
             "nexus_tournaments.tasks",
             "nexus_tournaments.tests.test_final_contract_gaps",
             "nexus_tournaments.tests.test_invariants",
+            "nexus_tournaments.verification.phash",
             "nexus_tournaments.views.announcements",
             "nexus_tournaments.views.leagues",
             "nexus_tournaments.views.matches",
@@ -219,7 +287,10 @@
             "django.contrib.auth",
             "django.utils.timezone",
             "nexus_tournaments.models.league_standing",
-            "nexus_tournaments.models.tournament_template"
+            "nexus_tournaments.models.tournament_template",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.tests.test_services",
+            "nexus_tournaments.verification.load_balancer"
         ],
         "imports": [
             "django",
@@ -292,7 +363,8 @@
             "django.contrib",
             "django.contrib.auth",
             "django.core",
-            "django.utils"
+            "django.utils",
+            "re"
         ],
         "name": "django.contrib.auth",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/contrib/auth/__init__.py"
@@ -510,6 +582,7 @@
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
             "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.verification.phash",
             "nexus_tournaments.views.leagues",
             "nexus_tournaments.views.moderation"
         ],
@@ -525,6 +598,8 @@
             "django",
             "django.core",
             "django.utils",
+            "io",
+            "re",
             "secrets"
         ],
         "name": "django.utils.text",
@@ -549,6 +624,7 @@
             "nexus_tournaments.tests.test_ruleset_restrictions",
             "nexus_tournaments.tests.test_services",
             "nexus_tournaments.tests.test_tasks",
+            "nexus_tournaments.verification.phash",
             "nexus_tournaments.views.leagues",
             "nexus_tournaments.views.moderation"
         ],
@@ -559,6 +635,38 @@
         ],
         "name": "django.utils.timezone",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/site-packages/django/utils/timezone.py"
+    },
+    "hashlib": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "random",
+            "uuid"
+        ],
+        "imports": [
+            "logging"
+        ],
+        "name": "hashlib",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/hashlib.py"
+    },
+    "io": {
+        "bacon": 2,
+        "imported_by": [
+            "PIL.Image",
+            "django.utils.text",
+            "logging",
+            "nexus_tournaments.verification.phash",
+            "os",
+            "pathlib",
+            "unittest.mock",
+            "uuid"
+        ],
+        "imports": [
+            "abc"
+        ],
+        "name": "io",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/io.py"
     },
     "json": {
         "bacon": 2,
@@ -571,6 +679,8 @@
     "logging": {
         "bacon": 2,
         "imported_by": [
+            "PIL.Image",
+            "hashlib",
             "nexus_tournaments.receivers",
             "nexus_tournaments.services.announcement_service",
             "nexus_tournaments.services.bracket_service",
@@ -581,11 +691,18 @@
             "nexus_tournaments.services.participation_service",
             "nexus_tournaments.services.verification_service",
             "nexus_tournaments.tasks",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.google_cloud",
             "nexus_tournaments.views.matches",
-            "nexus_tournaments.views.moderation"
+            "nexus_tournaments.views.moderation",
+            "requests"
         ],
         "imports": [
-            "os"
+            "io",
+            "os",
+            "re",
+            "threading"
         ],
         "name": "logging",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/logging/__init__.py"
@@ -593,6 +710,7 @@
     "math": {
         "bacon": 2,
         "imported_by": [
+            "PIL.Image",
             "datetime",
             "nexus_tournaments.services.bracket_service",
             "random"
@@ -603,12 +721,27 @@
     "nexus_core": {
         "bacon": 2,
         "imported_by": [
+            "nexus_core.models",
             "nexus_core.utils",
             "nexus_tournaments.services.verification_service",
-            "nexus_tournaments.tasks"
+            "nexus_tournaments.tasks",
+            "nexus_tournaments.tests.test_services"
         ],
         "name": "nexus_core",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/__init__.py"
+    },
+    "nexus_core.models": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_core.models",
+            "nexus_tournaments.tests.test_services"
+        ],
+        "imports": [
+            "nexus_core",
+            "nexus_core.models"
+        ],
+        "name": "nexus_core.models",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_core/models/__init__.py"
     },
     "nexus_core.utils": {
         "bacon": 2,
@@ -690,6 +823,11 @@
             "nexus_tournaments.urls.leagues",
             "nexus_tournaments.urls.matches",
             "nexus_tournaments.urls.moderation",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "nexus_tournaments.verification.providers.registry",
             "nexus_tournaments.views",
             "nexus_tournaments.views.announcements",
             "nexus_tournaments.views.base",
@@ -1352,6 +1490,7 @@
         "imports": [
             "django",
             "django.apps",
+            "django.conf",
             "django.contrib",
             "django.contrib.auth",
             "django.db",
@@ -1362,7 +1501,11 @@
             "nexus_core.utils.feature_flags",
             "nexus_tournaments",
             "nexus_tournaments.models",
-            "nexus_tournaments.signals"
+            "nexus_tournaments.signals",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "requests"
         ],
         "name": "nexus_tournaments.services.verification_service",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/verification_service.py"
@@ -1599,11 +1742,14 @@
             "datetime",
             "decimal",
             "django",
+            "django.conf",
             "django.contrib",
             "django.contrib.auth",
             "django.test",
             "django.utils",
             "django.utils.timezone",
+            "nexus_core",
+            "nexus_core.models",
             "nexus_tournaments",
             "nexus_tournaments.models",
             "nexus_tournaments.services",
@@ -1707,6 +1853,148 @@
         ],
         "name": "nexus_tournaments.urls.moderation",
         "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/urls/moderation.py"
+    },
+    "nexus_tournaments.verification": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "nexus_tournaments.verification.providers.registry"
+        ],
+        "name": "nexus_tournaments.verification",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/__init__.py"
+    },
+    "nexus_tournaments.verification.load_balancer": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.services.verification_service"
+        ],
+        "imports": [
+            "django",
+            "django.conf",
+            "logging",
+            "nexus_tournaments",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.providers",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.providers.registry",
+            "nexus_tournaments.verification.result",
+            "threading",
+            "typing"
+        ],
+        "name": "nexus_tournaments.verification.load_balancer",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/load_balancer.py"
+    },
+    "nexus_tournaments.verification.phash": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.services.verification_service"
+        ],
+        "imports": [
+            "PIL",
+            "PIL.Image",
+            "datetime",
+            "django",
+            "django.apps",
+            "django.utils",
+            "django.utils.timezone",
+            "hashlib",
+            "io",
+            "logging",
+            "nexus_tournaments",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.result",
+            "requests",
+            "typing"
+        ],
+        "name": "nexus_tournaments.verification.phash",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/phash.py"
+    },
+    "nexus_tournaments.verification.providers": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "nexus_tournaments.verification.providers.registry"
+        ],
+        "name": "nexus_tournaments.verification.providers",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/providers/__init__.py"
+    },
+    "nexus_tournaments.verification.providers.base": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.providers.google_cloud"
+        ],
+        "imports": [
+            "abc",
+            "nexus_tournaments",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.result"
+        ],
+        "name": "nexus_tournaments.verification.providers.base",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/providers/base.py"
+    },
+    "nexus_tournaments.verification.providers.google_cloud": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.verification.providers.registry"
+        ],
+        "imports": [
+            "hashlib",
+            "logging",
+            "nexus_tournaments",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.providers",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.result",
+            "os",
+            "re",
+            "requests",
+            "typing"
+        ],
+        "name": "nexus_tournaments.verification.providers.google_cloud",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/providers/google_cloud.py"
+    },
+    "nexus_tournaments.verification.providers.registry": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.verification.load_balancer"
+        ],
+        "imports": [
+            "nexus_tournaments",
+            "nexus_tournaments.verification",
+            "nexus_tournaments.verification.providers",
+            "nexus_tournaments.verification.providers.google_cloud"
+        ],
+        "name": "nexus_tournaments.verification.providers.registry",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/providers/registry.py"
+    },
+    "nexus_tournaments.verification.result": {
+        "bacon": 1,
+        "imported_by": [
+            "__main__",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.base",
+            "nexus_tournaments.verification.providers.google_cloud"
+        ],
+        "imports": [
+            "dataclasses",
+            "typing"
+        ],
+        "name": "nexus_tournaments.verification.result",
+        "path": "/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/verification/result.py"
     },
     "nexus_tournaments.views": {
         "bacon": 1,
@@ -1874,16 +2162,21 @@
     "os": {
         "bacon": 2,
         "imported_by": [
+            "PIL.Image",
             "django.conf",
             "logging",
             "nexus_core.utils.feature_flags",
             "nexus_tournaments.generate_tree",
+            "nexus_tournaments.verification.providers.google_cloud",
             "os",
             "pathlib",
             "random",
+            "threading",
             "uuid"
         ],
         "imports": [
+            "abc",
+            "io",
             "os"
         ],
         "name": "os",
@@ -1896,7 +2189,9 @@
             "nexus_tournaments.generate_tree"
         ],
         "imports": [
-            "os"
+            "io",
+            "os",
+            "re"
         ],
         "name": "pathlib",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/pathlib.py"
@@ -1909,11 +2204,42 @@
             "uuid"
         ],
         "imports": [
+            "hashlib",
             "math",
             "os"
         ],
         "name": "random",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/random.py"
+    },
+    "re": {
+        "bacon": 2,
+        "imported_by": [
+            "PIL.Image",
+            "dataclasses",
+            "django.contrib.auth",
+            "django.utils.text",
+            "logging",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "pathlib",
+            "typing"
+        ],
+        "name": "re",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/re.py"
+    },
+    "requests": {
+        "bacon": 2,
+        "imported_by": [
+            "nexus_tournaments.services.verification_service",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "requests"
+        ],
+        "imports": [
+            "logging",
+            "requests"
+        ],
+        "name": "requests",
+        "path": "/home/yusupha/.local/lib/python3.10/site-packages/requests/__init__.py"
     },
     "secrets": {
         "bacon": 2,
@@ -1929,10 +2255,32 @@
         "name": "secrets",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/secrets.py"
     },
+    "threading": {
+        "bacon": 2,
+        "imported_by": [
+            "logging",
+            "nexus_tournaments.verification.load_balancer",
+            "unittest.mock"
+        ],
+        "imports": [
+            "os"
+        ],
+        "name": "threading",
+        "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/threading.py"
+    },
     "typing": {
         "bacon": 2,
         "imported_by": [
-            "nexus_tournaments.generate_tree"
+            "PIL.Image",
+            "nexus_tournaments.generate_tree",
+            "nexus_tournaments.verification.load_balancer",
+            "nexus_tournaments.verification.phash",
+            "nexus_tournaments.verification.providers.google_cloud",
+            "nexus_tournaments.verification.result"
+        ],
+        "imports": [
+            "abc",
+            "re"
         ],
         "name": "typing",
         "path": "/home/yusupha/my_tools/miniconda3/envs/audit_env/lib/python3.10/typing.py"
@@ -1960,6 +2308,8 @@
             "nexus_tournaments.tests.test_tasks"
         ],
         "imports": [
+            "io",
+            "threading",
             "unittest"
         ],
         "name": "unittest.mock",
@@ -1989,6 +2339,8 @@
             "nexus_tournaments.tests.test_tasks"
         ],
         "imports": [
+            "hashlib",
+            "io",
             "os",
             "random"
         ],

@@ -421,6 +421,7 @@
         </h1>
         <p style="color:#94a3b8;margin-bottom:8px;">
             Generated: ${ts} | Project: ${project_path}
+            <span id="server-mode-badge" style="display:none;font-size:.78rem;background:rgba(110,231,183,.12);border:1px solid #6ee7b7;border-radius:6px;padding:2px 10px;margin-left:12px;vertical-align:middle;"></span>
         </p>
         <p style="color:#10b981;margin-bottom:8px;">
             ✅ STRICT MODULARITY: Cross-app imports are violations.
@@ -1146,11 +1147,15 @@ Object.entries(modules).forEach(([id, mod]) => {
         if (edgeSeen.has(key)) return;
         edgeSeen.add(key);
         const srcApp = id.split('.')[0], tgtApp = imp.split('.')[0];
-        const isViol     = violations.some(v => v.type === 'Cross-App Import' && v.source === id && v.target === imp);
-        const isBootstrap= allowedComms.some(c => c.type === 'Django Bootstrap (Exempt)' && c.details === `$${id} → $${imp}`);
-        const isAllow    = allowedComms.some(c => c.details === `$${id} → $${imp}` && c.type !== 'Django Bootstrap (Exempt)');
-        const tgtLeaf    = imp.split('.').pop().toLowerCase();
-        const srcLeaf    = id.split('.').pop().toLowerCase();
+        const isViol      = violations.some(v => v.type === 'Cross-App Import' && v.source === id && v.target === imp);
+        const comm        = allowedComms.find(c => c.details === `$${id} → $${imp}`);
+        const isBootstrap = comm && comm.type === 'Django Bootstrap (Exempt)';
+        const isSignal    = comm && comm.type === 'Django Signal';
+        const isTask      = comm && comm.type === 'Celery Task';
+        const isTest      = comm && comm.type === 'Test Cross-App Import';
+        
+        const tgtLeaf     = imp.split('.').pop().toLowerCase();
+        const srcLeaf     = id.split('.').pop().toLowerCase();
         const BOOTSTRAP_LEAVES = ['asgi','wsgi','settings','celery','manage','routing','apps','admin'];
 
         let color = '#5DADE2', edgeType = 'internal', width = 1, dashes = false;
@@ -1159,12 +1164,12 @@ Object.entries(modules).forEach(([id, mod]) => {
         } else if (isBootstrap || BOOTSTRAP_LEAVES.includes(srcLeaf)) {
             /* Bootstrap files: shown as subtle dashed grey — informative, not alarming */
             color = '#64748b'; edgeType = 'bootstrap'; dashes = [3, 5]; width = 1;
-        } else if (isAllow || ['signals','receivers','signal','receiver'].includes(tgtLeaf) || ['signals','receivers','signal','receiver'].includes(srcLeaf)) {
-            color = '#2ECC71'; edgeType = 'allowed'; dashes = true; width = 2;
-        } else if (['tasks','celery','worker'].includes(tgtLeaf) || ['tasks','celery','worker'].includes(srcLeaf)) {
-            color = '#A29BFE'; edgeType = 'celery'; dashes = [4, 4]; width = 2;
         } else if (isViol) {
             color = '#FF3333'; edgeType = 'violation'; width = 3;
+        } else if (isSignal || isTest || ['signals','receivers','signal','receiver'].includes(tgtLeaf) || ['signals','receivers','signal','receiver'].includes(srcLeaf)) {
+            color = '#2ECC71'; edgeType = 'allowed'; dashes = true; width = 2;
+        } else if (isTask || ['tasks','task','celery','worker','beat'].includes(tgtLeaf) || ['tasks','task','celery','worker','beat'].includes(srcLeaf)) {
+            color = '#A29BFE'; edgeType = 'celery'; dashes = [4, 4]; width = 2;
         } else if (srcApp !== tgtApp) {
             /* Unknown cross-app — flag it orange until classified */
             color = '#FFA500'; edgeType = 'violation'; width = 2;
@@ -1253,10 +1258,10 @@ function initGraph() {
     const loadingEl = document.getElementById('graph-loading');
     if (loadingEl) loadingEl.style.display = 'block';
 
-const visNodes = new vis.DataSet(nodesData);
-const visEdges = new vis.DataSet(edgesData);
+visNodes = new vis.DataSet(nodesData);
+visEdges = new vis.DataSet(edgesData);
 
-const network = new vis.Network(
+network = new vis.Network(
     document.getElementById('network'),
     { nodes: visNodes, edges: visEdges },
     {
@@ -1411,8 +1416,24 @@ function clearHighlight() {
 /* highlightCycle ─────────────────────────────────────────────────────── */
 function highlightCycle(cycleNodes) {
     const s = new Set(cycleNodes);
-    visNodes.update(nodesData.map(n => ({ id: n.id, opacity: s.has(n.id) ? 1 : 0.06, color: s.has(n.id) ? n.color : { background:'#1e293b', border:'#334155' } })));
-    visEdges.update(edgesData.map(e => ({ id: e.id, color: (s.has(e.from)&&s.has(e.to)) ? {color:'#ff6b6b'} : {color:'rgba(255,255,255,0.02)'}, width: (s.has(e.from)&&s.has(e.to)) ? 3 : 0.3 })));
+    // Find only the specific edges that form the cycle path
+    const cycleEdges = new Set();
+    for (let i = 0; i < cycleNodes.length; i++) {
+        const from = cycleNodes[i];
+        const to = cycleNodes[(i + 1) % cycleNodes.length];
+        cycleEdges.add(from + '|' + to);
+    }
+
+    visNodes.update(nodesData.map(n => ({
+        id: n.id,
+        opacity: s.has(n.id) ? 1 : 0.06,
+        color: s.has(n.id) ? n.color : { background:'#1e293b', border:'#334155' }
+    })));
+    visEdges.update(edgesData.map(e => ({
+        id: e.id,
+        color: cycleEdges.has(e.id) ? {color:'#ff6b6b'} : {color:'rgba(255,255,255,0.02)'},
+        width: cycleEdges.has(e.id) ? 3 : 0.3
+    })));
     network.fit();
     showTab('cycles');
 }
@@ -1422,6 +1443,7 @@ function highlightCycle(cycleNodes) {
 let _frozen = false;
 let _separated = false;
 let _inspectMode = false;
+let _destroyOverlay = null;
 let _bundleMembers = {};
 let _fanoutEdgeIds = [];
 let _activeBundleId = null;
@@ -1455,18 +1477,18 @@ function _clearFanout() {
 function toggleSeparation() {
     const btn = document.getElementById('sep-btn');
     if (_separated) {
-        _clearFanout();
+        // Destroy overlay if inspect was also on
+        if (_destroyOverlay) { _destroyOverlay(); _destroyOverlay = null; }
         _inspectMode = false;
         const ib = document.getElementById('inspect-btn');
-        ib.classList.remove('active');
-        ib.textContent = '🔍 Inspect Edges';
+        if (ib) { ib.classList.remove('active'); ib.textContent = '🔍 Inspect Edges'; }
         resetSeparation();
         btn.classList.remove('active');
         btn.textContent = '🏝️ Separate Apps';
         _separated = false;
     } else {
         _separated = true;
-        separateApps(false);
+        separateApps();
         btn.classList.add('active');
         btn.textContent = '🔗 Merge View';
     }
@@ -1571,21 +1593,31 @@ function separateApps() {
 
     // 5. Freeze physics, reposition nodes
     network.setOptions({ physics: { enabled: false } });
+    const newNodes = new vis.DataSet(nodesData.map(n => ({
+        ...n,
+        x: nodePositions[n.id] ? nodePositions[n.id].x : 0,
+        y: nodePositions[n.id] ? nodePositions[n.id].y : 0,
+        fixed: false
+    })));
+    const newEdges = new vis.DataSet(edgesData);
     network.setData({
-        nodes: new vis.DataSet(nodesData.map(n => ({
-            ...n,
-            x: nodePositions[n.id] ? nodePositions[n.id].x : 0,
-            y: nodePositions[n.id] ? nodePositions[n.id].y : 0,
-            fixed: true
-        }))),
-        edges: new vis.DataSet(edgesData)
+        nodes: newNodes,
+        edges: newEdges
     });
+    // ✅ Fix: Update global references so filters still work
+    visNodes = newNodes;
+    visEdges = newEdges;
     network.fit({ animation: { duration: 600, easingFunction: 'easeInOutQuad' } });
 }
 
 function resetSeparation() {
     network.setOptions({ physics: { enabled: true } });
-    network.setData({ nodes: new vis.DataSet(nodesData), edges: new vis.DataSet(edgesData) });
+    const newNodes = new vis.DataSet(nodesData);
+    const newEdges = new vis.DataSet(edgesData);
+    network.setData({ nodes: newNodes, edges: newEdges });
+    // ✅ Fix: Update global references so filters still work
+    visNodes = newNodes;
+    visEdges = newEdges;
     network.fit({ animation: true });
 }
 
@@ -1670,25 +1702,30 @@ function applyInspectLayout() {
         return srcApp === tgtApp;  // only same-app edges visible in vis-network
     });
 
-    network.setOptions({ physics: { enabled: false } });
+    const newNodes = new vis.DataSet(nodesData.map(n => ({
+        ...n,
+        x: nodePositions[n.id] ? nodePositions[n.id].x : 0,
+        y: nodePositions[n.id] ? nodePositions[n.id].y : 0,
+        fixed: false
+    })));
+    const newEdges = new vis.DataSet(intraIslandEdges);
     network.setData({
-        nodes: new vis.DataSet(nodesData.map(n => ({
-            ...n,
-            x: nodePositions[n.id] ? nodePositions[n.id].x : 0,
-            y: nodePositions[n.id] ? nodePositions[n.id].y : 0,
-            fixed: true
-        }))),
-        edges: new vis.DataSet(intraIslandEdges)
+        nodes: newNodes,
+        edges: newEdges
     });
+    // ✅ Fix: Update global references so filters still work
+    visNodes = newNodes;
+    visEdges = newEdges;
     network.fit({ animation: { duration: 500 } });
 }
 
 function buildBundleOverlay() {
-    // Remove old overlay
+    // Tear down any previous overlay completely
+    if (_destroyOverlay) { _destroyOverlay(); _destroyOverlay = null; }
     const old = document.getElementById('bundle-overlay');
     if (old) old.remove();
 
-    // Build bundle map: "appA|appB" -> array of {from, to} edges
+    // Build bundle map: "appA|appB" -> {apps, edges, hovered, clicked}
     const bundles = {};
     edgesData.forEach(e => {
         const sa = (e.from||'').split('.')[0], ta = (e.to||'').split('.')[0];
@@ -1698,75 +1735,81 @@ function buildBundleOverlay() {
         bundles[key].edges.push(e);
     });
 
-    // Create SVG overlay
     const container = document.getElementById('network');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.id = 'bundle-overlay';
-    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;';
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;';
     container.style.position = 'relative';
     container.appendChild(svg);
 
     function redraw() {
+        if (!document.getElementById('bundle-overlay')) return; // already removed
         svg.innerHTML = '';
         Object.values(bundles).forEach(bundle => {
-            // Get canvas positions of first node in each app
-            const posA = network.getPosition(bundle.edges[0].from);
-            const posB = network.getPosition(bundle.edges[0].to);
-            const domA = network.canvasToDOM(posA);
-            const domB = network.canvasToDOM(posB);
-            const count = bundle.edges.length;
-            const thickness = Math.min(16, 3 + count * 2);
-            // Use violation colour from the first edge (red for violations, orange for warnings)
-            const bundleColor = bundle.edges[0].color || '#FF3333';
+            if (!bundle.edges.length) return;
+            try {
+                const posA = network.getPosition(bundle.edges[0].from);
+                const posB = network.getPosition(bundle.edges[0].to);
+                if (!posA || !posB) return;
+                const domA = network.canvasToDOM(posA);
+                const domB = network.canvasToDOM(posB);
+                const count = bundle.edges.length;
+                const thickness = Math.min(16, 3 + count * 2);
+                const bundleColor = bundle.edges[0].color || '#FF3333';
 
-            if (bundle.hovered || bundle.clicked) {
-                // Fan out individual threads
-                bundle.edges.forEach((e, i) => {
-                    const pA = network.canvasToDOM(network.getPosition(e.from));
-                    const pB = network.canvasToDOM(network.getPosition(e.to));
-                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    line.setAttribute('x1', pA.x); line.setAttribute('y1', pA.y);
-                    line.setAttribute('x2', pB.x); line.setAttribute('y2', pB.y);
-                    line.setAttribute('stroke', e.color || '#FF3333');
-                    line.setAttribute('stroke-width', '2');
-                    line.setAttribute('opacity', '0.85');
-                    svg.appendChild(line);
-                });
-            } else {
-                // Single thick bundled line
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const mx = (domA.x + domB.x) / 2, my = (domA.y + domB.y) / 2 - 40;
-                const d = `M ${domA.x} ${domA.y} Q ${mx} ${my} ${domB.x} ${domB.y}`;
-                path.setAttribute('d', d);
-                path.setAttribute('stroke', bundleColor);
-                path.setAttribute('stroke-width', thickness);
-                path.setAttribute('fill', 'none');
-                path.setAttribute('opacity', '0.6');
-                path.style.pointerEvents = 'stroke';
-                path.style.cursor = 'pointer';
-
-                path.addEventListener('mouseenter', () => { bundle.hovered = true; redraw(); });
-                path.addEventListener('mouseleave', () => { bundle.hovered = false; if (!bundle.clicked) redraw(); });
-                path.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                    bundle.clicked = !bundle.clicked;
-                    showBundlePanel(bundle);
-                    redraw();
-                });
-
-                // Count label
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', mx); text.setAttribute('y', my - 8);
-                text.setAttribute('fill', '#94a3b8'); text.setAttribute('font-size', '11');
-                text.setAttribute('text-anchor', 'middle');
-                text.textContent = `${count} connection${count>1?'s':''}`;
-                svg.appendChild(path);
-                svg.appendChild(text);
-            }
+                if (bundle.hovered || bundle.clicked) {
+                    bundle.edges.forEach(e => {
+                        try {
+                            const pA = network.canvasToDOM(network.getPosition(e.from));
+                            const pB = network.canvasToDOM(network.getPosition(e.to));
+                            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', pA.x); line.setAttribute('y1', pA.y);
+                            line.setAttribute('x2', pB.x); line.setAttribute('y2', pB.y);
+                            line.setAttribute('stroke', e.color || '#FF3333');
+                            line.setAttribute('stroke-width', '2');
+                            line.setAttribute('opacity', '0.85');
+                            svg.appendChild(line);
+                        } catch(e) {}
+                    });
+                } else {
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const mx = (domA.x + domB.x) / 2;
+                    const my = (domA.y + domB.y) / 2 - 40;
+                    path.setAttribute('d', `M ${domA.x} ${domA.y} Q ${mx} ${my} ${domB.x} ${domB.y}`);
+                    path.setAttribute('stroke', bundleColor);
+                    path.setAttribute('stroke-width', thickness);
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('opacity', '0.75');
+                    path.style.pointerEvents = 'stroke';
+                    path.style.cursor = 'pointer';
+                    path.addEventListener('mouseenter', () => { bundle.hovered = true; redraw(); });
+                    path.addEventListener('mouseleave', () => { bundle.hovered = false; if (!bundle.clicked) redraw(); });
+                    path.addEventListener('click', ev => {
+                        ev.stopPropagation();
+                        bundle.clicked = !bundle.clicked;
+                        showBundlePanel(bundle);
+                        redraw();
+                    });
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', mx); text.setAttribute('y', my - 8);
+                    text.setAttribute('fill', '#94a3b8'); text.setAttribute('font-size', '11');
+                    text.setAttribute('text-anchor', 'middle');
+                    text.textContent = `${count} connection${count > 1 ? 's' : ''}`;
+                    svg.appendChild(path);
+                    svg.appendChild(text);
+                }
+            } catch(err) {}
         });
     }
 
-    // Click outside collapses all panels
+    // Register named listener functions so we can remove them later
+    const onZoom = () => redraw();
+    const onDragEnd = () => redraw();
+    const onDrag = () => redraw();
+    network.on('zoom', onZoom);
+    network.on('dragEnd', onDragEnd);
+    network.on('dragging', onDrag);
+
     container.addEventListener('click', () => {
         Object.values(bundles).forEach(b => { b.clicked = false; b.hovered = false; });
         const panel = document.getElementById('bundle-panel');
@@ -1774,10 +1817,15 @@ function buildBundleOverlay() {
         redraw();
     });
 
-    // Redraw on pan/zoom
-    network.on('zoom', redraw);
-    network.on('dragEnd', redraw);
-    network.on('stabilizationIterationsDone', redraw);
+    // Expose cleanup
+    _destroyOverlay = () => {
+        network.off('zoom', onZoom);
+        network.off('dragEnd', onDragEnd);
+        network.off('dragging', onDrag);
+        const el = document.getElementById('bundle-overlay');
+        if (el) el.remove();
+    };
+
     setTimeout(redraw, 100);
 }
 
@@ -1811,10 +1859,14 @@ function toggleInspect() {
     const btn = document.getElementById('inspect-btn');
     const panel = document.getElementById('edge-info-panel');
     const bundlePanel = document.getElementById('bundle-panel');
+
     if (_inspectMode) {
         btn.classList.add('active');
         btn.textContent = '🔍 Inspecting…';
-        if (panel) { panel.style.display = 'block'; panel.innerHTML = '<span style="color:#64748b;">Click any bundled line to see connections.</span>'; }
+        if (panel) {
+            panel.style.display = 'block';
+            panel.innerHTML = '<span style="color:#64748b;">Click any bundled line to see connections.</span>';
+        }
         applyInspectLayout();
         setTimeout(buildBundleOverlay, 700);
     } else {
@@ -1822,12 +1874,27 @@ function toggleInspect() {
         btn.textContent = '🔍 Inspect Edges';
         if (panel) panel.style.display = 'none';
         if (bundlePanel) bundlePanel.style.display = 'none';
-        const overlay = document.getElementById('bundle-overlay');
-        if (overlay) overlay.remove();
-        // Restore normal physics
-        network.setOptions({ physics: { enabled: true } });
-        network.setData({ nodes: new vis.DataSet(nodesData), edges: new vis.DataSet(edgesData) });
-        network.fit({ animation: true });
+
+        // Destroy overlay and its event listeners
+        if (_destroyOverlay) { _destroyOverlay(); _destroyOverlay = null; }
+
+        if (_separated) {
+            // Restore Separate Apps layout (not full reset)
+            separateApps();
+        } else {
+            // Restore normal physics layout
+            network.setOptions({ physics: { enabled: true } });
+            const newNodes = new vis.DataSet(nodesData);
+            const newEdges = new vis.DataSet(edgesData);
+            network.setData({
+                nodes: newNodes,
+                edges: newEdges
+            });
+            // ✅ Fix: Update global references
+            visNodes = newNodes;
+            visEdges = newEdges;
+            network.fit({ animation: true });
+        }
     }
 }
 
@@ -2020,6 +2087,21 @@ legendDef.forEach(item => {
 
 window.showTab = showTab;
 setTimeout(initGraph, 50);
+
+// Server mode detection
+(function detectServerMode() {
+    const badge = document.getElementById('server-mode-badge');
+    if (!badge) return;
+    fetch('/fix-queue', { method: 'GET' })
+        .then(r => {
+            if (r.ok) {
+                badge.textContent = '🟢 Live Server — localhost:8421';
+                badge.style.color = '#6ee7b7';
+                badge.style.display = 'inline-block';
+            }
+        })
+        .catch(() => {});
+})();
 </script>
 </body>
 </html>

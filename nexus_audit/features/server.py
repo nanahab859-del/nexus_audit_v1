@@ -189,12 +189,49 @@ def serve(
 
     server = ThreadingHTTPServer(("127.0.0.1", port), AuditHandler)
     url = f"http://localhost:{port}"
-    print(f"🌐 Serving dashboard at {url}")
+
+    print()
+    print("═" * 62)
+    print(f"🌐  NEXUS AUDIT DASHBOARD SERVER")
+    print(f"   URL  : {url}")
+    try:
+        # OSC 8 terminal hyperlink: \033]8;;URL\033\\TEXT\033]8;;\033\\
+        print(f"   Open : \033]8;;{url}\033\\{url}\033]8;;\033\\ (clickable)")
+    except Exception:
+        pass
+    print(f"   Watch: {'enabled' if watch else 'disabled'}")
+    print(f"   Stop : Ctrl+C")
+    print("═" * 62)
+    print()
+
     if open_browser:
-        webbrowser.open(url)
+        # WSL-aware browser launch: try cmd.exe first (Windows host),
+        # fall back to standard webbrowser module.
+        opened = False
+        try:
+            result = subprocess.run(
+                ["cmd.exe", "/c", "start", url],
+                capture_output=True, timeout=5
+            )
+            opened = result.returncode == 0
+        except Exception:
+            pass
+        if not opened:
+            try:
+                webbrowser.open(url)
+                opened = True
+            except Exception:
+                pass
+        
+        if opened:
+            print(f"✔ Browser opened automatically")
+        else:
+            print(f"📢 Could not open browser automatically — open: {url}")
+        print()
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        pass
+        print("\n🛑 Server stopped.")
     finally:
         server.server_close()
