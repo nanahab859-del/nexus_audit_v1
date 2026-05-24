@@ -445,8 +445,8 @@ function showCouplingDrilldown(cell) {
         return template_content
 
     def _inject_config_health_tab(self, template_content: str) -> str:
-        """Inject the Config Health tab button, content div, and JS renderer."""
-        # 1. Inject JS data variable after coupling_matrix
+        """Inject the Config Health UI into the main dashboard and graph."""
+        # 1. Inject JS data variable
         template_content = template_content.replace(
             'const couplingMatrix   = ${coupling_matrix_json};\n'
             'const gitContext       = ${git_context_json};\n\n',
@@ -455,7 +455,7 @@ function showCouplingDrilldown(cell) {
             'const configHealth     = ${config_health_json};\n\n'
         )
 
-        # 2. Inject JS render function alongside coupling helpers
+        # 2. Inject JS render function and graph injection
         config_health_js = r"""
 function severityColor(sev) {
     return sev === 'CRITICAL' ? '#dc2626'
@@ -469,108 +469,129 @@ function statusIcon(status) {
 function statusColor(status) {
     return status === 'PASS' ? '#16a34a' : status === 'FAIL' ? '#dc2626' : '#d97706';
 }
-function generateConfigHealthTab() {
+
+function renderConfigHealthDashboard() {
     const cfg = configHealth || {};
     const checks = cfg.checks || [];
     const summary = cfg.summary || {};
     const score = summary.score ?? 0;
     const folderName = cfg.config_folder_name || 'config';
 
-    if (!checks.length) {
-        return '<p style="padding:16px;color:#94a3b8;">No config health data available.</p>';
-    }
+    if (!checks.length) return;
 
     const scoreColor = score >= 90 ? '#10b981' : score >= 70 ? '#f59e0b' : '#ef4444';
-    const bar = Math.round(score / 10);
 
     let html = `
-    <div style="margin-bottom:20px;padding:20px;background:rgba(15,23,42,.6);border:1px solid #334155;border-radius:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-            <div>
-                <div style="font-size:1.05rem;font-weight:700;color:#f1f5f9;">⚙️ ${folderName}/</div>
-                <div style="font-size:.82rem;color:#94a3b8;margin-top:4px;">Django Project Config Folder &mdash; Not an app, but audited separately</div>
+    <div style="grid-column: 1 / -1; margin-bottom: 20px; padding: 24px; background: linear-gradient(145deg, rgba(15,23,42,0.8), rgba(30,41,59,0.8)); border: 1px solid #475569; border-left: 4px solid #f59e0b; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            <div style="flex: 1; min-width: 300px;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="font-size: 1.4rem; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px;">⚙️ ${folderName}/</div>
+                    <span style="padding: 4px 10px; background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Project Kernel</span>
+                </div>
+                <div style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.5;">This folder contains the core Django configuration (settings, routing, entry points). It is audited separately from application boundary logic.</div>
+                
+                <div style="display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; font-size: 0.85rem; font-weight: 600;">
+                    <span style="display: flex; align-items: center; gap: 6px; color: #10b981; background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 6px;">✔ ${summary.passed || 0} passed</span>
+                    <span style="display: flex; align-items: center; gap: 6px; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 4px 10px; border-radius: 6px;">⚠️ ${summary.warnings || 0} warnings</span>
+                    <span style="display: flex; align-items: center; gap: 6px; color: #ef4444; background: rgba(239,68,68,0.1); padding: 4px 10px; border-radius: 6px;">❌ ${summary.failures || 0} failures</span>
+                </div>
             </div>
-            <div style="text-align:right;">
-                <div style="font-size:2rem;font-weight:800;color:${scoreColor};">${score}%</div>
-                <div style="font-size:.75rem;color:#64748b;">Config Health Score</div>
+            
+            <div style="text-align: right; background: rgba(0,0,0,0.2); padding: 16px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="font-size: 3rem; font-weight: 900; color: ${scoreColor}; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">${score}%</div>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Kernel Health</div>
             </div>
         </div>
-        <div style="margin-top:12px;background:#1e293b;border-radius:8px;height:10px;overflow:hidden;">
-            <div style="width:${score}%;height:100%;background:${scoreColor};border-radius:8px;transition:width .4s;"></div>
-        </div>
-        <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:.82rem;">
-            <span style="color:#10b981;">✔ ${summary.passed || 0} passed</span>
-            <span style="color:#f59e0b;">⚠️ ${summary.warnings || 0} warnings</span>
-            <span style="color:#ef4444;">❌ ${summary.failures || 0} failures</span>
-            <span style="color:#94a3b8;">${summary.total || 0} total checks</span>
-        </div>
-    </div>`;
+        
+        <div style="margin-top: 24px; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Audit Findings</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px;">`;
 
-    // Group checks by file
-    const groups = {};
-    checks.forEach(c => {
-        const key = c.check || '';
-        let group = 'General';
-        if (key.includes('secret') || key.includes('debug') || key.includes('allowed_host') ||
-            key.includes('middleware') || key.includes('encryption') || key.includes('session') ||
-            key.includes('csrf') || key.includes('secure_ssl') || key.includes('installed_app')) {
-            group = 'settings.py';
-        } else if (key.includes('asgi')) {
-            group = 'asgi.py';
-        } else if (key.includes('wsgi')) {
-            group = 'wsgi.py';
-        } else if (key.includes('urls') || key.includes('url')) {
-            group = 'urls.py';
-        } else if (key.includes('celery')) {
-            group = 'celery.py';
-        } else if (key.includes('config_dir') || key.includes('unexpected')) {
-            group = 'General';
-        }
-        if (!groups[group]) groups[group] = [];
-        groups[group].push(c);
-    });
-
-    const fileOrder = ['General', 'settings.py', 'urls.py', 'asgi.py', 'wsgi.py', 'celery.py'];
-    fileOrder.forEach(groupName => {
-        const items = groups[groupName];
-        if (!items || !items.length) return;
-
-        const hasIssues = items.some(c => c.status !== 'PASS');
-        const groupIcon = groupName === 'settings.py' ? '🔐'
-            : groupName === 'urls.py'     ? '🔗'
-            : groupName === 'asgi.py'     ? '📡'
-            : groupName === 'wsgi.py'     ? '📡'
-            : groupName === 'celery.py'   ? '⏰'
-            : '📂';
-
-        html += `<div style="margin-bottom:14px;border:1px solid ${hasIssues ? '#475569' : '#1e3a2f'};border-radius:12px;overflow:hidden;">
-            <div style="padding:10px 16px;background:rgba(15,23,42,.5);font-weight:700;color:#e2e8f0;font-size:.88rem;">
-                ${groupIcon} ${groupName}
-            </div>`;
-
-        items.forEach(c => {
-            if (c.status === 'PASS') return; // Only show non-passing checks in detail
+    // Group checks
+    const issues = checks.filter(c => c.status !== 'PASS');
+    if (issues.length === 0) {
+        html += `<div style="grid-column: 1 / -1; padding: 12px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); border-radius: 8px; color: #34d399; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.2rem;">✨</span> All configuration checks passed successfully. The project kernel is perfectly healthy.
+        </div>`;
+    } else {
+        issues.forEach(c => {
             const sc = statusColor(c.status);
             const si = statusIcon(c.status);
             const sevC = severityColor(c.severity || 'LOW');
-            html += `<div style="padding:10px 16px;border-top:1px solid #1e293b;display:flex;gap:12px;align-items:flex-start;">
-                <span style="color:${sc};font-size:1rem;flex-shrink:0;margin-top:1px;">${si}</span>
-                <div style="flex:1;min-width:0;">
-                    <span style="color:#e2e8f0;font-size:.86rem;">${c.message || ''}</span>
+            html += `<div style="background: rgba(15,23,42,0.8); border: 1px solid #334155; border-left: 3px solid ${sc}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;">
+                    <span style="color: ${sc}; font-size: 1rem; margin-top: 2px;">${si}</span>
+                    <span style="color: #e2e8f0; font-size: 0.85rem; line-height: 1.4;">${c.message || ''}</span>
                 </div>
-                <span style="flex-shrink:0;padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700;background:rgba(0,0,0,.3);color:${sevC};border:1px solid ${sevC};">${c.severity || ''}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                    <span style="color: #64748b; font-size: 0.7rem; font-family: monospace;">${c.check || 'check'}</span>
+                    <span style="padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; background: ${sevC}22; color: ${sevC}; text-transform: uppercase; letter-spacing: 0.5px;">${c.severity || 'LOW'}</span>
+                </div>
             </div>`;
         });
+    }
 
-        const passedCount = items.filter(c => c.status === 'PASS').length;
-        if (passedCount > 0) {
-            html += `<div style="padding:8px 16px;border-top:1px solid #1e293b;color:#475569;font-size:.78rem;">✔ ${passedCount} check${passedCount === 1 ? '' : 's'} passed for ${groupName}</div>`;
+    html += `       </div>
+        </div>
+    </div>`;
+    
+    // Inject into the top of the app grid
+    const grid = document.getElementById('app-grid');
+    if (grid) {
+        grid.insertAdjacentHTML('afterbegin', html);
+    }
+}
+
+// Intercept graph generation to add the config folder
+function injectConfigNode() {
+    const cfg = configHealth || {};
+    const folderName = cfg.config_folder_name || 'config';
+    
+    // Add to color scheme
+    if (typeof APP_SCHEME !== 'undefined') {
+        APP_SCHEME[folderName] = { bg: '#b45309', border: '#f59e0b', text: '#fef3c7' };
+    }
+    
+    // Inject the node into nodesData
+    if (typeof nodesData !== 'undefined') {
+        if (!nodesData.some(n => n.id === `config_${folderName}`)) {
+            nodesData.push({
+                id: `config_${folderName}`,
+                label: `${folderName}\n(Config)`,
+                group: folderName,
+                title: 'Project Configuration Kernel (audited separately)',
+                value: 20, // make it prominent
+                shape: 'hexagon',
+                color: { background: '#b45309', border: '#f59e0b' },
+                font: { color: '#fef3c7', size: 13 }
+            });
         }
-
-        html += '</div>';
-    });
-
-    return html;
+    }
+    
+    // Inject into the sidebar
+    const sidebarEl = document.getElementById('island-sidebar');
+    if (sidebarEl) {
+        const col = '#b45309';
+        const sc = (cfg.summary || {}).score || 0;
+        const pill = document.createElement('div');
+        pill.className = 'island-pill';
+        pill.id = `config-pill-${folderName}`;
+        if (!document.getElementById(pill.id)) {
+            pill.dataset.app = folderName;
+            pill.style.border = '1px solid rgba(245,158,11,0.3)';
+            pill.title = `${folderName} (Kernel) — ${sc}%`;
+            pill.innerHTML = `
+                <div class="island-dot" style="background:${col};box-shadow:0 0 0 2px rgba(245,158,11,0.3);"></div>
+                <span class="island-label" style="color:#fcd34d;">CONFIG</span>
+                <span class="island-score" style="color:#f59e0b;">${sc}%</span>`;
+            pill.addEventListener('click', () => {
+                if (pill.classList.contains('pill-active')) { window.clearHighlight(); }
+                else { window.highlightApp(folderName); }
+            });
+            sidebarEl.insertBefore(pill, sidebarEl.firstChild); // put it at the top
+        }
+    }
 }
 """;
         template_content = template_content.replace(
@@ -578,32 +599,21 @@ function generateConfigHealthTab() {
             config_health_js + '\nfunction getFixQueueState() {\n'
         )
 
-        # 3. Inject tab button (after Coupling Map)
+        # 3. Inject dashboard render hook right where tabs are populated
         template_content = template_content.replace(
-            '            <button class="tab" onclick="showTab(\'coupling-map\')">🔥 Coupling Map</button>\n'
-            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n',
-            '            <button class="tab" onclick="showTab(\'coupling-map\')">🔥 Coupling Map</button>\n'
-            '            <button class="tab" onclick="showTab(\'config-health\')">⚙️ Config Health</button>\n'
-            '            <button class="tab" onclick="showTab(\'recommendations\')">💡 Recommendations</button>\n'
+            "document.getElementById('trends').innerHTML          = generateTrendsTab();\n",
+            "document.getElementById('trends').innerHTML          = generateTrendsTab();\n"
+            "renderConfigHealthDashboard();\n"
         )
 
-        # 4. Inject content div (after coupling-map div)
+        # 4. Inject graph node logic at the true end of the script, after APP_SCHEME is defined
         template_content = template_content.replace(
-            '        <div id="coupling-map"    class="tab-content"></div>\n'
-            '        <div id="recommendations" class="tab-content">\n',
-            '        <div id="coupling-map"    class="tab-content"></div>\n'
-            '        <div id="config-health"   class="tab-content"></div>\n'
-            '        <div id="recommendations" class="tab-content">\n'
-        )
-
-        # 5. Inject render call (after coupling-map render call)
-        template_content = template_content.replace(
-            "document.getElementById('coupling-map').innerHTML    = generateCouplingMapTab();\n",
-            "document.getElementById('coupling-map').innerHTML    = generateCouplingMapTab();\n"
-            "document.getElementById('config-health').innerHTML   = generateConfigHealthTab();\n"
+            "setTimeout(initGraph, 50);",
+            "injectConfigNode();\nsetTimeout(initGraph, 50);"
         )
 
         return template_content
+
 
     def generate_html_dashboard(self) -> str:
         ts = self.timestamp.strftime('%Y-%m-%d %H:%M:%S')
