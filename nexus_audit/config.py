@@ -76,10 +76,6 @@ def _load_dotenv() -> Dict[str, str]:
 # Load .env before anything else reads os.environ
 _dotenv_keys = _load_dotenv()
 
-# Rate-limit sentinel: set True when Gemini returns 429.
-# Checked before every _ai_complete call in run_ai_recommendations.
-_GEMINI_RATE_LIMITED: bool = False
-
 # ============================================================================
 # TIER 1 — ALWAYS AVAILABLE (zero internet required)
 #   • Full DNA audit and violation detection

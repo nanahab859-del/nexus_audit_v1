@@ -270,7 +270,6 @@ def _analyze_single_app(
     app: str,
     s: Dict,
     backend: str,
-    api_key: Optional[str],
     label: str,
     throttled_complete,
     rate_limited,
@@ -289,7 +288,7 @@ def _analyze_single_app(
         print(f"   \u26a0 Rate-limited \u2014 skipping health narrative for {app}")
         return []
     narrative = throttled_complete(
-        prompt, AI_SYSTEM, backend, api_key, max_tokens=300,
+        prompt, AI_SYSTEM, backend, max_tokens=300,
         desc=f"Health narrative: {app} ({score}%)",
         task_type="health_narrative",
     )
@@ -364,7 +363,7 @@ def run_ai_recommendations(
 
     violation_memory = compute_violation_persistence(HISTORY_DIR)
 
-    def _throttled_complete(prompt, system, backend, api_key, max_tokens=800,
+    def _throttled_complete(prompt, system, backend, max_tokens=800,
                             desc="", task_type=None, best_of=1):
         """Wrapper: log progress, pace calls, track consecutive failures (thread-safe)."""
         nonlocal _consec_429, _total_calls
@@ -388,11 +387,11 @@ def run_ai_recommendations(
             print(flush=True)
         if best_of > 1 and backend == "gemini" and task_type:
             result = _ai_complete_best_of(
-                prompt, system, backend, api_key,
+                prompt, system, backend,
                 task_type=task_type, max_tokens=max_tokens, n_models=best_of
             )
         else:
-            result = _ai_complete(prompt, system, backend, api_key,
+            result = _ai_complete(prompt, system, backend,
                                   max_tokens=max_tokens,
                                   preferred_models=pref)
         if result is None:
@@ -431,7 +430,7 @@ def run_ai_recommendations(
         )
         _is_top = src_mods_list.index(tgt) < 2
         raw = _throttled_complete(
-            prompt, AI_SYSTEM, backend, api_key, max_tokens=1400,
+            prompt, AI_SYSTEM, backend, max_tokens=1400,
             desc=f"Violation: {tgt_leaf} ← {len(src_apps)} app(s)",
             task_type="violation_analysis",
             best_of=2 if _is_top else 1,
@@ -505,7 +504,7 @@ def run_ai_recommendations(
         with ThreadPoolExecutor(max_workers=4) as executor:
             futures = {
                 executor.submit(
-                    _analyze_single_app, app, s, backend, api_key, label, _throttled_complete, _rate_limited
+                    _analyze_single_app, app, s, backend, label, _throttled_complete, _rate_limited
                 ): app for app, s in health_apps
             }
             for future in as_completed(futures):
@@ -533,7 +532,7 @@ def run_ai_recommendations(
         
         prompt = build_upgrade_prompt(pkg_name, installed, latest, cve_count)
         raw = _throttled_complete(
-            prompt, AI_SYSTEM, backend, api_key, max_tokens=400,
+            prompt, AI_SYSTEM, backend, max_tokens=400,
             desc=f"Upgrade: {pkg_name} {installed} → {latest}",
             task_type="upgrade_advisor",
         )
@@ -574,7 +573,7 @@ def run_ai_recommendations(
         
         prompt = build_cve_prompt(cve_id, pkg_name, severity, summary)
         raw = _throttled_complete(
-            prompt, AI_SYSTEM, backend, api_key, max_tokens=450,
+            prompt, AI_SYSTEM, backend, max_tokens=450,
             desc=f"CVE: {cve_id} in {pkg_name}",
             task_type="cve_advisor",
         )
@@ -613,7 +612,7 @@ def run_ai_recommendations(
             print(f"   \u26a0 Rate-limited \u2014 skipping extraction plan for {tgt}")
             continue
         plan = _throttled_complete(
-            prompt, AI_SYSTEM, backend, api_key, max_tokens=400,
+            prompt, AI_SYSTEM, backend, max_tokens=400,
             desc=f"Extract plan: {tgt.split('.')[-1]}",
             task_type="extraction_plan",
         )

@@ -161,7 +161,6 @@ def _ai_complete(
     prompt: str,
     system: str,
     backend: str,
-    api_key: Optional[str],
     max_tokens: int = 1000,
     timeout: int = 30,
     preferred_models: Optional[List[str]] = None,
@@ -172,7 +171,17 @@ def _ai_complete(
     preferred_models overrides GEMINI_MODELS for the gemini branch.
     Returns the text response or None on any error.
     """
-    global _GEMINI_RATE_LIMITED
+    
+    # Retrieve api_key internally from key_pool or environment
+    api_key = None
+    if backend == "gemini":
+        api_key = key_pool.get_key()
+        if not api_key:
+            import os
+            api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    elif backend == "claude":
+        import os
+        api_key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 
     try:
         if backend == "ollama":
@@ -350,7 +359,6 @@ def _ai_complete_best_of(
     prompt:     str,
     system:     str,
     backend:    str,
-    api_key:    Optional[str],
     task_type:  str,
     max_tokens: int = 1400,
     n_models:   int = 2,
@@ -388,7 +396,7 @@ def _ai_complete_best_of(
     for _model in models:
         if tried >= n_models:
             break
-        raw = _ai_complete(prompt, system, backend, api_key,
+        raw = _ai_complete(prompt, system, backend,
                            max_tokens=max_tokens,
                            preferred_models=[_model],
                            silent=True)
