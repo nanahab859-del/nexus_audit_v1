@@ -14,7 +14,9 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Dict, Any
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
+
+from ..report.markdown_report import generate_app_markdown, generate_category_markdown
 
 
 TRACKED_STATUSES = {"open", "in_progress", "done", "snoozed"}
@@ -67,6 +69,229 @@ class AuditHandler(BaseHTTPRequestHandler):
         if path == "/fix-queue":
             body = json.dumps(_read_json(self.queue_path), indent=2).encode("utf-8")
             return self._send_bytes(200, body, "application/json; charset=utf-8")
+        if path == "/api/status":
+            running = getattr(AuditHandler, '_audit_running', False)
+            try:
+                mtime = Path(self.json_path).stat().st_mtime
+            except Exception:
+                mtime = 0
+            body = json.dumps({"status": "running" if running else "idle", "mtime": mtime}).encode("utf-8")
+            return self._send_bytes(200, body, "application/json; charset=utf-8")
+            
+        if path == "/api/settings":
+            settings_path = Path(self.json_path).parent / "settings.json"
+            if settings_path.exists():
+                with open(settings_path, "rb") as f:
+                    body = f.read()
+            else:
+                body = b"{}"
+            return self._send_bytes(200, body, "application/json; charset=utf-8")
+            
+        if path == "/api/history":
+            history_dir = Path(self.json_path).parent / "audit_history"
+            history = []
+            if history_dir.exists():
+                for f in history_dir.glob("*.json"):
+                    history.append(f.name)
+            history.sort(reverse=True)
+            body = json.dumps({"history": history}).encode("utf-8")
+            return self._send_bytes(200, body, "application/json; charset=utf-8")
+            
+        if path == "/api/stream":
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/event-stream')
+            self.send_header('Cache-Control', 'no-cache')
+            self.send_header('Connection', 'keep-alive')
+            self.end_headers()
+            
+            seen_idx = 0
+            while True:
+                try:
+                    running = getattr(AuditHandler, '_audit_running', False)
+                    logs = getattr(AuditHandler, '_audit_log', [])
+                    
+                    if len(logs) > seen_idx:
+                        for line in logs[seen_idx:]:
+                            if line == "__DONE__":
+                                self.wfile.write(b'event: status\ndata: {"state": "completed"}\n\n')
+                            else:
+                                self.wfile.write(f'event: log\ndata: {json.dumps({"message": line})}\n\n'.encode('utf-8'))
+                        seen_idx = len(logs)
+                        self.wfile.flush()
+                    
+                    # Status ping every second
+                    self.wfile.write(f'event: status\ndata: {{"state": "{ "running" if running else "idle" }"}}\n\n'.encode('utf-8'))
+                    self.wfile.flush()
+                    
+                    time.sleep(1)
+                except Exception:
+                    # Broken pipe or connection closed
+                    break
+            return
+
+        # ── Download endpoints ────────────────────────────────────────────
+        if path == "/api/download/report/full":
+            md_path = str(Path(self.json_path).parent / "AUDIT_REPORT_COMPREHENSIVE.md")
+            if not Path(md_path).exists():
+                return self._send_bytes(404, b"Full report not found. Run an audit first.", "text/plain")
+            with open(md_path, "rb") as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/markdown; charset=utf-8")
+            self.send_header("Content-Disposition", 'attachment; filename="AUDIT_REPORT_COMPREHENSIVE.md"')
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        if path == "/api/download/report/app":
+            qs = parse_qs(urlparse(self.path).query)
+            app_name = (qs.get("name", [""])[0] or "").strip()
+            if not app_name:
+                return self._send_bytes(400, b"Missing ?name= parameter", "text/plain")
+            if not Path(self.json_path).exists():
+                return self._send_bytes(404, b"Audit data not found. Run an audit first.", "text/plain")
+            with open(self.json_path, "r", encoding="utf-8") as f:
+                audit_data = json.load(f)
+            md_content = generate_app_markdown(audit_data, app_name)
+            body = md_content.encode("utf-8")
+            filename = f"{app_name}_audit_report.md"
+            self.send_response(200)
+            self.send_header("Content-Type", "text/markdown; charset=utf-8")
+            self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        if path == "/api/download/report/category":
+            qs = parse_qs(urlparse(self.path).query)
+            category = (qs.get("name", [""])[0] or "").strip()
+            if not category:
+                return self._send_bytes(400, b"Missing ?name= parameter", "text/plain")
+            if not Path(self.json_path).exists():
+                return self._send_bytes(404, b"Audit data not found. Run an audit first.", "text/plain")
+            with open(self.json_path, "r", encoding="utf-8") as f:
+                audit_data = json.load(f)
+            md_content = generate_category_markdown(audit_data, category)
+            body = md_content.encode("utf-8")
+            filename = f"{category}_audit_report.md"
+            self.send_response(200)
+            self.send_header("Content-Type", "text/markdown; charset=utf-8")
+            self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        # ── Static CSS and JS files ────────────────────────────────────────
+        if path.startswith("/css/") and path.endswith(".css"):
+            safe_name = path[5:]
+            if ".." in safe_name:
+                return self._send_bytes(403, b"Forbidden", "text/plain")
+            css_path = Path(self.html_path).parent / "css" / safe_name
+            if css_path.exists():
+                return self._serve_file(str(css_path), "text/css; charset=utf-8")
+
+        if path.startswith("/js/") and path.endswith(".js"):
+            safe_name = path[4:]
+            if ".." in safe_name:
+                return self._send_bytes(403, b"Forbidden", "text/plain")
+            js_path = Path(self.html_path).parent / "js" / safe_name
+            if js_path.exists():
+                return self._serve_file(str(js_path), "application/javascript; charset=utf-8")
+
+        if path == "/vis-network.min.js":
+            vis_path = Path(self.html_path).parent / "vis-network.min.js"
+            if vis_path.exists():
+                return self._serve_file(str(vis_path), "application/javascript; charset=utf-8")
+
+        self._send_bytes(404, b"Not found", "text/plain; charset=utf-8")
+
+    def do_POST(self) -> None:  # noqa: N802
+        path = urlparse(self.path).path
+
+        if path == "/api/settings":
+            length = int(self.headers.get("Content-Length", "0") or 0)
+            raw = self.rfile.read(length).decode("utf-8") if length else "{}"
+            try:
+                payload = json.loads(raw)
+                # Validation
+                if "project_path" in payload and payload["project_path"]:
+                    p = Path(payload["project_path"]).expanduser().resolve()
+                    if not p.exists() or not p.is_dir():
+                        return self._send_bytes(400, b'{"error": "Invalid project_path"}', "application/json; charset=utf-8")
+                    payload["project_path"] = str(p)
+                
+                settings_path = Path(self.json_path).parent / "settings.json"
+                with open(settings_path, "w", encoding="utf-8") as f:
+                    json.dump(payload, f, indent=2)
+                return self._send_bytes(200, b'{"ok": true}', "application/json; charset=utf-8")
+            except Exception as e:
+                return self._send_bytes(400, json.dumps({"error": str(e)}).encode(), "application/json; charset=utf-8")
+
+        if path == "/api/run":
+            if getattr(AuditHandler, '_audit_running', False):
+                body = json.dumps({"ok": False, "error": "Audit already running"}).encode("utf-8")
+                return self._send_bytes(409, body, "application/json; charset=utf-8")
+
+            # Load settings to get project path
+            settings_path = Path(self.json_path).parent / "settings.json"
+            repo_root = Path.cwd()
+            if settings_path.exists():
+                try:
+                    with open(settings_path, "r", encoding="utf-8") as f:
+                        settings = json.load(f)
+                    if "project_path" in settings and settings["project_path"]:
+                        repo_root = Path(settings["project_path"])
+                except Exception:
+                    pass
+
+            # pulse.py path
+            pulse_path = str(Path(__file__).resolve().parents[2] / "pulse.py")
+            cmd = [sys.executable, pulse_path]
+
+            def _run() -> None:
+                AuditHandler._audit_running = True
+                AuditHandler._audit_log = []
+                try:
+                    proc = subprocess.Popen(
+                        cmd, cwd=str(repo_root),
+                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                        text=True, bufsize=1,
+                    )
+                    AuditHandler._audit_pid = proc.pid
+                    for line in proc.stdout:
+                        AuditHandler._audit_log.append(line.rstrip())
+                    proc.wait()
+                    AuditHandler._audit_log.append("__DONE__")
+                except Exception as exc:
+                    AuditHandler._audit_log.append(f"ERROR: {exc}")
+                    AuditHandler._audit_log.append("__DONE__")
+                finally:
+                    AuditHandler._audit_running = False
+                    AuditHandler._audit_pid = None
+
+            threading.Thread(target=_run, daemon=True).start()
+            body = json.dumps({"ok": True}).encode("utf-8")
+            return self._send_bytes(200, body, "application/json; charset=utf-8")
+
+        if path == "/api/cancel":
+            pid = getattr(AuditHandler, '_audit_pid', None)
+            if pid:
+                import signal
+                try:
+                    # Windows uses taskkill, UNIX uses os.kill
+                    if sys.platform == "win32":
+                        subprocess.run(["taskkill", "/F", "/T", "/PID", str(pid)], capture_output=True)
+                    else:
+                        os.kill(pid, signal.SIGTERM)
+                    AuditHandler._audit_log.append("WARNING: Audit cancelled by user.")
+                except Exception:
+                    pass
+            body = b'{"ok": true}'
+            return self._send_bytes(200, body, "application/json; charset=utf-8")
+
         self._send_bytes(404, b"Not found", "text/plain; charset=utf-8")
 
     def do_PUT(self) -> None:  # noqa: N802
@@ -187,7 +412,10 @@ def serve(
     if watch:
         _start_watch_loop(repo_root)
 
-    server = ThreadingHTTPServer(("127.0.0.1", port), AuditHandler)
+    class ReusableThreadingHTTPServer(ThreadingHTTPServer):
+        allow_reuse_address = True
+
+    server = ReusableThreadingHTTPServer(("127.0.0.1", port), AuditHandler)
     url = f"http://localhost:{port}"
 
     print()

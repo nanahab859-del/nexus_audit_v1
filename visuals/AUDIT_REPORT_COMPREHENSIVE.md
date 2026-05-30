@@ -1,7 +1,7 @@
 # 🛡️ NEXUS MASTER AUDIT REPORT
 
-**Generated:** 2026-05-24 17:44:38  
-**Project:** `/home/yusupha/my_tools/nexus_project_copy`  
+**Generated:** 2026-05-27 07:16:53  
+**Project:** `/home/yusupha/nexus-gaming`  
 **Tier:** 🌐 Tier 2 — ONLINE (Enhanced Mode)  
 **Total modules:** 243  
 **Physical files:** 217  
@@ -27,14 +27,14 @@
 
 | Metric | Value |
 | :--- | :--- |
-| Overall fleet health | 💛 **77.6%** (Grade C) |
+| Overall fleet health | 💛 **77.1%** (Grade C) |
 | Apps audited | 6 |
 | Cross-app violations | 13 |
-| Violations vs last run | → unchanged (+0) — prev: 13 on 2026-05-24 |
+| Violations vs last run | → unchanged (+0) — prev: 13 on 2026-05-27 |
 | Allowed communications | 23 |
-| Security findings | 109 |
+| Security findings | 110 |
 | Ghost files | 6 |
-| Circular dependency cycles | 16 |
+| Circular dependency cycles | 15 |
 | Avg cyclomatic complexity | 2.43 |
 | Max cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
@@ -47,31 +47,29 @@ Circular dependencies prevent clean testing and deployment isolation.
   Apps involved: nexus_core
 - **[HIGH / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views.results → nexus_tournaments.views`  
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views.moderation → nexus_tournaments.views`  
+  Apps involved: nexus_tournaments
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.results`  
   Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.announcements`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
-  Apps involved: nexus_tournaments
 - **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.leagues`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.moderation`  
+- **[HIGH / INTRA-APP]** `nexus_tournaments.views → nexus_tournaments.views.matches`  
   Apps involved: nexus_tournaments
-- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout`  
-  Apps involved: nexus_economy
 - **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.escrow`  
   Apps involved: nexus_economy
-- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund`  
+- **[HIGH / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout`  
   Apps involved: nexus_economy
-- **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.bracket_service`  
-  Apps involved: nexus_tournaments
 - **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.diagnostic_service`  
   Apps involved: nexus_tournaments
-- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.payout_service`  
+- **[MEDIUM / INTRA-APP]** `nexus_tournaments.services.match_service → nexus_tournaments.tasks → nexus_tournaments.services.bracket_service`  
+  Apps involved: nexus_tournaments
+- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks.refund → nexus_economy.services.refund_service → nexus_economy.tasks`  
   Apps involved: nexus_economy
 - **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.forfeiture_service`  
   Apps involved: nexus_economy
-- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.refund → nexus_economy.services.refund_service`  
+- **[MEDIUM / INTRA-APP]** `nexus_economy.tasks → nexus_economy.tasks.payout → nexus_economy.services.payout_service`  
   Apps involved: nexus_economy
 - **[INFO / INTRA-APP]** `nexus_tournaments.models → nexus_tournaments.models.league`  
   Apps involved: nexus_tournaments
@@ -87,6 +85,41 @@ These files exist on disk but were not scanned by pydeps. They may be dead code 
 - `nexus_core.serializers.users`
 - `nexus_tournaments.management.commands.dispatch_outbox_events`
 
+## ⚙️ NEXUS_GAMING KERNEL HEALTH
+
+**Score:** 62% | **Passed:** 20 | **Warnings:** 6 | **Failures:** 1
+
+| Check | Status | Severity | Message |
+| :--- | :---: | :---: | :--- |
+| `secret_key_hardcoded` | WARN | MEDIUM | Could not locate SECRET_KEY assignment in settings.py. |
+| `encryption_key_set` | WARN | HIGH | ENCRYPTION_KEY defaults to empty string. Set via environment variable in production. |
+| `session_cookie_secure_present` | WARN | MEDIUM | SESSION_COOKIE_SECURE is not set. Add it to enforce HTTPS security headers in production. |
+| `csrf_cookie_secure_present` | WARN | MEDIUM | CSRF_COOKIE_SECURE is not set. Add it to enforce HTTPS security headers in production. |
+| `secure_ssl_redirect_present` | WARN | MEDIUM | SECURE_SSL_REDIRECT is not set. Add it to enforce HTTPS security headers in production. |
+| `asgi.py_purity` | FAIL | HIGH | asgi.py imports domain app code: nexus_gateway.routing, nexus_social.routing, nexus_gateway.middleware. Entry points must stay pure. |
+| `config_unexpected_files` | WARN | LOW | Unexpected .py files in config folder: generate_tree.py. Config folders should only contain settings, urls, asgi, wsgi, celery. |
+
+## 📈 HISTORICAL TRENDS
+
+| Date | Fleet Score |
+| :--- | ---: |
+| 2026-05-27 | 77.1% |
+| 2026-05-27 | 77.1% |
+| 2026-05-27 | 77.1% |
+| 2026-05-27 | 77.1% |
+| 2026-05-26 | 77.1% |
+| 2026-05-26 | 77.6% |
+| 2026-05-24 | 77.6% |
+| 2026-05-24 | 86.6% |
+| 2026-05-24 | 77.6% |
+| 2026-05-24 | 86.6% |
+| 2026-05-24 | 86.6% |
+| 2026-05-24 | 86.6% |
+| 2026-05-24 | 86.6% |
+| 2026-05-24 | 77.6% |
+| 2026-05-24 | 79.9% |
+
+
 ## 🖤 APPLICATION FLEET HEALTH
 
 | App | Score | Grade | Trend | Physical | Audited | Boundary Violations | Security | Ghosts |
@@ -94,7 +127,7 @@ These files exist on disk but were not scanned by pydeps. They may be dead code 
 | **NEXUS_CONTENT** | 💚 92% | A | → | 18 | 21 | 0 | 3 | 0 |
 | **NEXUS_CORE** | 💛 62% | D | → | 42 | 44 | 1 | 58 | 5 |
 | **NEXUS_ECONOMY** | 💚 93% | A | → | 48 | 56 | 0 | 18 | 0 |
-| **NEXUS_GATEWAY** | 💚 95% | A | → | 9 | 12 | 3 | 7 | 0 |
+| **NEXUS_GATEWAY** | 💚 92% | A | → | 9 | 12 | 3 | 8 | 0 |
 | **NEXUS_SOCIAL** | ❤️ 57% | F | → | 40 | 41 | 6 | 12 | 0 |
 | **NEXUS_TOURNAMENTS** | 💛 67% | D | → | 60 | 69 | 3 | 11 | 1 |
 
@@ -120,7 +153,7 @@ Direct imports between first-party apps violate strict modularity. Replace with 
 | `nexus_tournaments.services.verification_service` | `nexus_core.utils` | Replace with Django signal, Celery task, or REST API call. |
 | `nexus_core.views.games` | `nexus_content` | Replace with Django signal, Celery task, or REST API call. |
 
-### Other Violations (109)
+### Other Violations (110)
 
 | Type | Source | Severity |
 | :--- | :--- | :--- |
@@ -205,6 +238,7 @@ Direct imports between first-party apps violate strict modularity. Replace with 
 | Hardcoded Password | `test_wallet_views.py` | LOW |
 | Bare Except | `consumers.py` | LOW |
 | Bare Except | `consumers.py` | LOW |
+| Bare Except | `consumers.py` | LOW |
 | Hardcoded Password | `test_consumers.py` | LOW |
 | Hardcoded Password | `test_consumers.py` | LOW |
 | Hardcoded Password | `test_consumers.py` | LOW |
@@ -266,8 +300,8 @@ These cross-app interactions use decoupled communication patterns and are permit
 
 ## 📦 DEPENDENCY HEALTH (Tier 2 — Online Scan)
 
-Scanned 120 packages for CVEs (OSV database) and version freshness (PyPI).  
-Total CVEs found: **397** | Outdated packages: **42**
+Scanned 121 packages for CVEs (OSV database) and version freshness (PyPI).  
+Total CVEs found: **397** | Outdated packages: **34**
 
 ### Package Summary
 
@@ -275,128 +309,129 @@ Total CVEs found: **397** | Outdated packages: **42**
 | :--- | :--- | :--- | :--- | :--- |
 | `﻿amqp` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
 | `annotated-doc` | 0.0.4 | 0.0.4 | ✅ Current | 0 |
-| `Automat` | 25.4.16 | 25.4.16 | ✅ Current | 0 |
 | `annotated-types` | 0.7.0 | 0.7.0 | ✅ Current | 0 |
+| `anyio` | 4.13.0 | 4.13.0 | ✅ Current | 0 |
+| `asgiref` | 3.11.1 | 3.11.1 | ✅ Current | 0 |
 | `async-timeout` | 5.0.1 | 5.0.1 | ✅ Current | 0 |
 | `attrs` | 26.1.0 | 26.1.0 | ✅ Current | 0 |
-| `asgiref` | 3.11.1 | 3.11.1 | ✅ Current | 0 |
-| `anyio` | 4.13.0 | 4.13.0 | ✅ Current | 0 |
 | `Authlib` | 1.6.9 | 1.7.2 | ⚠️ Outdated | 13 |
 | `autobahn` | 24.4.2 | 25.12.2 | ⚠️ Outdated | 2 |
+| `Automat` | 25.4.16 | 25.4.16 | ✅ Current | 0 |
 | `backports-datetime-fromisoformat` | 2.0.3 | 2.0.3 | ✅ Current | 0 |
-| `billiard` | 4.2.4 | 4.2.4 | ✅ Current | 0 |
 | `bcrypt` | 5.0.0 | 5.0.0 | ✅ Current | 0 |
-| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
+| `billiard` | 4.2.4 | 4.2.4 | ✅ Current | 0 |
+| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `bleach` | 6.3.0 | 6.3.0 | ✅ Current | 10 |
 | `celery` | 5.6.3 | 5.6.3 | ✅ Current | 4 |
+| `certifi` | 2026.2.25 | 2026.5.20 | ⚠️ Outdated | 6 |
+| `cffi` | 2.0.0 | 2.0.0 | ✅ Current | 0 |
 | `cfgv` | 3.5.0 | 3.5.0 | ✅ Current | 0 |
 | `channels` | 4.3.2 | 4.3.2 | ✅ Current | 2 |
-| `black` | 26.3.1 | 26.5.1 | ⚠️ Outdated | 3 |
 | `channels_redis` | 4.3.0 | 4.3.0 | ✅ Current | 0 |
-| `cffi` | 2.0.0 | 2.0.0 | ✅ Current | 0 |
-| `click-didyoumean` | 0.3.1 | 0.3.1 | ✅ Current | 0 |
-| `click` | 8.3.1 | 8.4.1 | ⚠️ Outdated | 0 |
-| `click-repl` | 0.3.0 | 0.3.0 | ✅ Current | 0 |
-| `click-plugins` | 1.1.1.2 | 1.1.1.2 | ✅ Current | 0 |
-| `constantly` | 23.10.4 | 23.10.4 | ✅ Current | 0 |
 | `charset-normalizer` | 3.4.7 | 3.4.7 | ✅ Current | 0 |
+| `click` | 8.3.1 | 8.4.1 | ⚠️ Outdated | 0 |
+| `click-didyoumean` | 0.3.1 | 0.3.1 | ✅ Current | 0 |
+| `click-plugins` | 1.1.1.2 | 1.1.1.2 | ✅ Current | 0 |
+| `click-repl` | 0.3.0 | 0.3.0 | ✅ Current | 0 |
+| `constantly` | 23.10.4 | 23.10.4 | ✅ Current | 0 |
 | `cron-descriptor` | 1.4.5 | 2.0.8 | ⚠️ Outdated | 0 |
+| `cryptography` | 46.0.6 | 46.0.6 | ✅ Current | 30 |
 | `daphne` | 4.2.1 | 4.2.1 | ✅ Current | 0 |
 | `distlib` | 0.4.0 | 0.4.0 | ✅ Current | 0 |
+| `Django` | 5.2.12 | 6.0.5 | ⚠️ Outdated | 0 |
 | `django-celery-beat` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
 | `django-ratelimit` | 4.1.0 | 4.1.0 | ✅ Current | 0 |
 | `django-timezone-field` | 7.2.1 | 7.2.1 | ✅ Current | 0 |
 | `djangorestframework` | 3.17.1 | 3.17.1 | ✅ Current | 3 |
+| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
 | `dparse` | 0.6.4 | 0.6.4 | ✅ Current | 2 |
 | `exceptiongroup` | 1.3.1 | 1.3.1 | ✅ Current | 0 |
-| `cryptography` | 46.0.6 | 48.0.0 | ⚠️ Outdated | 30 |
-| `djangorestframework_simplejwt` | 5.5.1 | 5.5.1 | ✅ Current | 1 |
 | `filelock` | 3.25.2 | 3.29.0 | ⚠️ Outdated | 2 |
-| `hyperlink` | 21.0.0 | 21.0.0 | ✅ Current | 0 |
 | `google-cloud-vision` | 3.7.4 | 3.14.0 | ⚠️ Outdated | 0 |
-| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 1 |
-| `imagehash` | 4.3.1 | 4.3.2 | ⚠️ Outdated | 0 |
-| `idna` | 3.11 | 3.16 | ⚠️ Outdated | 3 |
+| `h11` | 0.16.0 | 0.16.0 | ✅ Current | 0 |
+| `hyperlink` | 21.0.0 | 21.0.0 | ✅ Current | 0 |
 | `identify` | 2.6.18 | 2.6.19 | ⚠️ Outdated | 0 |
+| `idna` | 3.11 | 3.16 | ⚠️ Outdated | 3 |
+| `imagehash` | 4.3.1 | 4.3.2 | ⚠️ Outdated | 0 |
 | `Incremental` | 24.11.0 | 24.11.0 | ✅ Current | 0 |
 | `iniconfig` | 2.3.0 | 2.3.0 | ✅ Current | 0 |
-| `jsonschema-specifications` | 2025.9.1 | 2025.9.1 | ✅ Current | 0 |
-| `jsonschema` | 4.19.0 | 4.26.0 | ⚠️ Outdated | 0 |
 | `Jinja2` | 3.1.6 | 3.1.6 | ✅ Current | 16 |
 | `joblib` | 1.5.3 | 1.5.3 | ✅ Current | 3 |
+| `jsonschema` | 4.19.0 | 4.26.0 | ⚠️ Outdated | 0 |
+| `jsonschema-specifications` | 2025.9.1 | 2025.9.1 | ✅ Current | 0 |
 | `kombu` | 5.6.2 | 5.6.2 | ✅ Current | 0 |
 | `markdown-it-py` | 4.0.0 | 4.2.0 | ⚠️ Outdated | 4 |
-| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
 | `MarkupSafe` | 3.0.3 | 3.0.3 | ✅ Current | 0 |
 | `marshmallow` | 4.3.0 | 4.3.0 | ✅ Current | 3 |
-| `Django` | 5.2.12 | 6.0.5 | ⚠️ Outdated | 0 |
-| `mypy_extensions` | 1.1.0 | 1.1.0 | ✅ Current | 0 |
+| `mdurl` | 0.1.2 | 0.1.2 | ✅ Current | 0 |
 | `msgpack` | 1.1.2 | 1.1.2 | ✅ Current | 0 |
-| `nodeenv` | 1.10.0 | 1.10.0 | ✅ Current | 0 |
-| `pathspec` | 1.0.4 | 1.1.1 | ⚠️ Outdated | 0 |
+| `mypy_extensions` | 1.1.0 | 1.1.0 | ✅ Current | 0 |
 | `nltk` | 3.9.4 | 3.9.4 | ✅ Current | 21 |
+| `nodeenv` | 1.10.0 | 1.10.0 | ✅ Current | 0 |
 | `packaging` | 26.0 | 26.2 | ⚠️ Outdated | 0 |
-| `pluggy` | 1.6.0 | 1.6.0 | ✅ Current | 0 |
+| `pathspec` | 1.0.4 | 1.1.1 | ⚠️ Outdated | 0 |
+| `Pillow` | 10.4.0 | 10.4.0 | ✅ Current | 118 |
 | `platformdirs` | 4.9.4 | 4.9.6 | ⚠️ Outdated | 0 |
-| `prometheus_client` | 0.25.0 | 0.25.0 | ✅ Current | 0 |
+| `pluggy` | 1.6.0 | 1.6.0 | ✅ Current | 0 |
 | `pre_commit` | 4.5.1 | 4.6.0 | ⚠️ Outdated | 0 |
+| `prometheus_client` | 0.25.0 | 0.25.0 | ✅ Current | 0 |
 | `prompt_toolkit` | 3.0.52 | 3.0.52 | ✅ Current | 0 |
-| `pycparser` | 3.0 | 3.0 | ✅ Current | 0 |
-| `psycopg2-binary` | 2.9.11 | 2.9.12 | ⚠️ Outdated | 0 |
-| `pyasn1_modules` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
+| `psycopg2-binary` | 2.9.11 | 2.9.11 | ✅ Current | 0 |
 | `pyasn1` | 0.6.3 | 0.6.3 | ✅ Current | 2 |
-| `PyJWT` | 2.12.1 | 2.13.0 | ⚠️ Outdated | 8 |
-| `pyotp` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
+| `pyasn1_modules` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
+| `pycparser` | 3.0 | 3.0 | ✅ Current | 0 |
+| `pydantic` | 2.12.5 | 2.12.5 | ✅ Current | 3 |
+| `pydantic_core` | 2.41.5 | 2.41.5 | ✅ Current | 0 |
 | `Pygments` | 2.20.0 | 2.20.0 | ✅ Current | 9 |
+| `PyJWT` | 2.12.1 | 2.13.0 | ⚠️ Outdated | 8 |
 | `pyOpenSSL` | 26.0.0 | 26.2.0 | ⚠️ Outdated | 8 |
-| `pydantic` | 2.12.5 | 2.13.4 | ⚠️ Outdated | 3 |
+| `pyotp` | 2.9.0 | 2.9.0 | ✅ Current | 0 |
+| `pytest` | 9.0.3 | 9.0.3 | ✅ Current | 1 |
+| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
 | `python-crontab` | 3.3.0 | 3.3.0 | ✅ Current | 0 |
 | `python-dateutil` | 2.9.0.post0 | 2.9.0.post0 | ✅ Current | 0 |
-| `pytest-django` | 4.12.0 | 4.12.0 | ✅ Current | 0 |
-| `pytest` | 9.0.3 | 9.0.3 | ✅ Current | 1 |
 | `python-discovery` | 1.2.2 | 1.3.1 | ⚠️ Outdated | 0 |
 | `pytokens` | 0.4.1 | 0.4.1 | ✅ Current | 0 |
-| `redis` | 7.4.0 | 7.4.0 | ✅ Current | 4 |
-| `Pillow` | 10.4.0 | 12.2.0 | ⚠️ Outdated | 118 |
-| `referencing` | 0.37.0 | 0.37.0 | ✅ Current | 0 |
 | `PyYAML` | 6.0.3 | 6.0.3 | ✅ Current | 8 |
+| `redis` | 7.4.0 | 7.4.0 | ✅ Current | 4 |
+| `referencing` | 0.37.0 | 0.37.0 | ✅ Current | 0 |
+| `regex` | 2026.4.4 | 2026.4.4 | ✅ Current | 0 |
 | `requests` | 2.33.1 | 2.34.2 | ⚠️ Outdated | 13 |
 | `rich` | 14.3.3 | 15.0.0 | ⚠️ Outdated | 0 |
-| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
-| `safety-schemas` | 0.0.16 | 0.0.18 | ⚠️ Outdated | 0 |
-| `safety` | 3.7.0 | 3.7.0 | ✅ Current | 2 |
-| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
-| `service-identity` | 24.2.0 | 24.2.0 | ✅ Current | 0 |
 | `rpds-py` | 0.30.0 | 0.30.0 | ✅ Current | 0 |
+| `ruamel.yaml` | 0.19.1 | 0.19.1 | ✅ Current | 0 |
+| `ruff` | 0.15.9 | 0.15.9 | ✅ Current | 0 |
+| `safety` | 3.7.0 | 3.8.0 | ⚠️ Outdated | 2 |
+| `safety-schemas` | 0.0.16 | 0.0.18 | ⚠️ Outdated | 0 |
 | `sentry-sdk` | 2.58.0 | 2.60.0 | ⚠️ Outdated | 2 |
+| `service-identity` | 24.2.0 | 24.2.0 | ✅ Current | 0 |
+| `shellingham` | 1.5.4 | 1.5.4 | ✅ Current | 0 |
 | `six` | 1.17.0 | 1.17.0 | ✅ Current | 0 |
-| `regex` | 2026.4.4 | 2026.5.9 | ⚠️ Outdated | 0 |
 | `sqlparse` | 0.5.5 | 0.5.5 | ✅ Current | 6 |
 | `structlog` | 25.5.0 | 25.5.0 | ✅ Current | 0 |
-| `tomlkit` | 0.14.0 | 0.15.0 | ⚠️ Outdated | 0 |
 | `tenacity` | 9.1.4 | 9.1.4 | ✅ Current | 0 |
 | `tomli` | 2.4.1 | 2.4.1 | ✅ Current | 0 |
+| `tomlkit` | 0.14.0 | 0.15.0 | ⚠️ Outdated | 0 |
 | `tqdm` | 4.67.3 | 4.67.3 | ✅ Current | 3 |
-| `pydantic_core` | 2.41.5 | 2.47.0 | ⚠️ Outdated | 0 |
-| `txaio` | 25.9.2 | 25.12.2 | ⚠️ Outdated | 0 |
-| `typer` | 0.24.1 | 0.25.1 | ⚠️ Outdated | 0 |
-| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
-| `tzdata` | 2025.3 | 2026.2 | ⚠️ Outdated | 0 |
-| `typing_extensions` | 4.15.0 | 4.15.0 | ✅ Current | 0 |
-| `ruff` | 0.15.9 | 0.15.14 | ⚠️ Outdated | 0 |
-| `tzlocal` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
-| `vine` | 5.1.0 | 5.1.0 | ✅ Current | 0 |
 | `Twisted` | 25.5.0 | 26.4.0 | ⚠️ Outdated | 28 |
+| `txaio` | 25.9.2 | 25.12.2 | ⚠️ Outdated | 0 |
+| `typer` | 0.24.1 | 0.26.1 | ⚠️ Outdated | 0 |
+| `typing-inspection` | 0.4.2 | 0.4.2 | ✅ Current | 0 |
+| `typing_extensions` | 4.15.0 | 4.15.0 | ✅ Current | 0 |
+| `tzdata` | 2025.3 | 2026.2 | ⚠️ Outdated | 0 |
+| `tzlocal` | 5.3.1 | 5.3.1 | ✅ Current | 0 |
+| `urllib3` | 2.6.3 | 2.7.0 | ⚠️ Outdated | 32 |
+| `vine` | 5.1.0 | 5.1.0 | ✅ Current | 0 |
+| `virtualenv` | 21.2.0 | 21.3.3 | ⚠️ Outdated | 5 |
 | `wcwidth` | 0.6.0 | 0.7.0 | ⚠️ Outdated | 0 |
 | `websocket-client` | 1.9.0 | 1.9.0 | ✅ Current | 0 |
-| `virtualenv` | 21.2.0 | 21.3.3 | ⚠️ Outdated | 5 |
-| `urllib3` | 2.6.3 | 2.7.0 | ⚠️ Outdated | 32 |
-| `zope.interface` | 8.2 | 8.4 | ⚠️ Outdated | 0 |
-| `numpy` | 1.26.4 | 2.4.6 | ⚠️ Outdated | 16 |
+| `zope.interface` | 8.2 | 8.2 | ✅ Current | 0 |
+| `numpy` | 1.26.4 | 1.26.4 | ✅ Current | 16 |
+| `python-dotenv` | 1.2.2 | 1.2.2 | ✅ Current | 1 |
 
 ## 🔒 SECURITY FINDINGS
 
-Bandit scan found 109 issue(s). Test-file findings are excluded from health scoring.
+Bandit scan found 110 issue(s). Test-file findings are excluded from health scoring.
 
 | Severity | File | Line | Issue |
 | :---: | :--- | ---: | :--- |
@@ -479,8 +514,9 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 | **LOW** | `test_wallet_views.py` | 173 | B105: Possible hardcoded password: 'token-abc' |
 | **LOW** | `test_wallet_views.py` | 180 | B105: Possible hardcoded password: 'token-abc' |
 | **LOW** | `test_wallet_views.py` | 192 | B105: Possible hardcoded password: 'tok' |
-| **LOW** | `consumers.py` | 391 | B110: Try, Except, Pass detected. |
-| **LOW** | `consumers.py` | 402 | B110: Try, Except, Pass detected. |
+| **LOW** | `consumers.py` | 397 | B110: Try, Except, Pass detected. |
+| **LOW** | `consumers.py` | 408 | B110: Try, Except, Pass detected. |
+| **LOW** | `consumers.py` | 439 | B110: Try, Except, Pass detected. |
 | **LOW** | `test_consumers.py` | 52 | B106: Possible hardcoded password: 'pass' |
 | **LOW** | `test_consumers.py` | 62 | B106: Possible hardcoded password: 'pass' |
 | **LOW** | `test_consumers.py` | 313 | B106: Possible hardcoded password: 'pass' |
@@ -517,7 +553,7 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 | Average cyclomatic complexity | 2.43 |
 | Maximum cyclomatic complexity | 26 |
 | Maintainability index | 100.0 |
-| Functions analysed | 1668 |
+| Functions analysed | 1682 |
 
 ### High Complexity Functions (>10)
 
@@ -533,9 +569,9 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 | `_check_12_invariants` | `verify_backend.py` | 19 | 0 |
 | `join_tournament` | `participation_service.py` | 19 | 0 |
 | `_render_text` | `verify_backend.py` | 16 | 0 |
+| `handle` | `ignition.py` | 15 | 0 |
 | `modempay_webhook_handler` | `webhooks.py` | 15 | 0 |
 | `fourteen_day_sweep` | `tasks.py` | 15 | 0 |
-| `handle` | `ignition.py` | 14 | 0 |
 | `_render_json` | `verify_backend.py` | 14 | 0 |
 | `_try_activate` | `match_service.py` | 14 | 0 |
 | `_check_08_websockets` | `verify_backend.py` | 13 | 0 |
@@ -562,453 +598,838 @@ Bandit scan found 109 issue(s). Test-file findings are excluded from health scor
 
 ## 💡 RECOMMENDATIONS
 
-### [CRITICAL] Refactor nexus_content boundary
+### [HIGH] Move event utility to nexus_gaming
 
-1 cross-app violation(s) point at nexus_content. Apps involved: nexus_core.
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
 
-**Affected modules:** `nexus_core.views.games`, `nexus_content`
+**Action:** 
 
-### [CRITICAL] Refactor nexus_core boundary
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`
 
-3 cross-app violation(s) point at nexus_core. Apps involved: nexus_social, nexus_tournaments.
+### [HIGH] Refactor: move services to correct app
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+```json
+{
+  "title": "Refactor Gateway Tournament Interaction to Use REST API",
+  "why_harmful": "This direct import couples `nexus_gateway` to the internal implementation details of `nexus_tournaments.services`. It means `nexus
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`, `nexus_core`
+**Action:** Move nexus_tournaments.services to nexus_core or appropriate shared module.
 
-### [CRITICAL] Refactor utils boundary
+**Affected modules:** `nexus_gateway.consumers`
 
-3 cross-app violation(s) point at nexus_core.utils. Apps involved: nexus_social, nexus_tournaments.
+### [HIGH] Refactor: move utils to correct app
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+```json
+{
+  "title": "Migrate generic utilities from nexus_core.utils to nexus_gaming.utils",
+  "why_harmful": "This direct import creates tight coupling between `nexus_core` and both `nexus_social` and
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`, `nexus_core.utils`
+**Action:** Move nexus_core.utils to nexus_core or appropriate shared module.
 
-### [CRITICAL] Refactor events boundary
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`
 
-2 cross-app violation(s) point at nexus_core.utils.events. Apps involved: nexus_social.
+### [HIGH] Refactor: move nexus_core to correct app
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+```json
+{
+  "title": "Relocate shared utility from nexus_core to nexus_gaming",
+  "why_harmful": "This direct import creates tight coupling between `nexus_social`, `nexus_tournaments`, and `nexus_
 
-**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_core.utils.events`
+**Action:** Move nexus_core to nexus_core or appropriate shared module.
 
-### [CRITICAL] Refactor feature_flags boundary
+**Affected modules:** `nexus_social.services.event_consumers`, `nexus_social.views.events`, `nexus_tournaments.services.verification_service`
 
-1 cross-app violation(s) point at nexus_core.utils.feature_flags. Apps involved: nexus_tournaments.
+### [HIGH] Refactor: move nexus_tournaments to correct app
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+```json
+{
+  "title": "Refactor Gateway Interaction with Tournament API",
+  "why_harmful": "This direct import creates tight coupling between `nexus_gateway` and the internal implementation details of `nexus_tournaments`. If `nexus_
 
-**Affected modules:** `nexus_tournaments.services.verification_service`, `nexus_core.utils.feature_flags`
+**Action:** Move nexus_tournaments to nexus_core or appropriate shared module.
 
-### [CRITICAL] Refactor nexus_tournaments boundary
+**Affected modules:** `nexus_gateway.consumers`
 
-1 cross-app violation(s) point at nexus_tournaments. Apps involved: nexus_gateway.
+### [HIGH] NEXUS_CORE — Health Analysis
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+**NEXUS_CORE Health Narrative:**
 
-**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments`
+**Action:** Fix 1 boundary violation(s) first (+3 pts), then 58 security finding(s) (+174 pts). Projected score: 100%.
 
-### [CRITICAL] Refactor services boundary
+**Affected modules:** `nexus_core`, `nexus_core.utils`, `nexus_core.utils.events`, `nexus_core.signals`, `nexus_core.models`
 
-1 cross-app violation(s) point at nexus_tournaments.services. Apps involved: nexus_gateway.
+### [HIGH] NEXUS_SOCIAL — Health Analysis
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+The 57.0% score for
 
-**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments.services`
+**Action:** Fix 6 boundary violation(s) first (+30 pts), then 12 security finding(s) (+36 pts). Projected score: 100%.
 
-### [CRITICAL] Refactor match_service boundary
+**Affected modules:** `nexus_social`, `nexus_social.admin`, `nexus_social.apps`, `nexus_social.consumers`, `nexus_social.logging`
 
-1 cross-app violation(s) point at nexus_tournaments.services.match_service. Apps involved: nexus_gateway.
+### [HIGH] NEXUS_TOURNAMENTS — Health Analysis
 
-**Action:** Replace the direct import with a signal, Celery task, REST call, or shared service boundary so each app owns its own implementation.
+The `nexus_tournaments` app currently
 
-**Affected modules:** `nexus_gateway.consumers`, `nexus_tournaments.services.match_service`
+**Action:** Fix 3 boundary violation(s) first (+15 pts), then 11 security finding(s) (+33 pts). Projected score: 100%.
 
-### [MEDIUM] Fix Bare Except
+**Affected modules:** `nexus_tournaments`, `nexus_tournaments.services`, `nexus_tournaments.services.match_service`, `nexus_tournaments.signals`, `nexus_tournaments.admin`
 
-12 bare except finding(s) were detected by Bandit.
+### [HIGH] Extract Shared Utility: nexus_core
 
-**Action:** Replace broad exception handling with specific exception types. Narrow each catch block to the real failure mode and preserve the stack trace where needed.
+`nexus_core` is imported by 2 app(s) (nexus_tournaments, nexus_social) as a cross-app violation. One refactor eliminates all 2 violations.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/middleware.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/admin_panel.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_gateway/consumers.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/apps.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/auto_flag.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_social/services/push_notifications.py`
+**Action:** Here is the concrete extraction plan for your shared utility module, adhering to strict app
 
-### [MEDIUM] Fix Hardcoded Password
+**Affected modules:** `nexus_core`, `nexus_tournaments`, `nexus_social`
 
-97 hardcoded password finding(s) were detected by Bandit.
+### [HIGH] Extract Shared Utility: nexus_core.utils
 
-**Action:** Move the password into an environment variable or secret manager. Replace hardcoded credentials with settings-backed secrets and rotate the exposed value.
+`nexus_core.utils` is imported by 2 app(s) (nexus_tournaments, nexus_social) as a cross-app violation. One refactor eliminates all 2 violations.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tests/test_views.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_admin_panel.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_auth.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_new_endpoints.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_sessions_mfa_deletion.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_signals.py`, `/home/yusupha/my_tools/nexus_project_copy/nexus_core/tests/test_users.py`
+**Action:** Here is a concrete extraction plan for `nexus_core.utils`:
 
-### [MEDIUM] Refactor LoginView
+**Affected modules:** `nexus_core.utils`, `nexus_tournaments`, `nexus_social`
 
-LoginView in auth.py has cyclomatic complexity 12.
+### [HIGH] Upgrade black: 26.3.1 → 26.5.1
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`
 
-### [MEDIUM] Refactor post
+**Action:** pip install black==26.5.1
 
-post in auth.py has cyclomatic complexity 11.
+Breaking changes: None known. Black is a code formatter and does not typically introduce breaking changes to application logic or Django/Celery usage.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Verify: black --check .
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/views/auth.py`
+**Affected modules:** `black`
 
-### [MEDIUM] Refactor generate_single_elimination
+### [HIGH] Upgrade Authlib: 1.6.9 → 1.7.2
 
-generate_single_elimination in bracket_service.py has cyclomatic complexity 13.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/bracket_service.py`
+**Action:** pip install Authlib==1.7.2
 
-### [MEDIUM] Refactor EscrowService
+Breaking changes: None known. Authlib 1.7.x series is generally backward compatible with 1.6.x for core functionality. Specific breaking changes would typically be in major version bumps or documented in release notes if they impact common usage patterns.
 
-EscrowService in escrow_service.py has cyclomatic complexity 12.
+Verify: python manage.py test nexus_core
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `Authlib`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py`
+### [HIGH] Upgrade autobahn: 24.4.2 → 25.12.2
 
-### [MEDIUM] Refactor lock
 
-lock in escrow_service.py has cyclomatic complexity 11.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install autobahn==25.12.2
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/escrow_service.py`
+Breaking changes: None known. Autobahn upgrades are generally backward-compatible within minor versions. The primary impact would be if any custom WebSocket protocol implementations relied on deprecated features, which is unlikely given the strict app-boundary policy.
 
-### [MEDIUM] Refactor ingest_event
+Verify: python manage.py test nexus_gateway
 
-ingest_event in events.py has cyclomatic complexity 12.
+**Affected modules:** `autobahn`
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+### [MEDIUM] Upgrade cron-descriptor: 1.4.5 → 2.0.8
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/events.py`
 
-### [HIGH] Refactor HandshakeRecheckService
 
-HandshakeRecheckService in handshake_recheck_service.py has cyclomatic complexity 22.
+**Action:** pip install "cron-descriptor>=2.0.8,<2.1.0"
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Breaking changes: None known. The changelog for cron-descriptor 2.0.x indicates no breaking changes relevant to typical Django/Celery usage. The API remains backward compatible for standard cron string parsing.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py`
+Verify: python manage.py shell -c "from cron_descriptor import get_description; assert get_description('* * * * *') == 'Every minute'"
 
-### [HIGH] Refactor recheck
+**Affected modules:** `cron-descriptor`
 
-recheck in handshake_recheck_service.py has cyclomatic complexity 21.
+### [MEDIUM] Upgrade click: 8.3.1 → 8.4.1
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/handshake_recheck_service.py`
 
-### [MEDIUM] Refactor handle
+**Action:** pip install click==8.4.1
 
-handle in ignition.py has cyclomatic complexity 14.
+Breaking changes: None known. Click is a dependency for command-line interface creation and is unlikely to introduce breaking changes in its core functionality that would affect Django or Celery usage in this context.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Verify: python manage.py test nexus_economy nexus_tournaments
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/ignition.py`
+**Affected modules:** `click`
 
-### [MEDIUM] Refactor create_tournament
+### [HIGH] Upgrade certifi: 2026.2.25 → 2026.5.20
 
-create_tournament in league_service.py has cyclomatic complexity 20.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/league_service.py`
+**Action:** pip install certifi==2026.5.20
 
-### [MEDIUM] Refactor _try_activate
+Breaking changes: None known. certifi is a low-level dependency for SSL/TLS certificate validation and typically does not introduce breaking changes at the application level unless there are fundamental shifts in certificate handling, which is unlikely between minor versions.
 
-_try_activate in match_service.py has cyclomatic complexity 14.
+Verify: python manage.py check
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `certifi`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py`
+### [HIGH] Upgrade filelock: 3.25.2 → 3.29.0
 
-### [HIGH] Refactor handle_timeout
 
-handle_timeout in match_service.py has cyclomatic complexity 21.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install filelock==3.29.0
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/match_service.py`
+Breaking changes: None known. The filelock library is a low-level utility and changes between these minor versions are unlikely to introduce breaking changes for typical Django/Celery usage.
 
-### [MEDIUM] Refactor join_tournament
+Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
 
-join_tournament in participation_service.py has cyclomatic complexity 19.
+**Affected modules:** `filelock`
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+### [MEDIUM] Upgrade Django: 5.2.12 → 6.0.5
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/participation_service.py`
 
-### [MEDIUM] Refactor PayoutService
 
-PayoutService in payout_service.py has cyclomatic complexity 11.
+**Action:** pip install "Django>=6.0.5,<6.1"
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Breaking changes: None known for standard Django/Celery usage. Django 6.0 introduced some minor changes to template rendering and form handling, but these are unlikely to impact a strictly modular monolith with minimal direct cross-app imports.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/payout_service.py`
+Verify: python manage.py test
 
-### [MEDIUM] Refactor patch
+**Affected modules:** `Django`
 
-patch in preferences.py has cyclomatic complexity 11.
+### [MEDIUM] Upgrade google-cloud-vision: 3.7.4 → 3.14.0
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/preferences.py`
 
-### [MEDIUM] Refactor MarkReadView
+**Action:** pip install google-cloud-vision==3.14.0
 
-MarkReadView in receipts.py has cyclomatic complexity 13.
+Breaking changes: None known. The `google-cloud-vision` library primarily provides client-side SDK functionality. Direct API changes that would break existing Django/Celery integrations are highly unlikely between minor versions unless specific, deprecated features were used, which is not indicated.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Verify: python manage.py test nexus_content
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py`
+**Affected modules:** `google-cloud-vision`
 
-### [MEDIUM] Refactor post
+### [HIGH] Upgrade idna: 3.11 → 3.16
 
-post in receipts.py has cyclomatic complexity 12.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_social/views/receipts.py`
+**Action:** pip install idna==3.16
 
-### [MEDIUM] Refactor auto_snatcher_backfill
+Breaking changes: None known. The idna library primarily handles Internationalized Domain Names in Applications (IDNA) encoding and decoding, which is unlikely to have direct breaking changes impacting typical Django or Celery application logic.
 
-auto_snatcher_backfill in tasks.py has cyclomatic complexity 13.
+Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `idna`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py`
+### [MEDIUM] Upgrade identify: 2.6.18 → 2.6.19
 
-### [MEDIUM] Refactor fourteen_day_sweep
 
-fourteen_day_sweep in tasks.py has cyclomatic complexity 15.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install identify==2.6.19
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_content/tasks.py`
+Breaking changes: None known
 
-### [MEDIUM] Refactor _run_ai_verification
+Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
 
-_run_ai_verification in verification_service.py has cyclomatic complexity 13.
+**Affected modules:** `identify`
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+### [MEDIUM] Upgrade imagehash: 4.3.1 → 4.3.2
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_tournaments/services/verification_service.py`
 
-### [HIGH] Refactor _check_01_env
 
-_check_01_env in verify_backend.py has cyclomatic complexity 23.
+**Action:** pip install imagehash==4.3.2
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Breaking changes: None known. Patch releases typically contain only backward-compatible bug fixes and minor improvements.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
 
-### [MEDIUM] Refactor _check_02_models
+**Affected modules:** `imagehash`
 
-_check_02_models in verify_backend.py has cyclomatic complexity 19.
+### [HIGH] Upgrade markdown-it-py: 4.0.0 → 4.2.0
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-### [MEDIUM] Refactor _check_06_imports
+**Action:** pip install markdown-it-py==4.2.0
 
-_check_06_imports in verify_backend.py has cyclomatic complexity 11.
+Breaking changes: None known. The changelog for markdown-it-py between 4.0.0 and 4.2.0 does not indicate any breaking API changes that would impact typical usage within a Django application.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Verify: python manage.py test nexus_content
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+**Affected modules:** `markdown-it-py`
 
-### [MEDIUM] Refactor _check_08_websockets
+### [MEDIUM] Upgrade packaging: 26.0 → 26.2
 
-_check_08_websockets in verify_backend.py has cyclomatic complexity 13.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+**Action:** pip install packaging==26.2
 
-### [MEDIUM] Refactor _check_10_security
+Breaking changes: None known. The packaging library is a low-level dependency, and patch releases typically contain only bug fixes and minor improvements, making them highly unlikely to introduce breaking changes for application-level code like Django or Celery.
 
-_check_10_security in verify_backend.py has cyclomatic complexity 12.
+Verify: python manage.py test
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `packaging`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+### [MEDIUM] Upgrade jsonschema: 4.19.0 → 4.26.0
 
-### [HIGH] Refactor _check_11_financial
 
-_check_11_financial in verify_backend.py has cyclomatic complexity 26.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install jsonschema==4.26.0
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+Breaking changes: None known. The jsonschema library's core functionality and API are generally stable. No direct impact on Django/Celery usage is anticipated based on the changelog between these versions.
 
-### [MEDIUM] Refactor _check_12_invariants
+Verify: python manage.py test nexus_core nexus_economy nexus_gaming nexus_gateway nexus_tournaments nexus_social nexus_content
 
-_check_12_invariants in verify_backend.py has cyclomatic complexity 19.
+**Affected modules:** `jsonschema`
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+### [MEDIUM] Upgrade pathspec: 1.0.4 → 1.1.1
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-### [MEDIUM] Refactor _render_json
 
-_render_json in verify_backend.py has cyclomatic complexity 14.
+**Action:** pip install pathspec==1.1.1
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Breaking changes: None known. The pathspec library is generally stable for minor version updates, and no breaking changes are documented between 1.0.4 and 1.1.1 that would impact typical Django or Celery usage.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+Verify: python manage.py test --keepdb
 
-### [MEDIUM] Refactor _render_text
+**Affected modules:** `pathspec`
 
-_render_text in verify_backend.py has cyclomatic complexity 16.
+### [HIGH] Upgrade PyJWT: 2.12.1 → 2.13.0
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
 
-### [MEDIUM] Refactor handle
+**Action:** pip install "PyJWT>=2.13.0,<3.0.0"
 
-handle in verify_backend.py has cyclomatic complexity 12.
+Breaking changes: None known. PyJWT 2.13.0 is a minor version update with backward-compatible changes. No direct impact on Django or Celery usage is anticipated.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+Verify: python manage.py test nexus_core.tests.test_jwt_handling
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_core/management/commands/verify_backend.py`
+**Affected modules:** `PyJWT`
 
-### [MEDIUM] Refactor WalletDepositView
+### [HIGH] Upgrade pyOpenSSL: 26.0.0 → 26.2.0
 
-WalletDepositView in wallet.py has cyclomatic complexity 11.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
+**Action:** pip install pyOpenSSL==26.2.0
 
-### [MEDIUM] Refactor WalletWithdrawView
+Breaking changes: None known
 
-WalletWithdrawView in wallet.py has cyclomatic complexity 12.
+Verify: python manage.py check
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `pyOpenSSL`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
+### [MEDIUM] Upgrade platformdirs: 4.9.4 → 4.9.6
 
-### [MEDIUM] Refactor post
 
-post in wallet.py has cyclomatic complexity 11.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install platformdirs==4.9.6
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/wallet.py`
+```json
+{
+  "upgrade_command": "pip
 
-### [MEDIUM] Refactor modempay_webhook_handler
+**Affected modules:** `platformdirs`
 
-modempay_webhook_handler in webhooks.py has cyclomatic complexity 15.
+### [MEDIUM] Upgrade pre_commit: 4.5.1 → 4.6.0
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/views/webhooks.py`
 
-### [MEDIUM] Refactor WithdrawalService
+**Action:** pip install pre_commit==4.6.0
 
-WithdrawalService in withdrawal_service.py has cyclomatic complexity 12.
+```json
+{
+  "upgrade_command": "pip install pre_
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Affected modules:** `pre_commit`
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py`
+### [HIGH] Upgrade requests: 2.33.1 → 2.34.2
 
-### [MEDIUM] Refactor process
 
-process in withdrawal_service.py has cyclomatic complexity 11.
 
-**Action:** Split the function into smaller helpers, flatten branches, and move repeated logic into a shared utility so the code becomes easier to test.
+**Action:** pip install requests==2.34.2
 
-**Affected modules:** `/home/yusupha/my_tools/nexus_project_copy/nexus_economy/services/withdrawal_service.py`
+Breaking changes: None known
 
-### [LOW] Review ghost files in nexus_core
+Verify: python manage.py test
 
-5 ghost file(s) were discovered for nexus_core.
+**Affected modules:** `requests`
 
-**Action:** Remove dead files that are no longer imported, or register the missing modules properly if they are still required.
+### [MEDIUM] Upgrade python-discovery: 1.2.2 → 1.3.1
 
-**Affected modules:** `nexus_core.serializers.token`, `nexus_core.serializers.users`, `nexus_core.serializers.auth`, `nexus_core.management.commands.verify_backend`, `nexus_core.management.commands.dispatch_outbox_events`
 
-### [LOW] Review ghost files in nexus_tournaments
 
-1 ghost file(s) were discovered for nexus_tournaments.
+**Action:** pip install python-discovery==1.3.1
 
-**Action:** Remove dead files that are no longer imported, or register the missing modules properly if they are still required.
+```json
+{
+  "upgrade_command": "pip install
 
-**Affected modules:** `nexus_tournaments.management.commands.dispatch_outbox_events`
+**Affected modules:** `python-discovery`
 
-### [HIGH] Resolve intra-app cycle
+### [MEDIUM] Upgrade rich: 14.3.3 → 15.0.0
 
-nexus_core.utils -> nexus_core.utils.decorators
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `nexus_core.utils`, `nexus_core.utils.decorators`
+**Action:** pip install rich==15.0.0
 
-### [HIGH] Resolve intra-app cycle
+```json
+{
+  "upgrade_command": "pip install
 
-nexus_tournaments.services.match_service -> nexus_tournaments.tasks
+**Affected modules:** `rich`
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+### [HIGH] Upgrade safety: 3.7.0 → 3.8.0
 
-**Affected modules:** `nexus_tournaments.services.match_service`, `nexus_tournaments.tasks`
 
-### [HIGH] Resolve intra-app cycle
 
-nexus_tournaments.views.results -> nexus_tournaments.views
+**Action:** pip install safety==3.8.0
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+```json
+{
+  "upgrade_command": "pip install safety
 
-**Affected modules:** `nexus_tournaments.views.results`, `nexus_tournaments.views`
+**Affected modules:** `safety`
 
-### [HIGH] Resolve intra-app cycle
+### [HIGH] Upgrade sentry-sdk: 2.58.0 → 2.60.0
 
-nexus_tournaments.views -> nexus_tournaments.views.announcements
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.announcements`
+**Action:** pip install sentry-sdk==2.60.0
 
-### [HIGH] Resolve intra-app cycle
+Breaking changes: None known
 
-nexus_tournaments.views -> nexus_tournaments.views.matches
+Verify: python manage.py test
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+**Affected modules:** `sentry-sdk`
 
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.matches`
+### [MEDIUM] Upgrade safety-schemas: 0.0.16 → 0.0.18
 
-### [HIGH] Resolve intra-app cycle
 
-nexus_tournaments.views -> nexus_tournaments.views.leagues
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+**Action:** pip install safety-schemas==0.0.18
 
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.leagues`
+```json
+{
+  "upgrade_command": "pip install safety-
 
-### [HIGH] Resolve intra-app cycle
+**Affected modules:** `safety-schemas`
 
-nexus_tournaments.views -> nexus_tournaments.views.moderation
+### [HIGH] Upgrade Twisted: 25.5.0 → 26.4.0
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
 
-**Affected modules:** `nexus_tournaments.views`, `nexus_tournaments.views.moderation`
 
-### [HIGH] Resolve intra-app cycle
+**Action:** pip install Twisted==26.4.0
 
-nexus_economy.tasks -> nexus_economy.tasks.payout
+Breaking changes: None known for standard Django/Celery integrations; verify custom async logic in nexus_gateway.
 
-**Action:** Move the shared dependency into a lower-level module, then replace the direct edge with a signal, task, or helper import that does not re-enter the cycle.
+Verify: python manage.py test nexus_gateway
 
-**Affected modules:** `nexus_economy.tasks`, `nexus_economy.tasks.payout`
+**Affected modules:** `Twisted`
+
+### [MEDIUM] Upgrade tomlkit: 0.14.0 → 0.15.0
+
+
+
+**Action:** pip install tomlkit==0.15.0
+
+```json
+{
+  "upgrade_command": "pip install
+
+**Affected modules:** `tomlkit`
+
+### [MEDIUM] Upgrade txaio: 25.9.2 → 25.12.2
+
+
+
+**Action:** pip install txaio==25.12.2
+
+```json
+{
+  "upgrade_command": "pip
+
+**Affected modules:** `txaio`
+
+### [MEDIUM] Upgrade typer: 0.24.1 → 0.26.1
+
+
+
+**Action:** pip install typer==0.26.1
+
+Breaking changes: None known for standard CLI usage; minor internal changes to Annotated handling may affect highly complex custom type wrappers.
+
+Verify: python manage.py shell -c "import typer; print(typer.__version__)"
+
+**Affected modules:** `typer`
+
+### [MEDIUM] Upgrade tzdata: 2025.3 → 2026.2
+
+
+
+**Action:** pip install tzdata==2026.2
+
+Breaking changes: None known
+
+Verify: python manage.py shell -c "import tzdata; print(tzdata.__version__)"
+
+**Affected modules:** `tzdata`
+
+### [HIGH] Upgrade urllib3: 2.6.3 → 2.7.0
+
+
+
+**Action:** pip install urllib3==2.7.0
+
+```json
+{
+  "upgrade_command": "pip install urllib3
+
+**Affected modules:** `urllib3`
+
+### [HIGH] Upgrade virtualenv: 21.2.0 → 21.3.3
+
+
+
+**Action:** pip install virtualenv==21.3.3
+
+Breaking changes: None known
+
+Verify: virtualenv --version && python -m django check
+
+**Affected modules:** `virtualenv`
+
+### [MEDIUM] Upgrade wcwidth: 0.6.0 → 0.7.0
+
+
+
+**Action:** pip install wcwidth==0.7.0
+
+Breaking changes: None known
+
+Verify: python manage.py check
+
+**Affected modules:** `wcwidth`
+
+## 📋 FIX QUEUE
+
+| ID | Status | App | Title | Updated |
+| :--- | :---: | :--- | :--- | :--- |
+| `rec-242d` | open | `` |  | 2026-05-27 |
+| `rec-2d82` | open | `` |  | 2026-05-27 |
+| `rec-75bd` | open | `` |  | 2026-05-27 |
+| `rec-a47e` | open | `` |  | 2026-05-27 |
+| `rec-c42e` | open | `` |  | 2026-05-27 |
+| `rec-d663` | open | `` |  | 2026-05-27 |
+| `rec-b8ad` | open | `` |  | 2026-05-27 |
+| `rec-f8fc` | open | `` |  | 2026-05-27 |
+| `rec-ddad` | open | `` |  | 2026-05-27 |
+| `rec-dcde` | open | `` |  | 2026-05-27 |
+| `rec-5062` | open | `` |  | 2026-05-27 |
+| `rec-9830` | open | `` |  | 2026-05-27 |
+| `rec-1534` | open | `` |  | 2026-05-27 |
+| `rec-17a0` | open | `` |  | 2026-05-27 |
+| `rec-e97f` | open | `` |  | 2026-05-27 |
+| `rec-5600` | open | `` |  | 2026-05-27 |
+| `rec-f5bd` | open | `` |  | 2026-05-27 |
+| `rec-558f` | open | `` |  | 2026-05-27 |
+| `rec-945a` | open | `` |  | 2026-05-27 |
+| `rec-3792` | open | `` |  | 2026-05-27 |
+| `rec-83eb` | open | `` |  | 2026-05-27 |
+| `rec-b640` | open | `` |  | 2026-05-27 |
+| `rec-ce98` | open | `` |  | 2026-05-27 |
+| `rec-8887` | open | `` |  | 2026-05-27 |
+| `rec-b1eb` | open | `` |  | 2026-05-27 |
+| `rec-bb17` | open | `` |  | 2026-05-27 |
+| `rec-380a` | open | `` |  | 2026-05-27 |
+| `rec-a145` | open | `` |  | 2026-05-27 |
+| `rec-9869` | open | `` |  | 2026-05-27 |
+| `rec-1d3d` | open | `` |  | 2026-05-27 |
+| `rec-6809` | open | `` |  | 2026-05-27 |
+| `rec-016e` | open | `` |  | 2026-05-27 |
+| `rec-44ea` | open | `` |  | 2026-05-27 |
+| `rec-4104` | open | `` |  | 2026-05-27 |
+| `rec-3399` | open | `` |  | 2026-05-27 |
+| `rec-1a4f` | open | `` |  | 2026-05-27 |
+| `rec-59fd` | open | `` |  | 2026-05-27 |
+| `rec-2b98` | open | `` |  | 2026-05-27 |
+| `rec-db3c` | open | `` |  | 2026-05-27 |
+| `rec-eddf` | open | `` |  | 2026-05-27 |
+| `rec-f1a7` | open | `` |  | 2026-05-27 |
+| `rec-cec1` | open | `` |  | 2026-05-27 |
+| `rec-52f4` | open | `` |  | 2026-05-27 |
+| `rec-0f5b` | open | `` |  | 2026-05-27 |
+| `rec-01ae` | open | `` |  | 2026-05-27 |
+| `rec-0d1d` | open | `` |  | 2026-05-27 |
+| `rec-0e7d` | open | `` |  | 2026-05-27 |
+| `rec-130e` | open | `` |  | 2026-05-27 |
+| `rec-15df` | open | `` |  | 2026-05-27 |
+| `rec-18ce` | open | `` |  | 2026-05-27 |
+| `rec-1ccd` | open | `` |  | 2026-05-27 |
+| `rec-1fdb` | open | `` |  | 2026-05-27 |
+| `rec-247c` | open | `` |  | 2026-05-27 |
+| `rec-2812` | open | `` |  | 2026-05-27 |
+| `rec-3779` | open | `` |  | 2026-05-27 |
+| `rec-37b8` | open | `` |  | 2026-05-27 |
+| `rec-3bb8` | open | `` |  | 2026-05-27 |
+| `rec-3de1` | open | `` |  | 2026-05-27 |
+| `rec-3ff5` | open | `` |  | 2026-05-27 |
+| `rec-4134` | open | `` |  | 2026-05-27 |
+| `rec-413c` | open | `` |  | 2026-05-27 |
+| `rec-4a78` | open | `` |  | 2026-05-27 |
+| `rec-532e` | open | `` |  | 2026-05-27 |
+| `rec-5610` | open | `` |  | 2026-05-27 |
+| `rec-5693` | open | `` |  | 2026-05-27 |
+| `rec-572b` | open | `` |  | 2026-05-27 |
+| `rec-57bc` | open | `` |  | 2026-05-27 |
+| `rec-5ef5` | open | `` |  | 2026-05-27 |
+| `rec-6a1a` | open | `` |  | 2026-05-27 |
+| `rec-6b1c` | open | `` |  | 2026-05-27 |
+| `rec-6c71` | open | `` |  | 2026-05-27 |
+| `rec-6d19` | open | `` |  | 2026-05-27 |
+| `rec-6db9` | open | `` |  | 2026-05-27 |
+| `rec-7220` | open | `` |  | 2026-05-27 |
+| `rec-73c2` | open | `` |  | 2026-05-27 |
+| `rec-7513` | open | `` |  | 2026-05-27 |
+| `rec-7da7` | open | `` |  | 2026-05-27 |
+| `rec-7e49` | open | `` |  | 2026-05-27 |
+| `rec-8fa7` | open | `` |  | 2026-05-27 |
+| `rec-9b01` | open | `` |  | 2026-05-27 |
+| `rec-9b0f` | open | `` |  | 2026-05-27 |
+| `rec-9d38` | open | `` |  | 2026-05-27 |
+| `rec-a109` | open | `` |  | 2026-05-27 |
+| `rec-ad22` | open | `` |  | 2026-05-27 |
+| `rec-af45` | open | `` |  | 2026-05-27 |
+| `rec-b4ea` | open | `` |  | 2026-05-27 |
+| `rec-b92d` | open | `` |  | 2026-05-27 |
+| `rec-bc53` | open | `` |  | 2026-05-27 |
+| `rec-c6d9` | open | `` |  | 2026-05-27 |
+| `rec-ca75` | open | `` |  | 2026-05-27 |
+| `rec-cba5` | open | `` |  | 2026-05-27 |
+| `rec-d889` | open | `` |  | 2026-05-27 |
+| `rec-d8ab` | open | `` |  | 2026-05-27 |
+| `rec-da11` | open | `` |  | 2026-05-27 |
+| `rec-dc6f` | open | `` |  | 2026-05-27 |
+| `rec-df10` | open | `` |  | 2026-05-27 |
+| `rec-e177` | open | `` |  | 2026-05-27 |
+| `rec-ed09` | open | `` |  | 2026-05-27 |
+| `rec-ef5d` | done | `` |  | 2026-05-27 |
+| `rec-f1b6` | open | `` |  | 2026-05-27 |
+| `rec-fb48` | open | `` |  | 2026-05-27 |
+| `rec-0836` | open | `` |  | 2026-05-27 |
+| `rec-f6b6` | open | `` |  | 2026-05-27 |
+| `rec-469a` | open | `` |  | 2026-05-27 |
+| `rec-0e02` | open | `` |  | 2026-05-26 |
+| `rec-10d5` | open | `` |  | 2026-05-26 |
+| `rec-2083` | open | `` |  | 2026-05-26 |
+| `rec-4473` | open | `` |  | 2026-05-26 |
+| `rec-6ff1` | open | `` |  | 2026-05-26 |
+| `rec-dd27` | open | `` |  | 2026-05-26 |
+| `rec-0720` | open | `` |  | 2026-05-26 |
+| `rec-1489` | open | `` |  | 2026-05-26 |
+| `rec-2e4b` | open | `` |  | 2026-05-26 |
+| `rec-397a` | open | `` |  | 2026-05-26 |
+| `rec-3a89` | open | `` |  | 2026-05-26 |
+| `rec-3fda` | open | `` |  | 2026-05-26 |
+| `rec-4bc6` | open | `` |  | 2026-05-26 |
+| `rec-4d16` | open | `` |  | 2026-05-26 |
+| `rec-52f6` | open | `` |  | 2026-05-26 |
+| `rec-55af` | open | `` |  | 2026-05-26 |
+| `rec-59b1` | open | `` |  | 2026-05-26 |
+| `rec-6153` | open | `` |  | 2026-05-26 |
+| `rec-63c2` | open | `` |  | 2026-05-26 |
+| `rec-6d0b` | open | `` |  | 2026-05-26 |
+| `rec-6fb6` | open | `` |  | 2026-05-26 |
+| `rec-86d6` | open | `` |  | 2026-05-26 |
+| `rec-8fe6` | open | `` |  | 2026-05-26 |
+| `rec-989a` | open | `` |  | 2026-05-26 |
+| `rec-9cb7` | open | `` |  | 2026-05-26 |
+| `rec-a2e0` | open | `` |  | 2026-05-26 |
+| `rec-b8a9` | open | `` |  | 2026-05-26 |
+| `rec-bc4b` | open | `` |  | 2026-05-26 |
+| `rec-c787` | open | `` |  | 2026-05-26 |
+| `rec-cdd3` | open | `` |  | 2026-05-26 |
+| `rec-d091` | open | `` |  | 2026-05-26 |
+| `rec-d538` | open | `` |  | 2026-05-26 |
+| `rec-d724` | open | `` |  | 2026-05-26 |
+| `rec-ddf8` | open | `` |  | 2026-05-26 |
+| `rec-de0f` | open | `` |  | 2026-05-26 |
+| `rec-de20` | open | `` |  | 2026-05-26 |
+| `rec-dfc4` | open | `` |  | 2026-05-26 |
+| `rec-e546` | open | `` |  | 2026-05-26 |
+| `rec-e5b4` | open | `` |  | 2026-05-26 |
+| `rec-e73e` | open | `` |  | 2026-05-26 |
+| `rec-f6bb` | open | `` |  | 2026-05-26 |
+| `rec-16af` | open | `` |  | 2026-05-24 |
+| `rec-dc9e` | open | `` |  | 2026-05-24 |
+| `rec-286f` | open | `` |  | 2026-05-24 |
+| `rec-d962` | open | `` |  | 2026-05-24 |
+| `rec-c31a` | open | `` |  | 2026-05-24 |
+| `rec-26a4` | open | `` |  | 2026-05-24 |
+| `rec-6e3e` | open | `` |  | 2026-05-24 |
+| `rec-9a60` | open | `` |  | 2026-05-24 |
+| `rec-a65f` | open | `` |  | 2026-05-24 |
+| `rec-a3d5` | open | `` |  | 2026-05-24 |
+| `rec-1e1f` | open | `` |  | 2026-05-24 |
+| `rec-76ee` | open | `` |  | 2026-05-24 |
+| `rec-30c2` | open | `` |  | 2026-05-24 |
+| `rec-ed7d` | open | `` |  | 2026-05-24 |
+| `rec-0e10` | open | `` |  | 2026-05-24 |
+| `rec-2033` | open | `` |  | 2026-05-24 |
+| `rec-250b` | open | `` |  | 2026-05-24 |
+| `rec-2e83` | open | `` |  | 2026-05-24 |
+| `rec-3c2a` | open | `` |  | 2026-05-24 |
+| `rec-3e45` | open | `` |  | 2026-05-24 |
+| `rec-402a` | open | `` |  | 2026-05-24 |
+| `rec-444f` | open | `` |  | 2026-05-24 |
+| `rec-4699` | open | `` |  | 2026-05-24 |
+| `rec-4d2c` | open | `` |  | 2026-05-24 |
+| `rec-502e` | open | `` |  | 2026-05-24 |
+| `rec-634d` | open | `` |  | 2026-05-24 |
+| `rec-6afa` | open | `` |  | 2026-05-24 |
+| `rec-7666` | open | `` |  | 2026-05-24 |
+| `rec-76f2` | open | `` |  | 2026-05-24 |
+| `rec-7f5f` | open | `` |  | 2026-05-24 |
+| `rec-8092` | open | `` |  | 2026-05-24 |
+| `rec-8b7a` | open | `` |  | 2026-05-24 |
+| `rec-9127` | open | `` |  | 2026-05-24 |
+| `rec-9aa6` | open | `` |  | 2026-05-24 |
+| `rec-9bf8` | open | `` |  | 2026-05-24 |
+| `rec-a017` | open | `` |  | 2026-05-24 |
+| `rec-a683` | open | `` |  | 2026-05-24 |
+| `rec-b64f` | open | `` |  | 2026-05-24 |
+| `rec-b6f0` | open | `` |  | 2026-05-24 |
+| `rec-c199` | open | `` |  | 2026-05-24 |
+| `rec-c7e6` | open | `` |  | 2026-05-24 |
+| `rec-c9c3` | open | `` |  | 2026-05-24 |
+| `rec-ca56` | open | `` |  | 2026-05-24 |
+| `rec-ddfe` | open | `` |  | 2026-05-24 |
+| `rec-f3b1` | open | `` |  | 2026-05-24 |
+| `rec-f47d` | open | `` |  | 2026-05-23 |
+| `rec-0a92` | open | `` |  | 2026-05-23 |
+| `rec-0c8f` | open | `` |  | 2026-05-23 |
+| `rec-0f85` | open | `` |  | 2026-05-23 |
+| `rec-1041` | open | `` |  | 2026-05-23 |
+| `rec-2c27` | open | `` |  | 2026-05-23 |
+| `rec-305d` | open | `` |  | 2026-05-23 |
+| `rec-460b` | open | `` |  | 2026-05-23 |
+| `rec-4760` | open | `` |  | 2026-05-23 |
+| `rec-4c0f` | open | `` |  | 2026-05-23 |
+| `rec-5830` | open | `` |  | 2026-05-23 |
+| `rec-5a58` | open | `` |  | 2026-05-23 |
+| `rec-62ec` | open | `` |  | 2026-05-23 |
+| `rec-68ff` | open | `` |  | 2026-05-23 |
+| `rec-89f5` | open | `` |  | 2026-05-23 |
+| `rec-8a61` | open | `` |  | 2026-05-23 |
+| `rec-8bd9` | open | `` |  | 2026-05-23 |
+| `rec-9b2f` | open | `` |  | 2026-05-23 |
+| `rec-9f87` | open | `` |  | 2026-05-23 |
+| `rec-a1bd` | open | `` |  | 2026-05-23 |
+| `rec-b056` | open | `` |  | 2026-05-23 |
+| `rec-b7aa` | open | `` |  | 2026-05-23 |
+| `rec-bbac` | open | `` |  | 2026-05-23 |
+| `rec-bebd` | open | `` |  | 2026-05-23 |
+| `rec-ca58` | open | `` |  | 2026-05-23 |
+| `rec-d6fd` | open | `` |  | 2026-05-23 |
+| `rec-d9ca` | open | `` |  | 2026-05-23 |
+| `rec-e063` | open | `` |  | 2026-05-23 |
+| `rec-ece7` | open | `` |  | 2026-05-23 |
+| `rec-f0bf` | open | `` |  | 2026-05-23 |
+| `rec-f3c7` | open | `` |  | 2026-05-23 |
+| `rec-f3e8` | open | `` |  | 2026-05-23 |
+| `rec-f732` | open | `` |  | 2026-05-23 |
+| `rec-fdb2` | open | `` |  | 2026-05-23 |
+| `rec-133e` | open | `` |  | 2026-05-22 |
+| `rec-4bc2` | open | `` |  | 2026-05-22 |
+| `rec-4d71` | open | `` |  | 2026-05-22 |
+| `rec-5e69` | open | `` |  | 2026-05-22 |
+| `rec-9e3e` | open | `` |  | 2026-05-22 |
+| `rec-2b7e` | open | `` |  | 2026-05-22 |
+| `rec-81d2` | open | `` |  | 2026-05-22 |
+| `rec-9a75` | open | `` |  | 2026-05-22 |
+| `rec-0805` | open | `` |  | 2026-05-22 |
+| `rec-0dd2` | open | `` |  | 2026-05-22 |
+| `rec-14e1` | open | `` |  | 2026-05-22 |
+| `rec-17a2` | open | `` |  | 2026-05-22 |
+| `rec-1edf` | open | `` |  | 2026-05-22 |
+| `rec-2bb1` | open | `` |  | 2026-05-22 |
+| `rec-2bc5` | open | `` |  | 2026-05-22 |
+| `rec-4c19` | open | `` |  | 2026-05-22 |
+| `rec-55bf` | open | `` |  | 2026-05-22 |
+| `rec-5c2a` | open | `` |  | 2026-05-22 |
+| `rec-835b` | open | `` |  | 2026-05-22 |
+| `rec-86d5` | open | `` |  | 2026-05-22 |
+| `rec-891c` | open | `` |  | 2026-05-22 |
+| `rec-9311` | open | `` |  | 2026-05-22 |
+| `rec-b50d` | open | `` |  | 2026-05-22 |
+| `rec-c9c9` | open | `` |  | 2026-05-22 |
+| `rec-dc88` | open | `` |  | 2026-05-22 |
+| `rec-eab3` | open | `` |  | 2026-05-22 |
+| `rec-ee9e` | open | `` |  | 2026-05-22 |
+| `rec-fc1e` | open | `` |  | 2026-05-22 |
+| `rec-7321` | open | `` |  | 2026-05-20 |
+| `rec-ce79` | open | `` |  | 2026-05-20 |
+| `rec-0743` | open | `` |  | 2026-05-19 |
+| `rec-07ff` | open | `` |  | 2026-05-19 |
+| `rec-08c8` | open | `` |  | 2026-05-19 |
+| `rec-0cef` | open | `` |  | 2026-05-19 |
+| `rec-12da` | open | `` |  | 2026-05-19 |
+| `rec-1dee` | open | `` |  | 2026-05-19 |
+| `rec-24f7` | open | `` |  | 2026-05-19 |
+| `rec-2a92` | open | `` |  | 2026-05-19 |
+| `rec-32d8` | open | `` |  | 2026-05-19 |
+| `rec-47b6` | open | `` |  | 2026-05-19 |
+| `rec-5400` | open | `` |  | 2026-05-19 |
+| `rec-6809` | open | `` |  | 2026-05-19 |
+| `rec-792f` | open | `` |  | 2026-05-19 |
+| `rec-7cea` | open | `` |  | 2026-05-19 |
+| `rec-80c9` | open | `` |  | 2026-05-19 |
+| `rec-8173` | open | `` |  | 2026-05-19 |
+| `rec-8a00` | open | `` |  | 2026-05-19 |
+| `rec-8b2d` | open | `` |  | 2026-05-19 |
+| `rec-90af` | open | `` |  | 2026-05-19 |
+| `rec-9c0a` | open | `` |  | 2026-05-19 |
+| `rec-ac3a` | open | `` |  | 2026-05-19 |
+| `rec-b353` | open | `` |  | 2026-05-19 |
+| `rec-b4bd` | open | `` |  | 2026-05-19 |
+| `rec-bdd7` | open | `` |  | 2026-05-19 |
+| `rec-bfb8` | open | `` |  | 2026-05-19 |
+| `rec-c998` | open | `` |  | 2026-05-19 |
+| `rec-cba8` | open | `` |  | 2026-05-19 |
+| `rec-d533` | open | `` |  | 2026-05-19 |
+| `rec-d747` | open | `` |  | 2026-05-19 |
+| `rec-f980` | open | `` |  | 2026-05-19 |
+| `rec-efa6` | open | `` |  | 2026-05-19 |
+| `rec-079e` | open | `` |  | 2026-05-18 |
+| `rec-0e4b` | open | `` |  | 2026-05-18 |
+| `rec-80b9` | open | `` |  | 2026-05-18 |
+| `rec-c0dd` | open | `` |  | 2026-05-18 |
+| `rec-c524` | open | `` |  | 2026-05-18 |
+| `rec-cfc4` | open | `` |  | 2026-05-18 |
+| `rec-fbcb` | open | `` |  | 2026-05-18 |
+| `rec-11ac` | open | `` |  | 2026-05-18 |
+| `rec-15fd` | open | `` |  | 2026-05-18 |
+| `rec-1fab` | open | `` |  | 2026-05-18 |
+| `rec-21a0` | open | `` |  | 2026-05-18 |
+| `rec-270d` | open | `` |  | 2026-05-18 |
+| `rec-2a50` | open | `` |  | 2026-05-18 |
+| `rec-2fe7` | open | `` |  | 2026-05-18 |
+| `rec-3ae8` | open | `` |  | 2026-05-18 |
+| `rec-3ece` | open | `` |  | 2026-05-18 |
+| `rec-4036` | open | `` |  | 2026-05-18 |
+| `rec-4993` | open | `` |  | 2026-05-18 |
+| `rec-5eeb` | open | `` |  | 2026-05-18 |
+| `rec-7016` | open | `` |  | 2026-05-18 |
+| `rec-7195` | open | `` |  | 2026-05-18 |
+| `rec-7615` | open | `` |  | 2026-05-18 |
+| `rec-7bff` | open | `` |  | 2026-05-18 |
+| `rec-8968` | open | `` |  | 2026-05-18 |
+| `rec-8cad` | open | `` |  | 2026-05-18 |
+| `rec-8ce2` | open | `` |  | 2026-05-18 |
+| `rec-91e3` | open | `` |  | 2026-05-18 |
+| `rec-94ef` | open | `` |  | 2026-05-18 |
+| `rec-ae12` | open | `` |  | 2026-05-18 |
+| `rec-b3ba` | open | `` |  | 2026-05-18 |
+| `rec-e173` | open | `` |  | 2026-05-18 |
+| `rec-efa4` | open | `` |  | 2026-05-18 |
+| `rec-f6c9` | open | `` |  | 2026-05-18 |
+| `rec-f890` | open | `` |  | 2026-05-18 |
+| `rec-fbbd` | open | `` |  | 2026-05-18 |
+| `rec-fd5e` | open | `` |  | 2026-05-18 |
+| `rec-2b53` | open | `` |  | 2026-05-18 |
+| `rec-0eea` | open | `` |  | 2026-05-18 |
+| `rec-1030` | open | `` |  | 2026-05-18 |
+| `rec-50fc` | open | `` |  | 2026-05-18 |
+| `rec-c330` | open | `` |  | 2026-05-18 |
+| `rec-c7fb` | open | `` |  | 2026-05-18 |
+| `rec-d4c1` | open | `` |  | 2026-05-18 |
 
 ## 📋 FULL MODULE MANIFEST
 
@@ -1286,4 +1707,4 @@ nexus_economy.tasks -> nexus_economy.tasks.payout
 | `nexus_tournaments.views.results` | 1 | 10 | 4 |
 
 ---
-*Report generated by Nexus Audit Command Center — 2026-05-24 17:44:38*
+*Report generated by Nexus Audit Command Center — 2026-05-27 07:16:53*

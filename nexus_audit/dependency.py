@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 from .config import TIER2_TIMEOUT, TIER2_PACKAGES
 
 _REQ_TXT_PATHS = [
-    os.path.expanduser('~/my_tools/nexus_project_copy/requirements.txt'),
+    os.path.expanduser('~/nexus-gaming/requirements.txt'),
     os.path.expanduser('~/my_tools/nexus_audit/requirements.txt'),
 ]
 
@@ -124,7 +124,7 @@ def _osv_query(package: str, ecosystem: str = 'PyPI',
         return []
 
 
-def run_tier2_dependency_scan(project_path: str) -> Dict:
+def run_tier2_dependency_scan(project_path: str, force_rescan: bool = False) -> Dict:
     """
     Tier 2: scan installed packages for:
       1. Known CVEs via OSV
@@ -139,15 +139,33 @@ def run_tier2_dependency_scan(project_path: str) -> Dict:
     Completely safe to call; any individual failure returns partial results.
     """
     import concurrent.futures
+    from .dep_cache import load_cache, save_cache, get_requirements_hash, get_packages_to_scan, merge_results
 
-    result: Dict = {
-        'packages':      [],
-        'total_cves':    0,
-        'outdated_count': 0,
-        'critical_cves': [],
-    }
+    # 1. Load cache and compute hash
+    cache = load_cache(project_path)
+    req_hash = get_requirements_hash(_REQ_TXT_PATHS)
+    
+    # 2. Determine what needs scanning
+    needs_scan, from_cache = get_packages_to_scan(
+        cache=cache,
+        all_packages=_REQ_PACKAGES,
+        current_versions=_REQ_VERSIONS,
+        req_hash=req_hash,
+        force_rescan=force_rescan
+    )
+    
+    total_pkgs = len(_REQ_PACKAGES)
+    num_cached = len(from_cache)
+    num_to_scan = len(needs_scan)
+    
+    if num_to_scan == 0:
+        print(f"   📦 {total_pkgs} packages — 100% loaded from Dependency Vault (saved ~60s)")
+        # Just merge everything from cache
+        result, new_cache = merge_results(from_cache, [], req_hash)
+        save_cache(project_path, new_cache)
+        return result
 
-    print("   Scanning package versions and CVEs (in parallel)...")
+    print(f"   📦 {total_pkgs} packages — {num_cached} from Vault, {num_to_scan} to scan...")
     
     def _scan_pkg(pkg_name: str) -> Dict:
         installed = _REQ_VERSIONS.get(pkg_name.lower(), 'unknown')
@@ -165,33 +183,18 @@ def run_tier2_dependency_scan(project_path: str) -> Dict:
             'cve_count': len(cves)
         }
 
+    fresh_results = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        futures = {executor.submit(_scan_pkg, pkg): pkg for pkg in _REQ_PACKAGES}
-        
-        total_pkgs = len(_REQ_PACKAGES)
+        futures = {executor.submit(_scan_pkg, pkg): pkg for pkg in needs_scan}
         completed = 0
 
         for future in concurrent.futures.as_completed(futures):
             res = future.result()
+            fresh_results.append(res)
             completed += 1
+            
             pkg_name = res['pkg_name']
-            cves = res['cves']
             
-            if res['outdated']:
-                result['outdated_count'] += 1
-            result['total_cves'] += res['cve_count']
-            
-            pkg_entry = {
-                'name':       pkg_name,
-                'installed':  res['installed'],
-                'latest':     res['latest'] if res['latest'] != 'unknown' else res['installed'],
-                'outdated':   res['outdated'],
-                'cve_count':  res['cve_count'],
-                'cves':       cves,
-                'upgrade_cmd': f"pip install --upgrade {pkg_name}=={res['latest']}" if res['outdated'] else None
-            }
-            result['packages'].append(pkg_entry)
-
             # Build status line
             status_parts = []
             if res['installed'] != 'unknown':
@@ -204,20 +207,14 @@ def run_tier2_dependency_scan(project_path: str) -> Dict:
                 status_parts.append(f"⚠ {res['cve_count']} CVE(s)")
             
             status_str = " | ".join(status_parts)
-            print(f"   [{completed}/{total_pkgs}] {pkg_name:<30} {status_str}", flush=True)
+            print(f"   [{completed}/{num_to_scan}] {pkg_name:<30} {status_str}", flush=True)
 
-            # Flag critical CVEs
-            for cve in cves:
-                severity = cve.get('severity', 'UNKNOWN')
-                if severity in ('CRITICAL', 'HIGH'):
-                    result['critical_cves'].append({
-                        'package': pkg_name,
-                        'id':      cve.get('id', 'unknown'),
-                        'summary': cve.get('summary', 'No summary'),
-                        'severity': severity,
-                    })
-
-    print(f"   ✔ Scanned {len(_REQ_PACKAGES)} package(s)")
+    print(f"   ✔ Scanned {num_to_scan} package(s)")
+    
+    # Merge and save
+    result, new_cache = merge_results(from_cache, fresh_results, req_hash)
+    save_cache(project_path, new_cache)
+    
     return result
 
 

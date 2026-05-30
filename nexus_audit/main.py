@@ -34,8 +34,6 @@ from .audit_engine import (
     get_git_context,
 )
 from .dependency import run_tier2_dependency_scan
-from .report.html_report import EnhancedAuditReport
-from .report.markdown_report import generate_comprehensive_markdown
 
 from .ai.backend import _detect_ai_backend
 from .features.fix_queue import FixQueue
@@ -140,11 +138,94 @@ def main():
         action="store_true",
         help="Re-run the audit when Python files change (use with --serve)",
     )
+    parser.add_argument(
+        "--skip-deps",
+        action="store_true",
+        help="Skip the Tier 2 dependency vulnerability / freshness scan (saves ~60s online)",
+    )
+    parser.add_argument(
+        "--skip-ai",
+        action="store_true",
+        help="Skip AI-powered recommendations (saves API quota)",
+    )
+    parser.add_argument(
+        "--skip-security",
+        action="store_true",
+        help="Skip Bandit security scan",
+    )
+    parser.add_argument(
+        "--skip-dead-code",
+        action="store_true",
+        help="Skip Vulture dead code scan",
+    )
+    parser.add_argument(
+        "--skip-complexity",
+        action="store_true",
+        help="Skip Lizard complexity scan",
+    )
+    parser.add_argument(
+        "--skip-config",
+        action="store_true",
+        help="Skip Config Health scan",
+    )
+    parser.add_argument(
+        "--skip-ghosts",
+        action="store_true",
+        help="Skip Ghost file detection",
+    )
+    parser.add_argument(
+        "--skip-cycles",
+        action="store_true",
+        help="Skip Circular dependency detection",
+    )
+    parser.add_argument(
+        "--force-rescan",
+        action="store_true",
+        help="Bypass Dependency Vault cache and force a full PyPI/OSV rescan",
+    )
+    parser.add_argument(
+        "--only-app",
+        metavar="APP",
+        default=None,
+        help="Limit analysis to a single first-party app (e.g. nexus_economy)",
+    )
     args = parser.parse_args()
+    
+    # ── Merge settings.json ───────────────────────────────────────────────
+    import json
+    from .config import VISUALS_DIR
+    settings_path = os.path.join(VISUALS_DIR, "settings.json")
+    if os.path.exists(settings_path):
+        try:
+            with open(settings_path, "r", encoding="utf-8") as f:
+                settings = json.load(f)
+            if settings.get("api_key"):
+                os.environ["GEMINI_API_KEY"] = settings["api_key"]
+            if not settings.get("ai_enabled", True):
+                args.skip_ai = True
+            scanners = settings.get("scanners", {})
+            if not scanners.get("bandit", True): args.skip_security = True
+            if not scanners.get("vulture", True): args.skip_dead_code = True
+            if not scanners.get("lizard", True): args.skip_complexity = True
+            if not scanners.get("dependencies", True): args.skip_deps = True
+            if settings.get("force_rescan"): args.force_rescan = True
+        except Exception:
+            pass
+
+    if args.serve:
+        from .features.server import serve
+        from .config import VISUALS_DIR
+        html_path = os.path.join(VISUALS_DIR, 'index.html')
+        json_path = os.path.join(VISUALS_DIR, 'audit_data_complete.json')
+        fix_queue_path = Path(__file__).resolve().parents[1] / 'fix_queue.json'
+        print("🌐 Starting Nexus Audit server in STANDALONE mode...")
+        serve(html_path, json_path, str(fix_queue_path), open_browser=True, watch=args.watch)
+        sys.exit(0)
+
     if args.fast:
         from .features.quick_check import run_quick_check
 
-        result = run_quick_check(str(NEXUS_ROOT))
+        result = run_quick_check(str(PROJECT_PATH))
         sys.exit(0 if result.get("pass") else 1)
 
     print("MAIN STARTED", flush=True)
@@ -204,43 +285,75 @@ def main():
     first_party_physical = [f for f in physical_files if f.split('.')[0] in FIRST_PARTY_APPS]
     first_party_dna = {k: v for k, v in dna.items() if k.split('.')[0] in FIRST_PARTY_APPS}
 
+    # ── Apply --only-app filter ────────────────────────────────────────────
+    if args.only_app:
+        if args.only_app not in FIRST_PARTY_APPS:
+            print(f"❌ --only-app '{args.only_app}' is not a recognised first-party app.")
+            print(f"   Known apps: {', '.join(FIRST_PARTY_APPS)}")
+            return
+        print(f"🎯 Limiting analysis to: {args.only_app}\n")
+        first_party_physical = [f for f in first_party_physical if f.startswith(args.only_app)]
+        first_party_dna = {k: v for k, v in first_party_dna.items() if k.startswith(args.only_app)}
+
     print(f"📊 First-party physical files: {len(first_party_physical)}, DNA modules: {len(first_party_dna)}\n")
 
     # ── Run scanners ──────────────────────────────────────────────────────
-    print("   Running scanners in parallel (bandit + dead code + complexity)...")
+    _scanners_to_run = []
     with ThreadPoolExecutor(max_workers=3) as executor:
-        f_security   = executor.submit(run_bandit_enhanced, PROJECT_PATH)
-        f_dead_code  = executor.submit(run_dead_code_scan,  PROJECT_PATH)
-        f_complexity = executor.submit(run_lizard_analysis, PROJECT_PATH)
-    security_violations = f_security.result()
-    dead_code           = f_dead_code.result()
-    complexity_metrics  = f_complexity.result()
+        if not args.skip_security:
+            f_security   = executor.submit(run_bandit_enhanced, PROJECT_PATH)
+        if not args.skip_dead_code:
+            f_dead_code  = executor.submit(run_dead_code_scan,  PROJECT_PATH)
+        if not args.skip_complexity:
+            f_complexity = executor.submit(run_lizard_analysis, PROJECT_PATH)
+
+    security_violations = f_security.result() if not args.skip_security else []
+    dead_code           = f_dead_code.result() if not args.skip_dead_code else []
+    complexity_metrics  = f_complexity.result() if not args.skip_complexity else {}
+    
+    if args.skip_security:
+        print("   Security scan SKIPPED (--skip-security flag)")
+    if args.skip_dead_code:
+        print("   Dead code scan SKIPPED (--skip-dead-code flag)")
+    if args.skip_complexity:
+        print("   Complexity scan SKIPPED (--skip-complexity flag)")
+    
     print(f"   Scanners complete — {len(security_violations)} security findings, "
           f"{len(dead_code)} dead code items")
 
     # ── Tier 2: dependency scan ───────────────────────────────────────────
     dep_scan: Dict = {'packages': [], 'total_cves': 0, 'outdated_count': 0, 'critical_cves': []}
-    if online:
+    if online and not args.skip_deps:
         print("🔍 Tier 2: scanning dependencies for vulnerabilities and freshness...")
-        dep_scan = run_tier2_dependency_scan(PROJECT_PATH)
+        dep_scan = run_tier2_dependency_scan(PROJECT_PATH, force_rescan=args.force_rescan)
         if dep_scan['total_cves']:
             print(f"   ⚠  {dep_scan['total_cves']} CVE(s) found across packages")
         if dep_scan['outdated_count']:
             print(f"   ⚠  {dep_scan['outdated_count']} package(s) are outdated")
         print()
+    elif args.skip_deps:
+        print("🔍 Dependency scan SKIPPED (--skip-deps flag)\n")
 
     # ── Ghost files ───────────────────────────────────────────────────────
-    ghost_files = [f for f in first_party_physical if is_ghost_file(f, dna_modules)]
-    print(f"👻 Found {len(ghost_files)} ghost files\n")
+    ghost_files = []
+    if not args.skip_ghosts:
+        ghost_files = [f for f in first_party_physical if is_ghost_file(f, dna_modules)]
+        print(f"👻 Found {len(ghost_files)} ghost files\n")
+    else:
+        print("👻 Ghost file detection SKIPPED (--skip-ghosts flag)\n")
 
     # ── Config Health Scan ────────────────────────────────────────────────
-    print("⚙️  Scanning config folder health...")
-    config_health = run_config_health_scan(PROJECT_PATH, FIRST_PARTY_APPS)
-    cfg_summary = config_health.get('summary', {})
-    cfg_name = config_health.get('config_folder_name', 'config')
-    print(f"   ✔ Config scan complete — {cfg_name}/ scored {cfg_summary.get('score', 0)}% "
-          f"({cfg_summary.get('passed', 0)} passed, {cfg_summary.get('warnings', 0)} warnings, "
-          f"{cfg_summary.get('failures', 0)} failures)\n")
+    config_health = {}
+    if not args.skip_config:
+        print("⚙️  Scanning config folder health...")
+        config_health = run_config_health_scan(PROJECT_PATH, FIRST_PARTY_APPS)
+        cfg_summary = config_health.get('summary', {})
+        cfg_name = config_health.get('config_folder_name', 'config')
+        print(f"   ✔ Config scan complete — {cfg_name}/ scored {cfg_summary.get('score', 0)}% "
+              f"({cfg_summary.get('passed', 0)} passed, {cfg_summary.get('warnings', 0)} warnings, "
+              f"{cfg_summary.get('failures', 0)} failures)\n")
+    else:
+        print("⚙️  Config Health scan SKIPPED (--skip-config flag)\n")
 
     # ── Violations & allowed communications ────────────────────────────────
     violations = []
@@ -309,10 +422,15 @@ def main():
                 app_stats[app]['dead_code'] = app_stats[app].get('dead_code', 0) + 1
                 break
 
-    # ── Circular dependencies ─────────────────────────────────────────────
-    cycles = find_circular_dependencies_accurate(dna)
+    # ── Circular Dependencies ─────────────────────────────────────────────
+    cycles = []
+    if not args.skip_cycles:
+        cycles = find_circular_dependencies_accurate(dna)
+        print(f"🔄 Found {len(cycles)} circular dependencies\n")
+    else:
+        print("🔄 Circular dependency scan SKIPPED (--skip-cycles flag)\n")
 
-    # ── Shared utility candidates (modules imported by 2+ apps as violations) ──
+    # ── Map functions & endpoints ─────────────────────────────────────────
     _shared_targets: Dict[str, List] = {}
     for v in violations:
         if v.type == 'Cross-App Import':
@@ -438,51 +556,63 @@ def main():
 
     # ── AI recommendations (or Tier-1 template fallback) ─────────────────
     print()
-    print("\U0001f916 Detecting AI backend...")
-    ai_backend, ai_key = _detect_ai_backend()
-
-    if ai_backend:
-        print(f"   \u2714 Backend: {ai_backend}")
-        print("\U0001f4a1 Running AI-powered recommendations...")
-        cross_violations = [v for v in violations if v.type == 'Cross-App Import']
-        ai_recs, ai_label = run_ai_recommendations(
-            violations=cross_violations,
-            app_stats=dict(app_stats),
-            ghost_files=ghost_files,
-            shared_util_candidates=shared_util_candidates,
-            backend=ai_backend,
-            api_key=ai_key,
-            dep_scan=dep_scan,
-        )
-        if ai_recs:
-            audit_data['recommendations'] = ai_recs
-            audit_data['metadata']['ai_backend'] = ai_label
-            print(f"   \u2714 {len(ai_recs)} AI recommendation(s) generated")
-        else:
-            print("   \u26a0 AI returned no recommendations (likely rate-limit/quota).")
-            print("   \u2139 Falling back to smart template recommendations.")
-            template_recs = generate_recommendations(
-                violations=violations,
-                metrics=complexity_metrics,
-                cycles=cycles,
-                ghost_files=ghost_files,
-            )
-            audit_data['recommendations'] = template_recs
-            audit_data['metadata']['ai_backend'] = f"{ai_label} + templates"
-            audit_data['metadata']['ai_fallback_reason'] = 'no_ai_output'
-            print(f"   \u2714 {len(template_recs)} template recommendation(s) generated (fallback)")
-    else:
-        print("   \u2139 No AI backend — using Tier-1 template recommendations")
-        all_violations = violations  # includes security violations too
+    if args.skip_ai:
+        print("🤖 AI recommendations SKIPPED (--skip-ai flag)")
         template_recs = generate_recommendations(
-            violations=all_violations,
+            violations=violations,
             metrics=complexity_metrics,
             cycles=cycles,
             ghost_files=ghost_files,
         )
         audit_data['recommendations'] = template_recs
-        audit_data['metadata']['ai_backend'] = 'template'
-        print(f"   \u2714 {len(template_recs)} template recommendation(s) generated")
+        audit_data['metadata']['ai_backend'] = 'skipped'
+        print(f"   ✔ {len(template_recs)} template recommendation(s) generated")
+    else:
+        print("\U0001f916 Detecting AI backend...")
+        ai_backend, ai_key = _detect_ai_backend()
+
+        if ai_backend:
+            print(f"   ✔ Backend: {ai_backend}")
+            print("💡 Running AI-powered recommendations...")
+            cross_violations = [v for v in violations if v.type == 'Cross-App Import']
+            ai_recs, ai_label = run_ai_recommendations(
+                violations=cross_violations,
+                app_stats=dict(app_stats),
+                ghost_files=ghost_files,
+                shared_util_candidates=shared_util_candidates,
+                backend=ai_backend,
+                api_key=ai_key,
+                dep_scan=dep_scan,
+            )
+            if ai_recs:
+                audit_data['recommendations'] = ai_recs
+                audit_data['metadata']['ai_backend'] = ai_label
+                print(f"   ✔ {len(ai_recs)} AI recommendation(s) generated")
+            else:
+                print("   ⚠ AI returned no recommendations (likely rate-limit/quota).")
+                print("   ℹ Falling back to smart template recommendations.")
+                template_recs = generate_recommendations(
+                    violations=violations,
+                    metrics=complexity_metrics,
+                    cycles=cycles,
+                    ghost_files=ghost_files,
+                )
+                audit_data['recommendations'] = template_recs
+                audit_data['metadata']['ai_backend'] = f"{ai_label} + templates"
+                audit_data['metadata']['ai_fallback_reason'] = 'no_ai_output'
+                print(f"   ✔ {len(template_recs)} template recommendation(s) generated (fallback)")
+        else:
+            print("   ℹ No AI backend — using Tier-1 template recommendations")
+            all_violations = violations
+            template_recs = generate_recommendations(
+                violations=all_violations,
+                metrics=complexity_metrics,
+                cycles=cycles,
+                ghost_files=ghost_files,
+            )
+            audit_data['recommendations'] = template_recs
+            audit_data['metadata']['ai_backend'] = 'template'
+            print(f"   ✔ {len(template_recs)} template recommendation(s) generated")
     print()
 
     # ── Fix queue tracking ────────────────────────────────────────────────
@@ -502,11 +632,12 @@ def main():
     prev = load_previous_audit(HISTORY_DIR)
     audit_data['change_summary'] = compute_change_summary(audit_data, prev)
     audit_data['timeline'] = load_score_history(HISTORY_DIR)
-    reporter = EnhancedAuditReport(audit_data)
 
     json_path = os.path.join(VISUALS_DIR, 'audit_data_complete.json')
-    with open(json_path, 'w', encoding='utf-8') as f:
+    tmp_json_path = os.path.join(VISUALS_DIR, 'audit_data_complete.tmp.json')
+    with open(tmp_json_path, 'w', encoding='utf-8') as f:
         json.dump(audit_data, f, indent=2, default=str)
+    os.replace(tmp_json_path, json_path)
     print(f"   ✔ JSON data  → {json_path}")
 
     os.makedirs(HISTORY_DIR, exist_ok=True)
@@ -517,32 +648,6 @@ def main():
     with open(history_path, 'w', encoding='utf-8') as f:
         json.dump(audit_data, f, indent=2, default=str)
     print(f"   ✔ History     → {history_path}")
-
-
-    html_path = os.path.join(VISUALS_DIR, 'NEXUS_AUDIT_DASHBOARD.html')
-    with open(html_path, 'w', encoding='utf-8') as f:
-        f.write(reporter.generate_html_dashboard())
-    print(f"   ✔ HTML dash  → {html_path}")
-
-    md_path = os.path.join(VISUALS_DIR, 'AUDIT_REPORT_COMPREHENSIVE.md')
-    with open(md_path, 'w', encoding='utf-8') as f:
-        f.write(generate_comprehensive_markdown(audit_data))
-    print(f"   ✔ Markdown   → {md_path}")
-
-    # ── Sync visuals to root visuals directory (Task 5) ──────────────────
-    root_visuals = os.path.join(os.path.dirname(MODULAR_ROOT), 'visuals')
-    if os.path.exists(VISUALS_DIR) and root_visuals != VISUALS_DIR:
-        import shutil
-        os.makedirs(root_visuals, exist_ok=True)
-        for item in os.listdir(VISUALS_DIR):
-            s = os.path.join(VISUALS_DIR, item)
-            d = os.path.join(root_visuals, item)
-            if os.path.isfile(s):
-                shutil.copy2(s, d)
-            elif os.path.isdir(s) and item != 'audit_history': # Avoid recursive history sync if possible
-                if os.path.exists(d): shutil.rmtree(d)
-                shutil.copytree(s, d)
-        print(f"   ✔ Synced to root   → {root_visuals}")
 
     # ── Console summary ───────────────────────────────────────────────────
     cross_count = len([v for v in violations if v.type == 'Cross-App Import'])
@@ -596,21 +701,7 @@ def main():
     if ghost_files:
         print(f"⚠️  {len(ghost_files)} ghost file(s) — see Ghost Files tab.")
 
-    if args.serve:
-        from .features.server import serve
 
-        print()
-        print("════════════════════════════════════════════════════════════")
-        print("✅ AUDIT COMPLETE")
-        print("🌐 Starting dashboard server at http://localhost:8421")
-        print("   Open: http://localhost:8421")
-        print("   Fix Queue: active (changes saved to fix_queue.json)")
-        print("   Stop: Ctrl+C")
-        print("════════════════════════════════════════════════════════════")
-        print()
-        serve(html_path, json_path, str(fix_queue_path), open_browser=True, watch=args.watch)
-
-    print()
 
 
 if __name__ == "__main__":

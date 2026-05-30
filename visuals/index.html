@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Architecture Audit</title>
+    <!-- Use locally served vis-network if available, fallback to CDN -->
+    <script src="js/vis-network.min.js"></script>
+    <script>
+        if (typeof vis === 'undefined') {
+            document.write('<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"><\/script>');
+        }
+    </script>
+    <!-- Link the new styling system -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Load the main entry module -->
+    <script type="module" src="js/main.js" defer></script>
+</head>
+<body>
+<div class="dashboard">
+
+    <!-- ── Header ─────────────────────────────────────────────────────── -->
+    <div class="header">
+        <h1 style="display:flex;align-items:center;">🛡️ Nexus Architecture Audit
+            <span id="tier-badge" class="tier-badge tier-offline">
+                <span class="tier-dot"></span> Loading…
+            </span>
+        </h1>
+        <p style="color:var(--text-secondary);margin-bottom:8px;">
+            Project Dashboard <span id="server-mode-badge" style="display:none;font-size:.78rem;background:rgba(110,231,183,.12);border:1px solid #6ee7b7;border-radius:6px;padding:2px 10px;margin-left:12px;vertical-align:middle;"></span>
+        </p>
+        <p style="color:var(--status-healthy);margin-bottom:8px;">
+            ✅ STRICT MODULARITY: Cross-app imports are violations.
+            Signals, tasks &amp; receivers are allowed communications.
+        </p>
+        <div id="change-summary-container"></div>
+        <div class="metrics-grid" id="metrics-grid"></div>
+    </div>
+
+    <!-- ── Control Panel (visible only in server mode) ─────────────────── -->
+    <div id="control-panel" style="margin: 0 0 28px 0; padding: 20px 28px; background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95)); border: 1px solid var(--border-color); border-left: 4px solid #6366f1; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.3);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <div style="font-size: 1rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px;">⚡ Audit Control Panel</div>
+                <div style="font-size: 0.78rem; color: #64748b;">Toggle scanners, then hit Run Audit. Results reload automatically.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip the PyPI/OSV dependency scan (~60s)">
+                    <input type="checkbox" id="tog-deps" checked style="accent-color:#6366f1;width:16px;height:16px;"> Dependencies
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Bandit security scan">
+                    <input type="checkbox" id="tog-security" checked style="accent-color:#6366f1;width:16px;height:16px;"> Security
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to use template recommendations instead of AI">
+                    <input type="checkbox" id="tog-ai" checked style="accent-color:#6366f1;width:16px;height:16px;"> AI
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Dead Code scanning">
+                    <input type="checkbox" id="tog-deadcode" checked style="accent-color:#6366f1;width:16px;height:16px;"> Dead Code
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Complexity Analysis">
+                    <input type="checkbox" id="tog-complexity" checked style="accent-color:#6366f1;width:16px;height:16px;"> Complexity
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Ghost File detection">
+                    <input type="checkbox" id="tog-ghosts" checked style="accent-color:#6366f1;width:16px;height:16px;"> Ghosts
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Config folder checking">
+                    <input type="checkbox" id="tog-config" checked style="accent-color:#6366f1;width:16px;height:16px;"> Config
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Uncheck to skip Circular Dependency detection">
+                    <input type="checkbox" id="tog-cycles" checked style="accent-color:#6366f1;width:16px;height:16px;"> Cycles
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-secondary);cursor:pointer;" title="Bypass the Dependency Vault and force a full PyPI/OSV rescan">
+                    <input type="checkbox" id="tog-force-rescan" style="accent-color:#ef4444;width:16px;height:16px;"> Force Rescan
+                </label>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                    <label style="font-size:0.78rem;color:#64748b;">Single app</label>
+                    <select id="tog-app" style="background:#0f172a;color:var(--text-secondary);border:1px solid var(--border-color);border-radius:6px;padding:4px 8px;font-size:0.82rem;">
+                        <option value="">All apps</option>
+                    </select>
+                </div>
+                <button id="run-audit-btn" class="primary-btn" onclick="runAuditFromUI()">
+                    &#9654; Run Audit
+                </button>
+            </div>
+        </div>
+        <!-- Live log -->
+        <div id="audit-log-wrapper" style="display:none; margin-top: 18px; background: #020617; border: 1px solid #1e293b; border-radius: 10px; padding: 14px 16px; max-height: 280px; overflow-y: auto;">
+            <div style="font-size: 0.72rem; color: #475569; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Live Output</div>
+            <pre id="audit-log-content" style="font-family:monospace;font-size:0.78rem;color:#94a3b8;white-space:pre-wrap;margin:0;"></pre>
+        </div>
+    </div>
+
+    <!-- ── App Health Grid ────────────────────────────────────────────── -->
+    <h2 style="margin:0 0 20px;font-size:1.3rem;">🏥 Application Health</h2>
+    <div class="app-grid" id="app-grid"></div>
+
+    <!-- ── Detail Tabs ───────────────────────────────────────────────── -->
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('violations')">🚨 Violations</button>
+            <button class="tab" onclick="showTab('test-debt')">🧪 Test Debt</button>
+            <button class="tab" onclick="showTab('allowed')">🔗 Allowed Comms</button>
+            <button class="tab" onclick="showTab('security')">🔒 Security</button>
+            <button class="tab" onclick="showTab('config-health')">⚙️ Config Health</button>
+            <button class="tab" onclick="showTab('complexity')">📊 Complexity</button>
+            <button class="tab" onclick="showTab('ghost')">👻 Ghost Files</button>
+            <button class="tab" onclick="showTab('cycles')">🔄 Cycles</button>
+            <button class="tab" id="dep-tab-btn" onclick="showTab('dependencies')" style="display:none;">📦 Dependencies</button>
+            <button class="tab" onclick="showTab('trends')">📈 Trends</button>
+            <button class="tab" onclick="showTab('coupling-map')">🔥 Coupling Map</button>
+            <button class="tab" onclick="showTab('recommendations')">💡 Recommendations</button>
+        </div>
+        
+        <div id="violations"      class="tab-content active"></div>
+        <div id="test-debt"       class="tab-content"></div>
+        <div id="allowed"         class="tab-content"></div>
+        <div id="security"        class="tab-content"></div>
+        <div id="config-health"   class="tab-content"></div>
+        <div id="complexity"      class="tab-content"></div>
+        <div id="ghost"           class="tab-content"></div>
+        <div id="cycles"          class="tab-content"></div>
+        <div id="dependencies"    class="tab-content"></div>
+        <div id="trends"          class="tab-content"></div>
+        <div id="coupling-map"    class="tab-content"></div>
+        
+        <div id="recommendations" class="tab-content">
+            <div id="effort-summary" style="margin-bottom:12px;"></div>
+            <div style="padding: 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; background: rgba(30, 41, 59, 0.4); border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
+                <input type="text" id="rec-search" placeholder="Search recommendations..." style="flex: 1; min-width: 200px; padding: 8px 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; color: #e2e8f0; font-size: 0.9rem;">
+                <select id="rec-filter-type" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; color: #e2e8f0; font-size: 0.9rem;">
+                    <option value="">All types</option>
+                    <option value="violation">Violations</option>
+                    <option value="security">Security</option>
+                    <option value="architecture">Architecture</option>
+                    <option value="performance">Performance</option>
+                    <option value="health">Health</option>
+                </select>
+                <select id="rec-filter-priority" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; color: #e2e8f0; font-size: 0.9rem;">
+                    <option value="">All priorities</option>
+                    <option value="CRITICAL">Critical</option>
+                    <option value="HIGH">High</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="LOW">Low</option>
+                </select>
+                <select id="rec-sort" style="padding: 8px 12px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; color: #e2e8f0; font-size: 0.9rem;">
+                    <option value="">Default order</option>
+                    <option value="effort-asc">Sort by effort (quick first)</option>
+                </select>
+                <span id="rec-counter" style="color: var(--text-secondary); font-size: 0.9rem; white-space: nowrap;"></span>
+            </div>
+            <div id="recommendations-list"></div>
+        </div>
+    </div>
+
+    <!-- ── Network Graph ─────────────────────────────────────────────── -->
+    <div class="network-section">
+        <h2>🌐 Dependency Network</h2>
+        <div class="network-controls">
+            <button class="ctrl-btn" onclick="resetView()">🌌 Reset View</button>
+            <button class="ctrl-btn" onclick="fitAll()">🔭 Fit All</button>
+            <button class="ctrl-btn" id="freeze-btn" onclick="toggleFreeze()">🧊 Freeze</button>
+            <button class="ctrl-btn" id="sep-btn" onclick="toggleSeparation()">🏝️ Separate Apps</button>
+            <button class="ctrl-btn" id="inspect-btn" onclick="toggleInspect()">🔍 Inspect Edges</button>
+            <span style="color:#475569;font-size:0.8rem;">
+                Hover = highlight · Click = isolate · Dbl-click = reset · Freeze = lock physics
+            </span>
+        </div>
+        <div class="network-wrap">
+            <div class="island-sidebar" id="island-sidebar">
+                <div class="island-sidebar-title">Islands</div>
+            </div>
+            <div id="network" style="flex:1;height:540px;min-height:540px;background:rgba(10,15,30,0.5);position:relative;">
+                <div id="graph-loading" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--text-secondary);font-size:1rem;pointer-events:none;">
+                  Waiting for data<span id="graph-dots">...</span>
+                </div>
+            </div>
+        </div>
+        <div class="node-info-bar" id="node-info">
+            Hover a node to see details · Click to isolate · Double-click to reset
+        </div>
+        <div class="legend" id="legend"></div>
+    </div>
+
+</div>
+</body>
+</html>

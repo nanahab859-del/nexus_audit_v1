@@ -125,7 +125,20 @@ HISTORY_DIR = os.path.join(VISUALS_DIR, 'audit_history')
 _MODULE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VAULT_PATH = _MODULE_DIR  # ~/my_tools/nexus_audit/ (legacy, read-only)
 
-PROJECT_PATH = os.path.expanduser('~/my_tools/nexus_project_copy')
+# Read dynamic settings
+_settings_path = os.path.join(VISUALS_DIR, "settings.json")
+_dyn_project_path = None
+if os.path.exists(_settings_path):
+    try:
+        import json
+        with open(_settings_path, "r", encoding="utf-8") as _f:
+            _s = json.load(_f)
+            if _s.get("project_path"):
+                _dyn_project_path = _s["project_path"]
+    except Exception:
+        pass
+
+PROJECT_PATH = _dyn_project_path or os.path.expanduser('~/nexus-gaming')
 
 # Create modular directories
 os.makedirs(VISUALS_DIR, exist_ok=True)
