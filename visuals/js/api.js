@@ -117,9 +117,25 @@ export function runAuditFromUI() {
     });
 }
 
+export function downloadReport(type, name) {
+    let url;
+    if (type === 'full')     url = '/api/download/report/full';
+    else if (type === 'app') url = '/api/download/report/app?name=' + encodeURIComponent(name);
+    else                     url = '/api/download/report/category?name=' + encodeURIComponent(name);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// Global exposure for inline onclick handlers
+window.downloadReport = downloadReport;
+
 // Live polling
 let initialMtime = null;
-export function startPolling() {
+export function startPolling(interval = 5000) {
     setInterval(() => {
         if (State.auditRunning) return;
         fetch('/api/status')

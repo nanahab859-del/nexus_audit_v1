@@ -22,7 +22,8 @@ export function renderTabs() {
         'cycles': generateCyclesTable,
         'dependencies': generateDependencyTable,
         'config-health': generateConfigHealthTab,
-        'coupling-map': generateCouplingMapTab
+        'coupling-map': generateCouplingMapTab,
+        'manifest': generateManifest
     };
 
     for (const [id, generator] of Object.entries(tabs)) {
@@ -95,10 +96,86 @@ function generateSecurityTable() {
 }
 
 function generateComplexityTable() {
-    let html = _dlBar('complexity', 'Complexity Metrics');
-    if (!State.metrics || !State.metrics.radon_available) return html + '<p class="status-warning">Radon is not installed. Complexity metrics unavailable.</p>';
-    return html + `<p class="status-ok">Average Complexity: ${(State.metrics.average_complexity || 0).toFixed(2)}</p>`;
+    let html = _dlBar('complexity', 'Complexity Analysis');
+    if (!State.metrics || !State.metrics.radon_available) {
+        return html + '<p class="status-warning">⚠️ Radon is not installed. Run <code>pip install radon</code> to enable complexity metrics.</p>';
+    }
+    const m = State.metrics;
+    const hcf = (m.high_complexity_functions || []).slice().sort((a, b) => b.complexity - a.complexity);
+
+    // ── Metrics summary grid ──────────────────────────────────────────────
+    html += `<div class="metrics-grid" style="margin-bottom:20px;">
+        <div class="metric-card">
+            <div class="metric-label">Avg Complexity</div>
+            <div class="metric-value">${(m.average_complexity || 0).toFixed(2)}</div>
+            <div style="font-size:0.8rem;color:#64748b;">Per function (Radon CC)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Max Complexity</div>
+            <div class="metric-value" style="color:${(m.max_complexity||0) > 15 ? '#ef4444' : (m.max_complexity||0) > 10 ? '#f59e0b' : '#10b981'};">${m.max_complexity || 0}</div>
+            <div style="font-size:0.8rem;color:#64748b;">Highest single function</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Maintainability</div>
+            <div class="metric-value" style="color:${(m.maintainability_index||0) >= 70 ? '#10b981' : (m.maintainability_index||0) >= 50 ? '#f59e0b' : '#ef4444'};">${Math.round(m.maintainability_index || 0)}</div>
+            <div style="font-size:0.8rem;color:#64748b;">Radon MI (0–100)</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Functions Analyzed</div>
+            <div class="metric-value">${m.functions_analyzed || 0}</div>
+            <div style="font-size:0.8rem;color:#64748b;">Scanned by Radon</div>
+        </div>
+    </div>`;
+
+    // ── Per-file complexity breakdown ─────────────────────────────────────
+    const fileComplexity = m.file_complexity || {};
+    if (Object.keys(fileComplexity).length) {
+        const filesSorted = Object.entries(fileComplexity)
+            .sort((a, b) => (b[1].average || 0) - (a[1].average || 0));
+        html += `<h3 style="margin:16px 0 10px;font-size:1rem;color:#f1f5f9;">📁 Complexity by File</h3>`;
+        html += `<table><thead><tr><th>File</th><th>Avg CC</th><th>Max CC</th><th>Functions</th></tr></thead><tbody>`;
+        filesSorted.forEach(([file, fc]) => {
+            const avg = (fc.average || 0).toFixed(1);
+            const max = fc.max || 0;
+            const fns = fc.functions || 0;
+            const avgColor = fc.average > 10 ? '#ef4444' : fc.average > 7 ? '#f59e0b' : '#10b981';
+            const maxColor = max > 15 ? '#ef4444' : max > 10 ? '#f59e0b' : '#10b981';
+            html += `<tr>
+                <td style="font-family:monospace;font-size:0.8rem;color:#94a3b8;">${file}</td>
+                <td style="color:${avgColor};font-weight:700;">${avg}</td>
+                <td style="color:${maxColor};font-weight:700;">${max}</td>
+                <td>${fns}</td>
+            </tr>`;
+        });
+        html += `</tbody></table>`;
+    }
+
+    // ── High-complexity functions table ───────────────────────────────────
+    if (!hcf.length) {
+        html += '<p class="status-ok" style="margin-top:16px;">✅ No high-complexity functions detected (threshold: CC > 10).</p>';
+        return html;
+    }
+
+    html += `<h3 style="margin:20px 0 10px;font-size:1rem;color:#f1f5f9;">🔥 High-Complexity Functions (CC &gt; 10)</h3>`;
+    html += `<table><thead><tr><th>Function</th><th>File</th><th>Complexity</th><th>Lines</th></tr></thead><tbody>`;
+    hcf.forEach(f => {
+        const cc = f.complexity || 0;
+        const ccColor = cc > 20 ? '#ef4444' : cc > 15 ? '#fb923c' : '#f59e0b';
+        const ccLabel = cc > 20 ? 'CRITICAL' : cc > 15 ? 'HIGH' : 'MEDIUM';
+        html += `<tr>
+            <td style="color:#fcd34d;font-family:monospace;font-size:0.85rem;">${f.function || f.name || ''}</td>
+            <td style="color:#94a3b8;font-family:monospace;font-size:0.78rem;">${f.file || ''}</td>
+            <td>
+                <span style="color:${ccColor};font-weight:700;font-size:1rem;">${cc}</span>
+                <span class="badge" style="background:${ccColor}22;color:${ccColor};margin-left:6px;font-size:0.7rem;">${ccLabel}</span>
+            </td>
+            <td style="color:#64748b;">${f.lines || f.line || '–'}</td>
+        </tr>`;
+    });
+    html += `</tbody></table>`;
+    return html;
 }
+
 
 function generateGhostTable() {
     let html = _dlBar('ghost', 'Ghost Files');
@@ -118,9 +195,16 @@ function generateCyclesTable() {
     
     html += `<div>`;
     State.cycles.forEach(c => {
-        html += `<div class="cycle-item">${(c.cycle || []).join(' → ')}</div>`;
+        const apps_involved = (c.apps||[]).join(', ') || '(same app)';
+        const cross = c.cross_app ? '🌐 CROSS-APP' : '🔁 INTRA-APP';
+        const cycleNodesStr = JSON.stringify(c.nodes||(c.cycle||[]));
+        html += `<div class="cycle-item" style="cursor:pointer;" onclick='if(window.highlightCycle) window.highlightCycle(${cycleNodesStr})'>
+            <strong>${cross}</strong> — ${(c.cycle || c.nodes || []).join(' → ')}
+            <span style="float:right;font-size:0.75rem;color:#94a3b8;">Apps: ${apps_involved}</span>
+        </div>`;
     });
     html += `</div>`;
+    html += `<p style="color:#64748b;font-size:0.85rem;margin-top:10px;">Tip: Click a cycle to highlight it on the graph.</p>`;
     return html;
 }
 
@@ -295,4 +379,28 @@ function generateCouplingMapTab() {
     
     html += `</tbody></table></div><div id="coupling-drilldown" style="margin-top:14px;"></div>`;
     return html;
+}
+
+function generateManifest() {
+    if (!State.modules) return '<p class="status-warning">No module data available.</p>';
+    const byApp = {};
+    Object.entries(State.modules).forEach(([name, mod]) => {
+        const app = name.split('.')[0];
+        if (!byApp[app]) byApp[app] = [];
+        byApp[app].push({name, ...mod});
+    });
+    let h = _dlBar('manifest', 'Full Module Manifest');
+    Object.entries(byApp).sort().forEach(([app, mods]) => {
+        h += `<h3 style="margin:20px 0 10px;font-size:1rem;color:#38bdf8;">${app.toUpperCase()} (${mods.length} modules)</h3>`;
+        h += `<table><thead><tr><th>Module</th><th>Depth</th><th>Imports</th></tr></thead><tbody>`;
+        mods.sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
+            h += `<tr>
+                <td style="color:#e2e8f0;">${m.name}</td>
+                <td><span class="badge" style="background:#1e293b;">${m.bacon||m.bacon_depth||0}</span></td>
+                <td>${(m.imports||[]).length}</td>
+            </tr>`;
+        });
+        h += '</tbody></table>';
+    });
+    return h;
 }

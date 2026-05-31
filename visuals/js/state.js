@@ -22,7 +22,9 @@ export const State = {
     // UI State
     activeFilter: null,
     graphInitialized: false,
-    auditRunning: false
+    auditRunning: false,
+    selectedEdge: null,
+    inspectMode: false
 };
 
 const FIX_QUEUE_STORAGE_KEY = 'nexus-audit-fix-queue';

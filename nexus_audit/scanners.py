@@ -106,6 +106,7 @@ def run_complexity_analysis(project_path: str) -> Dict[str, Any]:
         radon_path = shutil.which('radon')
         if not radon_path:
             radon_path = os.path.expanduser('~/my_tools/miniconda3/envs/audit_env/bin/radon')
+        file_complexity: Dict[str, Any] = {}
         for app in FIRST_PARTY_APPS:
             app_path = os.path.join(project_path, app)
             if not os.path.exists(app_path):
@@ -118,12 +119,13 @@ def run_complexity_analysis(project_path: str) -> Dict[str, Any]:
                 try:
                     data = json.loads(result.stdout)
                     for file_path, blocks in data.items():
+                        file_comps = []
                         for block in blocks:
                             comp = block.get('complexity', 0)
                             metrics['total_complexity'] += comp
                             metrics['functions_analyzed'] += 1
                             metrics['max_complexity'] = max(metrics['max_complexity'], comp)
-                            metrics['files_analyzed'] += 1
+                            file_comps.append(comp)
                             if comp > 10:
                                 metrics['high_complexity_functions'].append({
                                     'file': os.path.basename(file_path),
@@ -133,8 +135,17 @@ def run_complexity_analysis(project_path: str) -> Dict[str, Any]:
                                     'line': block.get('lineno', 0),
                                     'lines': 0
                                 })
+                        if file_comps:
+                            rel = os.path.relpath(file_path, project_path).replace('\\', '/')
+                            file_complexity[rel] = {
+                                'average': sum(file_comps) / len(file_comps),
+                                'max': max(file_comps),
+                                'functions': len(file_comps)
+                            }
+                            metrics['files_analyzed'] += 1
                 except:
                     pass
+        metrics['file_complexity'] = file_complexity
     except Exception as e:
         print(f"⚠️ Complexity analysis warning: {e}")
     if metrics['functions_analyzed'] > 0:
@@ -148,6 +159,7 @@ def run_complexity_analysis(project_path: str) -> Dict[str, Any]:
         print("   ⚠ radon not available — complexity metrics will show N/A in report.")
         print("     Install with: pip install radon")
     return metrics
+
 
 
 def run_lizard_analysis(project_path: str) -> Dict[str, Any]:

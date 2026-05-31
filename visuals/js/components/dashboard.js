@@ -164,6 +164,11 @@ function renderAppGrid() {
                     ⚙️ Settings · URL conf · ASGI/WSGI · Celery<br>
                     ✅ ${cfgSum.passed||0} passed · ⚠️ ${cfgSum.warnings||0} warnings · ❌ ${cfgSum.failures||0} failures
                 </div>
+                <div style="padding:8px 0 2px;display:flex;justify-content:flex-end;">
+                    <button onclick="event.stopPropagation();downloadReport('app','${cfgName}')" style="padding:4px 12px;background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;" title="Download ${cfgName} config health report as markdown">
+                        &#11015; Download MD
+                    </button>
+                </div>
             </div>`;
     }
     
@@ -199,6 +204,11 @@ function renderAppGrid() {
                 <div class="app-details">
                     📁 ${phys} physical | 🔍 ${mods} audited<br>
                     ⚠️ ${bviol} boundary violation(s) | 🔒 ${sec} security | 💀 ${dead} dead
+                </div>
+                <div style="padding:8px 0 2px;display:flex;justify-content:flex-end;">
+                    <button onclick="event.stopPropagation();downloadReport('app','${name}')" style="padding:4px 12px;background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;" title="Download ${name} audit report as markdown">
+                        &#11015; Download MD
+                    </button>
                 </div>
             </div>`;
     });
